@@ -1,29 +1,15 @@
-package org.readingservice.readingservice.mapper;
+package org.readingservice.mapper;
 
-import org.readingservice.dto.BookDTO;
+import org.readingservice.dto.BookRequest;
+
 import org.readingservice.entity.Book;
+import org.readingservice.dto.BookResponse;
+import org.mapstruct.*;
 
-public class BookMapper {
+@Mapper(componentModel = "spring")
+public interface BookMapper {
 
-    public static BookDTO toDTO(Book book) {
-        return BookDTO.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .description(book.getDescription())
-                .author(book.getAuthor())
-                .createdAt(book.getCreatedAt())
-                .updatedAt(book.getUpdatedAt())
-                .build();
-    }
-
-    public static Book toEntity(BookDTO dto) {
-        return Book.builder()
-                .id(dto.getId())
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .author(dto.getAuthor())
-                .createdAt(dto.getCreatedAt())
-                .updatedAt(dto.getUpdatedAt())
-                .build();
-    }
+    Book toEntity(BookRequest request);
+    BookResponse toBookResponse(Book book);
+    BookResponse toResponse(Book book);
 }

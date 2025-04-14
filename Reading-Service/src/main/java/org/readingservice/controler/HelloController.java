@@ -1,4 +1,4 @@
-package org.readingservice.readingservice.controler;
+package org.readingservice.controler;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

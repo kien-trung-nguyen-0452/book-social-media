@@ -1,4 +1,4 @@
-package org.readingservice.readingservice;
+package org.readingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

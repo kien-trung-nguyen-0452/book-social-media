@@ -11,11 +11,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class BookDTO {
-    private Long id;
-    private String title;
-    private String description;
-    private String author;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+public class BookRequest {
+
+    String title;
+
+    String subtitle;
+
+    String description;
+
+    String author;
+
+    String coverUrl;
+
+    Boolean isCompleted;
+
+    Long categoryId;
 }
