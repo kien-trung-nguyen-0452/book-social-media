@@ -10,10 +10,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Role {
     @Id
-    String roleId;
     String roleName;
+    String description;
 
     @ManyToMany
     Set<Permission> permissions;

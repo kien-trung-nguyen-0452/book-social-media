@@ -1,22 +1,15 @@
-package org.example.authservice.entity;
+package org.example.authservice.dto.request;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class Permission {
-
-    @Id
+public class PermissionRequest {
     String name;
     String description;
-
-
 }
+

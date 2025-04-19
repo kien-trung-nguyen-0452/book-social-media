@@ -19,6 +19,7 @@ import org.example.authservice.exception.ErrorCode;
 import org.example.authservice.exception.ServiceException;
 import org.example.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +29,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,8 +37,7 @@ import java.util.StringJoiner;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+     UserRepository userRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -44,6 +45,7 @@ public class AuthenticationService {
 
 
     public AuthenticateResponse authenticate(AuthenticateRequest authenticateRequest) {
+        PasswordEncoder  passwordEncoder = new BCryptPasswordEncoder(10);
         var user = userRepository.findByUsername(authenticateRequest.getUsername()).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         boolean authenticated = passwordEncoder.matches(authenticateRequest.getPassword(), user.getPassword());
 
@@ -55,7 +57,7 @@ public class AuthenticationService {
         }
         var token = generatedToken(user);
         return AuthenticateResponse.builder().token(token)
-                .authenticated(authenticated)
+                .authenticated(true)
                 .build();
 
     }
@@ -82,6 +84,7 @@ public class AuthenticationService {
                 .expirationTime(
                         new Date (Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
                 .claim("scope", buildScope(user))
+                .jwtID(UUID.randomUUID().toString())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
@@ -100,8 +103,19 @@ public class AuthenticationService {
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if(!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(role -> stringJoiner.add(role.getRoleName()));
+            user.getRoles().forEach(role ->{
+                    stringJoiner.add("ROLE_" + role.getRoleName());
+                    if(!CollectionUtils.isEmpty(role.getPermissions())) {
+                        role.getPermissions().forEach(permission -> {
+                            stringJoiner.add(permission.getName());
+                        });
+                    }
+            }
+            );
 
+        }
+        else {
+            log.info("No user has been created with default scope");
         }
         return stringJoiner.toString();
     }

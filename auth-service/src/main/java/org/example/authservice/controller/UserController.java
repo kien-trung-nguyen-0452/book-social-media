@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +23,35 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    UserResponse createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
-       return userService.createUser(userCreateRequest);
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
+       var userResponse = userService.createUser(userCreateRequest);
+       return ApiResponse.<UserResponse>builder().result(userResponse).build();
 
     }
 
     @GetMapping
-    List<UserResponse> findAllUsers() {
-        return userService.findAllUser();
+    @PreAuthorize("hasRole('ADMIN')")
+   ApiResponse<List<UserResponse>> findAllUsers() {
+        var userList = userService.findAllUser();
+        return ApiResponse.<List<UserResponse>>builder().result(userList).build();
     }
     @GetMapping("/{userId}")
-    UserResponse findUserById(@PathVariable String userId) {
-        return userService.findUserById(userId);
+    ApiResponse<UserResponse> findUserById(@PathVariable String userId) {
+        var userResponse = userService.findUserById(userId);
+        return ApiResponse.<UserResponse>builder().result(userResponse).build();
     }
 
+    @GetMapping("/info")
+    ApiResponse<UserResponse> getInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+
+    }
     @PutMapping("/{userId}")
-    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest userUpdateRequest) {
-        return userService.updateUser(userUpdateRequest, userId);
+    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        var userResponse = userService.updateUser(userUpdateRequest, userId);
+        return ApiResponse.<UserResponse>builder().result(userResponse).build();
     }
 
 }

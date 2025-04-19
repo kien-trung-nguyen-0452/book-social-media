@@ -15,3 +15,4 @@ public class AuthenticateRequest {
     String username;
     String password;
 }
+

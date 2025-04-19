@@ -3,6 +3,8 @@ package org.example.authservice.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Setter
 @Getter
 @Data
@@ -13,5 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class UserUpdateRequest {
     String username;
     String password;
+
+    List<String> roles;
 
 }
