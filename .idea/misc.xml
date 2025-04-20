@@ -16,10 +16,12 @@
         <option value="$PROJECT_DIR$/RatingandReview-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Bookmark-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Wishlist-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Reading-Service/Chapter-Service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Chapter-Service/pom.xml" />
         <option value="$PROJECT_DIR$/RatingandReview-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Reading-service/pom.xml" />
         <option value="$PROJECT_DIR$/auth/pom.xml" />

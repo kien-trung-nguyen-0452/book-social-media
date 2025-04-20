@@ -17,6 +17,17 @@
         <java.version>17</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2022.0.0</version> <!-- Phiên bản của Spring Cloud phù hợp với Spring Boot 3.4.4 -->
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!-- Dependency for Spring Boot Web -->
         <dependency>
