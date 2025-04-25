@@ -1,6 +1,7 @@
 package org.example.authservice.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +17,4 @@ public class ApiResponse<T> {
     int code;
     String message;
     T result;
-
 }

@@ -1,9 +1,10 @@
 package org.example.authservice.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Set;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ import java.util.Set;
 public class Role {
     @Id
     String roleName;
+
     String description;
 
     @ManyToMany

@@ -1,19 +1,19 @@
 package org.example.authservice.service;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.example.authservice.dto.request.PermissionRequest;
 import org.example.authservice.dto.response.PermissionResponse;
 import org.example.authservice.entity.Permission;
 import org.example.authservice.mapper.PermissionMapper;
 import org.example.authservice.repository.PermissionRepository;
-import org.example.authservice.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class PermissionService {
         Permission permission = permissionMapper.toPermission(permissionRequest);
         permissionRepository.save(permission);
         return permissionMapper.toPermissionResponse(permission);
-
     }
 
     public List<PermissionResponse> getAllPermissions() {
@@ -36,8 +35,7 @@ public class PermissionService {
         return permissions.stream().map(permissionMapper::toPermissionResponse).collect(Collectors.toList());
     }
 
-    public void deleteById (String permissionId) {
+    public void deleteById(String permissionId) {
         permissionRepository.deleteById(permissionId);
     }
-
 }

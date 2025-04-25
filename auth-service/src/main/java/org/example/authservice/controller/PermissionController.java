@@ -1,15 +1,16 @@
 package org.example.authservice.controller;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import java.util.List;
+
 import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.PermissionRequest;
 import org.example.authservice.dto.response.PermissionResponse;
 import org.example.authservice.service.PermissionService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequestMapping("/permissions")
@@ -27,7 +28,9 @@ public class PermissionController {
     @GetMapping
     ApiResponse<List<PermissionResponse>> findAllPermissions() {
         var permissionList = permissionService.getAllPermissions();
-        return ApiResponse.<List<PermissionResponse>>builder().result(permissionList).build();
+        return ApiResponse.<List<PermissionResponse>>builder()
+                .result(permissionList)
+                .build();
     }
 
     @DeleteMapping("{permissionId}")

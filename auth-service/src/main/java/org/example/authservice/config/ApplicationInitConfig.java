@@ -1,10 +1,7 @@
 package org.example.authservice.config;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+
 import org.example.authservice.entity.Role;
 import org.example.authservice.entity.User;
 import org.example.authservice.enumerate.PredefinedRole;
@@ -16,7 +13,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class ApplicationInitConfig {
         log.info("Initializing application.....");
         return args -> {
             if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
-               Role userRole = roleRepository.save(Role.builder()
+                Role userRole = roleRepository.save(Role.builder()
                         .roleName(PredefinedRole.USER_ROLE)
                         .description("User role")
                         .build());
