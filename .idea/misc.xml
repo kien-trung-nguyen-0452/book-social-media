@@ -7,16 +7,29 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/auth/pom.xml" />
         <option value="$PROJECT_DIR$/auth-service/pom.xml" />
+        <option value="$PROJECT_DIR$/Reading-service/pom.xml" />
+        <option value="$PROJECT_DIR$/Reading-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Upload-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Chapter-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Comment-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Analytics-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/RatingandReview-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Bookmark-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Wishlist-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Reading-Service/Chapter-Service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Chapter-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/RatingandReview-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Reading-service/pom.xml" />
         <option value="$PROJECT_DIR$/auth/pom.xml" />
         <option value="$PROJECT_DIR$/book-service/pom.xml" />
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
