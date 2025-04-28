@@ -2,13 +2,17 @@ package org.readingservice.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.readingservice.dto.BookRequest;
+import org.readingservice.client.ChapterClient;
+import org.readingservice.client.ChapterResponse;
+import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.ChapterDTO;
 import org.readingservice.entity.Book;
 import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.readingservice.dto.BookResponse;
+import org.readingservice.dto.response.BookResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +23,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-
+    private final ChapterClient chapterClient;
     @Override
     public BookResponse createBook(BookRequest request) {
         Book book = bookMapper.toEntity(request);
@@ -98,4 +102,15 @@ public class BookServiceImpl implements BookService {
                 .map(bookMapper::toBookResponse)
                 .toList();
     }
+
+
+    @Override
+    public ChapterDTO getChapterInfo(Long chapterId) {
+        return chapterClient.getChapterById(chapterId);
+    }
+    @Override
+    public List<ChapterResponse> getChaptersByBookId(Long bookId) {
+        return chapterClient.getChaptersByBookId(bookId);
+    }
+
 }

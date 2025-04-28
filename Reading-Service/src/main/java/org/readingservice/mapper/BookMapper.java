@@ -1,9 +1,9 @@
 package org.readingservice.mapper;
 
-import org.readingservice.dto.BookRequest;
+import org.readingservice.dto.request.BookRequest;
 
 import org.readingservice.entity.Book;
-import org.readingservice.dto.BookResponse;
+import org.readingservice.dto.response.BookResponse;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

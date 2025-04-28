@@ -2,11 +2,13 @@ package org.readingservice.controler;
 
 
 import lombok.RequiredArgsConstructor;
-import org.readingservice.dto.BookRequest;
-import org.readingservice.dto.BookResponse;
+import org.readingservice.client.ChapterResponse;
+import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.BookResponse;
 import org.readingservice.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.readingservice.dto.response.ChapterDTO;
 
 import java.util.List;
 
@@ -75,5 +77,18 @@ public class BookController {
     @GetMapping("/search")
     public List<BookResponse> searchBooks(@RequestParam String keyword) {
         return bookService.searchBooks(keyword);
+    }
+
+    @GetMapping("/{bookId}/chapters/{chapterId}")
+    public ResponseEntity<ChapterDTO> getChapterInfo(
+            @PathVariable Long bookId,
+            @PathVariable Long chapterId
+    ) {
+        ChapterDTO chapterInfo = bookService.getChapterInfo(chapterId);
+        return ResponseEntity.ok(chapterInfo);
+    }
+    @GetMapping("/{bookId}/chapters")
+    public ResponseEntity<List<ChapterResponse>> getChaptersByBookId(@PathVariable Long bookId) {
+        return ResponseEntity.ok(bookService.getChaptersByBookId(bookId));
     }
 }
