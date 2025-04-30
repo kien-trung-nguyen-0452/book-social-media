@@ -27,3 +27,6 @@ spring:
             connect-timeout: 5000
             read-timeout: 5000
 
+chapter:
+  service:
+    url: http://localhost:8080 # Hoặc tên service trong hệ thống service discovery

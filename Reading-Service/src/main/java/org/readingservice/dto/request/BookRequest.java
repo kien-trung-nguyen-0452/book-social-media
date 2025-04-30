@@ -1,5 +1,6 @@
 package org.readingservice.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,17 +12,18 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class BookRequest {
 
+    @NotBlank
     String title;
 
     String subtitle;
-
     String description;
-
     String author;
-
     String coverUrl;
 
+    @NonNull
     Boolean isCompleted;
 
+    @NonNull
     Long categoryId;
+
 }

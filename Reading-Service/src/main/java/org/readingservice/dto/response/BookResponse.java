@@ -4,11 +4,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 @Data
-@Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookResponse {
     Long id;

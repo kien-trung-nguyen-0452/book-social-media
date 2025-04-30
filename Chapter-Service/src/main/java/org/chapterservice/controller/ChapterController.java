@@ -1,8 +1,8 @@
 package org.chapterservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.chapterservice.dto.ChapterRequest;
-import org.chapterservice.dto.ChapterResponse;
+import org.chapterservice.dto.request.ChapterRequest;
+import org.chapterservice.dto.respone.ChapterResponse;
 import org.chapterservice.service.ChapterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,4 +41,32 @@ public class ChapterController {
         chapterService.deleteChapter(id);
         return ResponseEntity.noContent().build();
     }
+    // Lấy chương cuối cùng của một sách
+    @GetMapping("/book/{bookId}/last")
+    public ResponseEntity<ChapterResponse> getLastChapterByBookId(@PathVariable Long bookId) {
+        return ResponseEntity.ok(chapterService.getLastChapterByBookId(bookId));
+    }
+
+    // Lấy chương theo số chương và mã sách
+    @GetMapping("/book/{bookId}/number/{chapterNumber}")
+    public ResponseEntity<ChapterResponse> getChapterByBookIdAndNumber(
+            @PathVariable Long bookId,
+            @PathVariable int chapterNumber
+    ) {
+        return ResponseEntity.ok(chapterService.getChapterByBookIdAndNumber(bookId, chapterNumber));
+    }
+
+    // Đếm số chương của sách
+    @GetMapping("/book/{bookId}/count")
+    public ResponseEntity<Long> countChaptersByBookId(@PathVariable Long bookId) {
+        return ResponseEntity.ok(chapterService.countChaptersByBookId(bookId));
+    }
+
+    // Xoá toàn bộ chương của một sách (cẩn thận khi dùng)
+    @DeleteMapping("/book/{bookId}")
+    public ResponseEntity<Void> deleteChaptersByBookId(@PathVariable Long bookId) {
+        chapterService.deleteChaptersByBookId(bookId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

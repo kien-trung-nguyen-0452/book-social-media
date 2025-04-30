@@ -2,6 +2,8 @@ package org.chapterservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,23 +12,38 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@Table(indexes = {
+        @Index(name = "idx_book_id", columnList = "bookId"),
+        @Index(name = "idx_book_chapter", columnList = "bookId, chapterNumber")
+})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Chapter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private Long bookId;
+    Long bookId;
 
-    private String title;
+    String title;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String content;
+    String content;
 
-    private Integer chapterNumber;
+    Integer chapterNumber;
 
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }

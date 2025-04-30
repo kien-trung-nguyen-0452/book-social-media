@@ -1,7 +1,7 @@
 package org.chapterservice.service;
 
-import org.chapterservice.dto.ChapterRequest;
-import org.chapterservice.dto.ChapterResponse;
+import org.chapterservice.dto.request.ChapterRequest;
+import org.chapterservice.dto.respone.ChapterResponse;
 
 import java.util.List;
 
@@ -11,4 +11,9 @@ public interface ChapterService {
     List<ChapterResponse> getChaptersByBookId(Long bookId);
     ChapterResponse updateChapter(Long id, ChapterRequest request);
     void deleteChapter(Long id);
+    ChapterResponse getLastChapterByBookId(Long bookId);
+    ChapterResponse getChapterByBookIdAndNumber(Long bookId, int chapterNumber);
+    long countChaptersByBookId(Long bookId);
+    void deleteChaptersByBookId(Long bookId);
+
 }
