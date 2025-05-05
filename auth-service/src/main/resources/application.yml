@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /identity
 spring:
+  application:
+    name: auth-service
   datasource:
     url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service?user=kien}
     driverClassName: "com.mysql.cj.jdbc.Driver"
@@ -15,6 +17,11 @@ spring:
 logging:
   level:
     com.zaxxer.hikari: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 jwt:
   signerKey: "A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq"

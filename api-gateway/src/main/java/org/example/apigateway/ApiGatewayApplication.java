@@ -1,13 +1,13 @@
-package org.example.authservice;
+package org.example.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-/*@EnableFeignClients*/
-public class AuthServiceApplication {
+public class ApiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServiceApplication.class, args);
+        SpringApplication.run(ApiGatewayApplication.class, args);
     }
+
 }

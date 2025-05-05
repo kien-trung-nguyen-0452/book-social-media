@@ -1,6 +1,5 @@
 package org.example.authservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.service.UserService;
@@ -17,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
@@ -31,37 +32,37 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-    	userCreateRequest = UserCreateRequest.builder()
-    			.username("username")
-    			.password("password")
-    			.email("email")
-    			.build();
-    	userResponse = UserResponse.builder()
-    			.username("username")
-    			.password("password")
-    			.email("email")
-    			.build();
+        userCreateRequest = UserCreateRequest.builder()
+                .username("username")
+                .password("password")
+                .email("email")
+                .build();
+        userResponse = UserResponse.builder()
+                .username("username")
+                .password("password")
+                .email("email")
+                .build();
     }
 
     @Test
     void createUser() throws Exception {
-    	// GIVEN
+        // GIVEN
 
-    	// WHEN
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String content = objectMapper.writeValueAsString(userCreateRequest);
+        // WHEN
+        ObjectMapper objectMapper = new ObjectMapper();
+        String content = objectMapper.writeValueAsString(userCreateRequest);
 
-    	Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
+        Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
 
-    	mockMvc.perform(MockMvcRequestBuilders.post("/users")
-    					.contentType(MediaType.APPLICATION_JSON_VALUE)
-    					.content(content))
-    			.andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(content))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-    	// THEN
+        // THEN
     }
 }
 
-//Given
-//When
-//Then
+// Given
+// When
+// Then
