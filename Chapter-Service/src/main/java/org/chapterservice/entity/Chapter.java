@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,7 +27,7 @@ public class Chapter {
     Long bookId;
 
     String title;
-
+    @Lob
     @Column(columnDefinition = "LONGTEXT")
     String content;
 
@@ -35,6 +36,8 @@ public class Chapter {
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
+    @ElementCollection
+     List<String> imageUrls; // Thêm dòng này
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

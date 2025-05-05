@@ -1,0 +1,41 @@
+[33mcommit e3a2f395e7926a997f364f740ee6b2bf5de2d0e6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: mfukluvu <pn16022004@gmail.com>
+Date:   Sun Apr 20 23:19:55 2025 +0700
+
+    Push initial code
+
+[33mcommit 682ff4332e85b6cc34be548945f4df38010f9822[m
+Author: mfukluvu <pn16022004@gmail.com>
+Date:   Mon Apr 14 10:00:50 2025 +0700
+
+    Add untracked services
+
+[33mcommit eabfd0b33e53e238bdde29c3e9fc0a812fd275fb[m
+Author: mfukluvu <pn16022004@gmail.com>
+Date:   Mon Apr 14 09:44:16 2025 +0700
+
+    Initial commit with updated files only
+
+[33mcommit dca2a3dd39ea0ab8bb53cce90a09e74365d4b6d5[m
+Author: mfukluvu <pn16022004@gmail.com>
+Date:   Sat Apr 12 22:03:28 2025 +0700
+
+    Initial commit
+
+[33mcommit 631a9429585366fc9c109b0fa79b183c90a58373[m
+Author: kien0452 <kienvipdeptrai245@gmail.com>
+Date:   Sat Apr 19 22:45:03 2025 +0700
+
+    complete identity and security config 2
+
+[33mcommit e43f2cc2539fefce7a4e3656255f094e59ccf0f7[m
+Author: kien0452 <kienvipdeptrai245@gmail.com>
+Date:   Sat Mar 22 12:09:18 2025 +0700
+
+    complete identity and security config
+
+[33mcommit 687e8e7fb19b2cedc8f595435f6bc3fd835d9867[m
+Author: kien0452 <kienvipdeptrai245@gmail.com>
+Date:   Tue Mar 18 16:09:40 2025 +0700
+
+    complete module authitencation

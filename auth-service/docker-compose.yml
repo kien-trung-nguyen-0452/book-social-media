@@ -1,0 +1,31 @@
+version: '3.8'         # 1️⃣ Phiên bản docker-compose syntax
+
+services:              # 2️⃣ Các service cần chạy
+  mysql-db:            # 👉 Service MySQL (database)
+    image: mysql:8.0
+    container_name: auth-mysql-db
+    restart: always
+    environment:       # 👉 Các biến môi trường cho MySQL
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_service
+      MYSQL_USER: kien
+      MYSQL_PASSWORD: 123456789
+    ports:
+      - "3307:3306"     # 👉 Expose MySQL port 3306 bên trong => 3307 bên ngoài
+    volumes:            # 👉 Gắn ổ đĩa để lưu database
+      - auth_mysql_data:/var/lib/mysql
+
+  auth-service:     # 👉 Service Spring Boot (API của bạn)
+    build: .            # 👉 Build từ Dockerfile ở thư mục hiện tại
+    container_name: auth-service
+    ports:
+      - "8080:8080"     # 👉 Expose port 8080
+    environment:        # 👉 Inject biến môi trường để app đọc
+      DBMS_CONNECTION: jdbc:mysql://mysql-db:3306/auth_service?user=kien
+      DBMS_USERNAME: kien
+      DBMS_PASSWORD: 123456789
+    depends_on:         # 👉 Phụ thuộc: chờ mysql-db start trước
+      - mysql-db
+
+volumes:                # 3️⃣ Khai báo volumes
+  auth_mysql_data:

@@ -1,0 +1,14 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: upload-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/upload_db
+
+cloudinary:
+  cloud-name: dku1pfouk
+  api-key: 368717919252533
+  api-secret: taAmPM2LBVZ4oCjLjshDMkFgWjg

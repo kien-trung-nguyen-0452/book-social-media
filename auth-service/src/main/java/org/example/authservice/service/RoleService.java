@@ -1,9 +1,8 @@
 package org.example.authservice.service;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+import java.util.List;
+
 import org.example.authservice.dto.request.RoleRequest;
 import org.example.authservice.dto.response.RoleResponse;
 import org.example.authservice.mapper.RoleMapper;
@@ -11,9 +10,10 @@ import org.example.authservice.repository.PermissionRepository;
 import org.example.authservice.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor

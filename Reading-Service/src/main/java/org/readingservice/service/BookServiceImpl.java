@@ -1,11 +1,19 @@
 package org.readingservice.service;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.readingservice.client.ChapterClient;
-import org.readingservice.client.ChapterResponse;
+import org.readingservice.client.AnalyticsServiceClient;
+import org.readingservice.client.ChapterServiceClient;
+import org.readingservice.client.CommentServiceClient;
+import org.readingservice.client.WishlistServiceClient;
+import org.readingservice.client.dto.analytics.AnalyticsRequest;
+import org.readingservice.client.dto.analytics.AnalyticsResponse;
+import org.readingservice.client.dto.chapter.ChapterResponse;
+import org.readingservice.client.dto.wishlist.WishlistResponse;
 import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.BookResponse;
+import  org.readingservice.client.dto.comment.CommentResponse;
+import  org.readingservice.client.dto.comment.CommentRequest;
 import org.readingservice.entity.Book;
 import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
@@ -13,18 +21,25 @@ import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.readingservice.dto.response.BookResponse;
+
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Valid
 @Service
 @RequiredArgsConstructor
+
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final ChapterClient chapterClient;
+    private final ChapterServiceClient chapterClient;
+    private final WishlistServiceClient wishlistClient;
+    private final CommentServiceClient commentServiceClient;
+    private final AnalyticsServiceClient analyticsServiceClient;
+    // =========================== CRUD BOOKS - Dùng nội bộ ===========================
 
     @Override
     public BookResponse createBook(BookRequest request) {
@@ -75,6 +90,8 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
+    // =========================== Tìm kiếm - Dùng nội bộ ===========================
+
     @Override
     public List<BookResponse> getBooksByAuthor(String author) {
         return bookRepository.findByAuthorContainingIgnoreCase(author)
@@ -107,46 +124,61 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
 
-
-    @Override
-    public ChapterResponse getChapterInfo(Long bookId, Long chapterId) {
-        try {
-            ChapterResponse chapter = chapterClient.getChapterById(chapterId);
-            if (!chapter.getBookId().equals(bookId)) {
-                throw new ServiceException(ErrorCode.CHAPTER_NOT_IN_BOOK);
-            }
-            return chapter;
-        } catch (Exception ex) {
-            throw new ServiceException(ErrorCode.CHAPTER_SERVICE_ERROR, ex);
-        }
-    }
+    // =========================== Gọi CHAPTER SERVICE qua Feign ===========================
 
     @Override
     public List<ChapterResponse> getChaptersByBookId(Long bookId) {
-        try {
-            return chapterClient.getChaptersByBookId(bookId);
-        } catch (Exception ex) {
-            throw new ServiceException(ErrorCode.BOOK_NOT_FOUND, ex);
-        }
+        return chapterClient.getChaptersByBookId(bookId).getData();
     }
+
     @Override
     public ChapterResponse getLastChapter(Long bookId) {
-        return chapterClient.getLastChapterByBookId(bookId);
+        return chapterClient.getLastChapterByBookId(bookId).getData();
+    }
+    @Override
+    public ChapterResponse getChapterById(Long chapterId) {
+        return chapterClient.getChapterById(chapterId).getData();
     }
 
     @Override
-    public ChapterResponse getChapterByNumber(Long bookId, int chapterNumber) {
-        return chapterClient.getChapterByBookIdAndNumber(bookId, chapterNumber);
+    public ChapterResponse getChapterByBookIdAndNumber(Long bookId, int chapterNumber) {
+        return chapterClient.getChapterByBookIdAndNumber(bookId, chapterNumber).getData();
+    }
+    // =========================== Gọi WISHLIST SERVICE qua Feign ===========================
+    @Override
+    public List<WishlistResponse> getWishlistByUser(Long userId) {
+        return wishlistClient.getWishlistByUser(userId).getData();
     }
 
     @Override
-    public Long countChapters(Long bookId) {
-        return chapterClient.countChaptersByBookId(bookId);
+    public void removeBookFromWishlist(Long userId, Long bookId) {
+        wishlistClient.removeFromWishlist(userId, bookId);
+    }
+// =========================== Gọi COMMENT SERVICE qua Feign ===========================
+    @Override
+    public List<CommentResponse> getCommentsByChapterId(Long chapterId) {
+        return commentServiceClient.getCommentsByChapterId(chapterId).getData();
     }
 
     @Override
-    public void deleteAllChapters(Long bookId) {
-        chapterClient.deleteChaptersByBookId(bookId);
+    public CommentResponse addComment(CommentRequest request) {
+        return commentServiceClient.addComment(request).getData();
     }
 
+    @Override
+    public void deleteComment(String commentId) {
+        commentServiceClient.deleteComment(commentId);
+    }
+// =========================== Gọi ANALYTICS SERVICE qua Feign ===========================
+    @Override
+    public void trackReading(AnalyticsRequest request) {
+        analyticsServiceClient.trackReading(request); // Gọi API track reading
 }
+
+    @Override
+    public List<AnalyticsResponse> getUserReadingStats(Long userId) {
+        return analyticsServiceClient.getUserReadingStats(userId).getData();
+    }
+}
+
+

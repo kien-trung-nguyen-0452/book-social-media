@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "books")
+@Table(name = "book")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
 
