@@ -1,4 +1,4 @@
-package org.chapterservice.dto.respone;
+package org.chapterservice.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

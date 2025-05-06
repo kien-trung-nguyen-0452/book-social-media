@@ -17,6 +17,7 @@
         <option value="$PROJECT_DIR$/Bookmark-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Wishlist-Service/pom.xml" />
         <option value="$PROJECT_DIR$/book-service/pom.xml" />
+        <option value="$PROJECT_DIR$/chapter-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

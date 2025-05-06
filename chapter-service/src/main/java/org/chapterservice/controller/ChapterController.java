@@ -3,7 +3,7 @@ package org.chapterservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.chapterservice.dto.common.ApiResponse;
 import org.chapterservice.dto.request.ChapterRequest;
-import org.chapterservice.dto.respone.ChapterResponse;
+import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.service.ChapterService;
 import org.springframework.web.bind.annotation.*;
 

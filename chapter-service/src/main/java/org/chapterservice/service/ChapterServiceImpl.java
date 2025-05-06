@@ -2,7 +2,7 @@ package org.chapterservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.chapterservice.dto.request.ChapterRequest;
-import org.chapterservice.dto.respone.ChapterResponse;
+import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.entity.Chapter;
 import org.chapterservice.exception.ErrorCode;
 import org.chapterservice.exception.ServiceException;
