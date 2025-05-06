@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <!-- các module cũ -->
+        <module>book-service</module>
         <module>api-gateway</module>
         <module>auth-service</module>
         <module>discovery-service</module>
