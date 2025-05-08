@@ -1,7 +1,7 @@
-package org.example.authservice.dto.common;
+package org.example.apigateway.dto.common;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org</groupId>
-    <artifactId>Analytics-Service</artifactId>
+    <artifactId>analytic-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Analytics-Service</name>
     <description>Analytics-Service</description>

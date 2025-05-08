@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/Analytics-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Bookmark-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Chapter-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Comment-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RatingandReview-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Reading-Service/Chapter-Service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Reading-Service/chapter-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Reading-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Upload-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Wishlist-Service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/analytic-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api-/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api-/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/book-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/book-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/book-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/comment-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/discovery-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/file-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/upload-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wishlist-service/src/main/java" charset="UTF-8" />
   </component>
 </project>

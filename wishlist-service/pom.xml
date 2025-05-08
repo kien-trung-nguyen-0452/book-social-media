@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org</groupId>
-    <artifactId>Wishlist-Service</artifactId>
+    <artifactId>wishlist-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Wishlist-Service</name>
     <description>Wishlist-Service</description>

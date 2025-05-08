@@ -1,4 +1,4 @@
-package dto.request;
+package org.example.apigateway.dto.request;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
