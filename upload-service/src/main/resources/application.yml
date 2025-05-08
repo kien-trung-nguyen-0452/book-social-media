@@ -12,3 +12,10 @@ cloudinary:
   cloud-name: dku1pfouk
   api-key: 368717919252533
   api-secret: taAmPM2LBVZ4oCjLjshDMkFgWjg
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

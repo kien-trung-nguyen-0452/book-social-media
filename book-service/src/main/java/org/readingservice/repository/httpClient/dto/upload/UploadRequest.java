@@ -1,4 +1,4 @@
-package org.readingservice.client.dto.upload;
+package org.readingservice.repository.httpClient.dto.upload;
 
 import lombok.Data;
 

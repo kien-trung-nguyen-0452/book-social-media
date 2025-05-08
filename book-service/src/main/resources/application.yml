@@ -1,8 +1,10 @@
 server:
   port: 8086
+  servlet:
+    context-path: /reading
 spring:
   application:
-    name: reading-service
+    name: book-service
   datasource:
     url: jdbc:mysql://localhost:3306/reading_db
     username: root
@@ -20,27 +22,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  cloud:
-    openfeign:
-      client:
-        config:
-          default:
-            connect-timeout: 5000
-            read-timeout: 5000
-service:
-  chapter:
-    base-url: http://localhost:8080
-  comment:
-    base-url: http://localhost:8083
-  upload:
-    base-url: http://localhost:8085
-  analytics:
-    base-url: http://localhost:8089
-  bookmark:
-    base-url: http://localhost:8084
-  wishlist:
-    base-url: http://localhost:8081
+
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka/

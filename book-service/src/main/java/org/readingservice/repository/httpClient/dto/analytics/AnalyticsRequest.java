@@ -1,4 +1,4 @@
-package org.readingservice.client.dto.analytics;
+package org.readingservice.repository.httpClient.dto.analytics;
 
 import lombok.Data;
 

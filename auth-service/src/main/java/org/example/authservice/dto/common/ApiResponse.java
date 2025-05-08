@@ -3,7 +3,6 @@ package org.example.authservice.dto.common;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 @Setter
 @Getter
@@ -11,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     int code;

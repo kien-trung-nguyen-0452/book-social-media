@@ -1,4 +1,4 @@
-package org.readingservice.client.dto.wishlist;
+package org.readingservice.repository.httpClient.dto.wishlist;
 
 import lombok.Data;
 

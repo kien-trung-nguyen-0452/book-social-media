@@ -1,4 +1,4 @@
-package org.readingservice.client.dto.bookmark;
+package org.readingservice.repository.httpClient.dto.bookmark;
 
 import lombok.Data;
 

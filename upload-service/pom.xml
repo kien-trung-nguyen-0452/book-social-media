@@ -35,7 +35,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2022.0.5</version> <!-- hoặc tương thích với Spring Boot của bạn -->
+                <version>2024.0.1</version> <!-- hoặc tương thích với Spring Boot của bạn -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

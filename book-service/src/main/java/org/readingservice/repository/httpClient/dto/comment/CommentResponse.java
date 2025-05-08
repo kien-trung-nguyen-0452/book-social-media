@@ -1,4 +1,4 @@
-package org.readingservice.client.dto.comment;
+package org.readingservice.repository.httpClient.dto.comment;
 
 
 

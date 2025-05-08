@@ -1,11 +1,11 @@
 package org.readingservice.service;
 
-import org.readingservice.client.dto.analytics.AnalyticsRequest;
-import org.readingservice.client.dto.analytics.AnalyticsResponse;
-import org.readingservice.client.dto.chapter.ChapterResponse;
-import org.readingservice.client.dto.comment.CommentRequest;
-import org.readingservice.client.dto.comment.CommentResponse;
-import org.readingservice.client.dto.wishlist.WishlistResponse;
+import org.readingservice.repository.httpClient.dto.analytics.AnalyticsRequest;
+import org.readingservice.repository.httpClient.dto.analytics.AnalyticsResponse;
+import org.readingservice.repository.httpClient.dto.chapter.ChapterResponse;
+import org.readingservice.repository.httpClient.dto.comment.CommentRequest;
+import org.readingservice.repository.httpClient.dto.comment.CommentResponse;
+import org.readingservice.repository.httpClient.dto.wishlist.WishlistResponse;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
 

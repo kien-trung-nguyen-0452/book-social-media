@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  application:
+    name: chapter-service
   datasource:
     url: jdbc:mysql://localhost:3306/article
     username: root

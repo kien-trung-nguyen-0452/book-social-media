@@ -1,19 +1,17 @@
 package org.readingservice.controler;
 
 import lombok.RequiredArgsConstructor;
-import org.readingservice.client.dto.chapter.ChapterResponse;
+import org.readingservice.repository.httpClient.dto.chapter.ChapterResponse;
 import org.readingservice.dto.common.ApiResponse;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
 import org.readingservice.service.BookService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -22,106 +20,119 @@ public class BookController {
     // ============================ BOOK CRUD ============================
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BookResponse>> createBook(@RequestBody BookRequest request) {
-        BookResponse createdBook = bookService.createBook(request);
-        return ResponseEntity.ok(new ApiResponse<>(createdBook, "Book created successfully", 200));
+    public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
+        return ApiResponse.<BookResponse>builder()
+                .data(bookService.createBook(request))
+                .message("Book created successfully")
+                .build();
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BookResponse>>> getAllBooks() {
-        List<BookResponse> books = bookService.getAllBooks();
-        return ResponseEntity.ok(new ApiResponse<>(books, "All books retrieved", 200));
+    public ApiResponse<List<BookResponse>> getAllBooks() {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.getAllBooks())
+                .message("All books retrieved")
+                .build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookResponse>> getBookById(@PathVariable Long id) {
-        BookResponse book = bookService.getBookById(id);
-        return ResponseEntity.ok(new ApiResponse<>(book, "Book found", 200));
+    public ApiResponse<BookResponse> getBookById(@PathVariable Long id) {
+        return ApiResponse.<BookResponse>builder()
+                .data(bookService.getBookById(id))
+                .message("Book found")
+                .build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookResponse>> updateBook(
-            @PathVariable Long id,
-            @RequestBody BookRequest request
-    ) {
-        BookResponse updated = bookService.updateBook(id, request);
-        return ResponseEntity.ok(new ApiResponse<>(updated, "Book updated successfully", 200));
+    public ApiResponse<BookResponse> updateBook(@PathVariable Long id, @RequestBody BookRequest request) {
+        return ApiResponse.<BookResponse>builder()
+                .data(bookService.updateBook(id, request))
+                .message("Book updated successfully")
+                .build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteBook(@PathVariable Long id) {
+    public ApiResponse<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
-        return ResponseEntity.ok(new ApiResponse<>(null, "Book deleted successfully", 200));
+        return ApiResponse.<Void>builder()
+                .message("Book deleted successfully")
+                .build();
     }
 
     // ============================ BOOK FILTERING ============================
 
     @GetMapping("/author")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> getBooksByAuthor(@RequestParam String author) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.getBooksByAuthor(author), "Books by author found", 200)
-        );
+    public ApiResponse<List<BookResponse>> getBooksByAuthor(@RequestParam String author) {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.getBooksByAuthor(author))
+                .message("Books by author found")
+                .build();
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> getBooksByCategoryId(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.getBooksByCategory(categoryId), "Books by category found", 200)
-        );
+    public ApiResponse<List<BookResponse>> getBooksByCategoryId(@PathVariable Long categoryId) {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.getBooksByCategory(categoryId))
+                .message("Books by category found")
+                .build();
     }
 
     @GetMapping("/top-rated")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> getTopRatedBooks(@RequestParam(defaultValue = "10") int limit) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.getTopRatedBooks(limit), "Top rated books", 200)
-        );
+    public ApiResponse<List<BookResponse>> getTopRatedBooks(@RequestParam(defaultValue = "10") int limit) {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.getTopRatedBooks(limit))
+                .message("Top rated books")
+                .build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> searchBooks(@RequestParam String keyword) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.searchBooks(keyword), "Search results", 200)
-        );
+    public ApiResponse<List<BookResponse>> searchBooks(@RequestParam String keyword) {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.searchBooks(keyword))
+                .message("Search results")
+                .build();
     }
 
     // ============================ CHAPTER SERVICE (via OpenFeign) ============================
+
     @GetMapping("/{bookId}/chapters")
-    public ResponseEntity<ApiResponse<List<ChapterResponse>>> getChaptersByBookId(@PathVariable Long bookId) {
+    public ApiResponse<List<ChapterResponse>> getChaptersByBookId(@PathVariable Long bookId) {
         List<ChapterResponse> chapters = bookService.getChaptersByBookId(bookId);
         if (chapters == null || chapters.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(null, "No chapters found for the book", 404));
+            return ApiResponse.<List<ChapterResponse>>builder()
+                    .message("No chapters found for the book")
+                    .build();
         }
-        return ResponseEntity.ok(
-                new ApiResponse<>(chapters, "Chapters of book found", 200)
-        );
+        return ApiResponse.<List<ChapterResponse>>builder()
+                .data(chapters)
+                .message("Chapters of book found")
+                .build();
     }
 
     @GetMapping("/{bookId}/chapters/last")
-    public ResponseEntity<ApiResponse<ChapterResponse>> getLastChapter(@PathVariable Long bookId) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.getLastChapter(bookId), "Last chapter found", 200)
-        );
+    public ApiResponse<ChapterResponse> getLastChapter(@PathVariable Long bookId) {
+        return ApiResponse.<ChapterResponse>builder()
+                .data(bookService.getLastChapter(bookId))
+                .message("Last chapter found")
+                .build();
     }
 
     @GetMapping("/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<ChapterResponse>> getChapterById(@PathVariable Long chapterId) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(bookService.getChapterById(chapterId), "Chapter found by ID", 200)
-        );
+    public ApiResponse<ChapterResponse> getChapterById(@PathVariable Long chapterId) {
+        return ApiResponse.<ChapterResponse>builder()
+                .data(bookService.getChapterById(chapterId))
+                .message("Chapter found by ID")
+                .build();
     }
 
     @GetMapping("/{bookId}/chapters/number/{chapterNumber}")
-    public ResponseEntity<ApiResponse<ChapterResponse>> getChapterByBookIdAndNumber(
+    public ApiResponse<ChapterResponse> getChapterByBookIdAndNumber(
             @PathVariable Long bookId,
             @PathVariable int chapterNumber
     ) {
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        bookService.getChapterByBookIdAndNumber(bookId, chapterNumber),
-                        "Chapter found by book and number",
-                        200
-                )
-        );
+        return ApiResponse.<ChapterResponse>builder()
+                .data(bookService.getChapterByBookIdAndNumber(bookId, chapterNumber))
+                .message("Chapter found by book and number")
+                .build();
     }
 }
