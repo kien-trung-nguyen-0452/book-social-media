@@ -1,0 +1,14 @@
+package org.example.crawlservice.repository;
+
+
+import org.example.crawlservice.dto.data.BookInfo;
+import org.example.crawlservice.dto.response.BookResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient(name = "book-service")
+public interface BookClient {
+    @PostMapping("/reading/books")
+    BookResponse createBook(@RequestBody BookInfo info);
+}

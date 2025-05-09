@@ -6,6 +6,14 @@
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/RatingandReview-Service" />
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/crawl-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/crawl-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
