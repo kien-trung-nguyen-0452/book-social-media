@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Wishlist-Service
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/wishlist_db
+
+
+logging:
+  level:
+    org.wishlistservice: DEBUG
+    org.springframework: INFO
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

@@ -5,12 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>untitled</artifactId>
+    <artifactId>Parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+
+        <!-- các module cũ -->
+        <module>book-service</module>
+        <module>api-gateway</module>
+        <module>discovery-service</module>
+        <module>chapter-service</module>
+        <module>comment-service</module>
+        <module>bookmark-service</module>
+        <module>wishlist-service</module>
+        <module>upload-service</module>
+        <module>analytics-service</module>
         <module>auth-service</module>
     </modules>
+
 
     <properties>
         <maven.compiler.source>23</maven.compiler.source>

@@ -30,6 +30,7 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/token")
+
     ApiResponse<AuthenticateResponse> authenticate(@RequestBody AuthenticateRequest authenticateRequest) {
         var result = authenticationService.authenticate(authenticateRequest);
         return ApiResponse.<AuthenticateResponse>builder().result(result).build();
