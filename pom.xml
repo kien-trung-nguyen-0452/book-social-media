@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+
         <!-- các module cũ -->
         <module>book-service</module>
         <module>api-gateway</module>
@@ -19,6 +20,7 @@
         <module>wishlist-service</module>
         <module>upload-service</module>
         <module>analytics-service</module>
+        <module>auth-service</module>
     </modules>
 
 

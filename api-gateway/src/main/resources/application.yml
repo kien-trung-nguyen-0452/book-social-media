@@ -11,9 +11,12 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: book-service
-          uri: https://localhost:8086
+        - id: auth_service
+          uri: http://localhost:8080
           predicates:
-            - Path=/reading/**
+            - Path=${app.api-prefix}/identity/**
           filters:
             - StripPrefix=2
+
+
+
