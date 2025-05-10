@@ -2,7 +2,10 @@ package org.readingservice.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,4 +25,6 @@ public class BookResponse {
     Double averageRating;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
+    List<String> categories;
 }

@@ -22,7 +22,7 @@ public interface BookService {
 
     // ======================= Truy vấn nội bộ =======================
     List<BookResponse> getBooksByAuthor(String author);
-    List<BookResponse> getBooksByCategory(Long categoryId);
+    List<BookResponse> getBooksByCategory(String category);
     List<BookResponse> getTopRatedBooks(int limit);
     List<BookResponse> searchBooks(String keyword);
 

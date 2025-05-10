@@ -18,7 +18,7 @@ FROM amazoncorretto:21.0.4
 WORKDIR /app
 
 # Copy the generated JAR file from the build stage into the container
-COPY --from=build /app/target/Chapter-Service-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/chapter-service-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port 8087 (vì ở docker-compose bạn map service port 8087)
 EXPOSE 8087

@@ -33,7 +33,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public ChapterResponse getChapterById(Long id) {
+    public ChapterResponse getChapterById(String id) {
         return chapterRepository.findById(id)
                 .map(chapterMapper::toResponse)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
@@ -52,7 +52,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public ChapterResponse updateChapter(Long id, ChapterRequest request) {
+    public ChapterResponse updateChapter(String id, ChapterRequest request) {
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
 
@@ -65,12 +65,13 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public void deleteChapter(Long id) {
+    public void deleteChapter(String id) {
         if (!chapterRepository.existsById(id)) {
             throw new ServiceException(ErrorCode.CHAPTER_NOT_FOUND);
         }
         chapterRepository.deleteById(id);
     }
+
     @Override
     public ChapterResponse getLastChapterByBookId(Long bookId) {
         return chapterRepository.findFirstByBookIdOrderByChapterNumberDesc(bookId)
@@ -94,5 +95,4 @@ public class ChapterServiceImpl implements ChapterService {
     public void deleteChaptersByBookId(Long bookId) {
         chapterRepository.deleteByBookId(bookId);
     }
-
 }
