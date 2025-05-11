@@ -21,11 +21,14 @@ public class BookController {
 
     @PostMapping
     public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
+        BookResponse response = bookService.createBook(request);
+
         return ApiResponse.<BookResponse>builder()
-                .data(bookService.createBook(request))
+                .data(response)
                 .message("Book created successfully")
                 .build();
     }
+
 
     @GetMapping
     public ApiResponse<List<BookResponse>> getAllBooks() {
@@ -69,10 +72,10 @@ public class BookController {
                 .build();
     }
 
-    @GetMapping("/category/{categoryId}")
-    public ApiResponse<List<BookResponse>> getBooksByCategoryId(@PathVariable Long categoryId) {
+    @GetMapping("/category/{category}")
+    public ApiResponse<List<BookResponse>> getBooksByCategory(@PathVariable String category) {
         return ApiResponse.<List<BookResponse>>builder()
-                .data(bookService.getBooksByCategory(categoryId))
+                .data(bookService.getBooksByCategory(category))
                 .message("Books by category found")
                 .build();
     }

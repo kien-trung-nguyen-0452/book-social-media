@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/common-dto" />
     <file type="web" url="file://$PROJECT_DIR$/crawl-service" />
   </component>
   <component name="MavenProjectsManager">
@@ -22,6 +23,8 @@
         <option value="$PROJECT_DIR$/book-service/pom.xml" />
         <option value="$PROJECT_DIR$/chapter-service/pom.xml" />
         <option value="$PROJECT_DIR$/wishlist-service/pom.xml" />
+        <option value="$PROJECT_DIR$/common-dto/pom.xml" />
+        <option value="$PROJECT_DIR$/crawl-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -32,6 +35,7 @@
         <option value="$PROJECT_DIR$/Reading-service/pom.xml" />
         <option value="$PROJECT_DIR$/api-/pom.xml" />
         <option value="$PROJECT_DIR$/auth/pom.xml" />
+        <option value="$PROJECT_DIR$/common-dto/pom.xml" />
       </set>
     </option>
   </component>

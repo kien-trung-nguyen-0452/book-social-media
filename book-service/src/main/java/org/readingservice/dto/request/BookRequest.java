@@ -1,8 +1,11 @@
 package org.readingservice.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,10 +23,12 @@ public class BookRequest {
     String author;
     String coverUrl;
 
-    @NonNull
+    @NotNull
     Boolean isCompleted;
 
-    @NonNull
+    @NotNull
     Long categoryId;
 
+    @NotNull
+    List<String> categories;  // Nếu muốn thêm trường thể loại vào khi người dùng tạo sách
 }

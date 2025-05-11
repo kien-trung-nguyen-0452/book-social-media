@@ -14,10 +14,7 @@ public class ChapterResponse {
     private Long id;
     private Long bookId;
     private String title;
-    private String content;
     private Integer chapterNumber;
     private List<String> imageUrls;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
 

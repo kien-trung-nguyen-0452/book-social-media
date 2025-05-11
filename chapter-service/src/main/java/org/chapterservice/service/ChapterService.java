@@ -9,13 +9,13 @@ public interface ChapterService {
 
     ChapterResponse createChapter(ChapterRequest request);
 
-    ChapterResponse getChapterById(Long id);
+    ChapterResponse getChapterById(String id); // Đổi Long -> String
 
     List<ChapterResponse> getChaptersByBookId(Long bookId);
 
-    ChapterResponse updateChapter(Long id, ChapterRequest request);
+    ChapterResponse updateChapter(String id, ChapterRequest request); // Đổi Long -> String
 
-    void deleteChapter(Long id);
+    void deleteChapter(String id); // Đổi Long -> String
 
     ChapterResponse getLastChapterByBookId(Long bookId);
 

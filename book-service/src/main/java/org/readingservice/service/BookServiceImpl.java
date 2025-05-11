@@ -43,14 +43,25 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse createBook(BookRequest request) {
+
         Book book = bookMapper.toEntity(request);
+
+
         book.setCreatedAt(LocalDateTime.now());
         book.setUpdatedAt(LocalDateTime.now());
         book.setViewCount(0L);
         book.setAverageRating(0.0);
-        book.setChapterCount(0); // default ban đầu
-        return bookMapper.toResponse(bookRepository.save(book));
+        book.setChapterCount(0);
+
+
+        Book savedBook = bookRepository.save(book);
+        System.out.println("Saved book ID: " + savedBook.getId());
+        BookResponse response = bookMapper.toResponse(savedBook);
+        System.out.println("Mapped response ID: " + response.getId());
+        return bookMapper.toResponse(savedBook);
+
     }
+
 
     @Override
     public BookResponse getBookById(Long id) {
@@ -72,15 +83,15 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
         book.setTitle(request.getTitle());
-        book.setSubtitle(request.getSubtitle());
         book.setDescription(request.getDescription());
         book.setAuthor(request.getAuthor());
         book.setCoverUrl(request.getCoverUrl());
         book.setIsCompleted(request.getIsCompleted());
-        book.setCategoryId(request.getCategoryId());
+        book.setCategories(request.getCategories());
         book.setUpdatedAt(LocalDateTime.now());
         return bookMapper.toResponse(bookRepository.save(book));
     }
+
 
     @Override
     public void deleteBook(Long id) {
@@ -101,12 +112,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> getBooksByCategory(Long categoryId) {
-        return bookRepository.findByCategoryId(categoryId)
+    public List<BookResponse> getBooksByCategory(String category) {
+        return bookRepository.findByCategory(category)
                 .stream()
                 .map(bookMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<BookResponse> getTopRatedBooks(int limit) {

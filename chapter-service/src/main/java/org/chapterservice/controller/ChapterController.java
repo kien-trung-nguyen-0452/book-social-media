@@ -25,7 +25,7 @@ public class ChapterController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<ChapterResponse> getChapterById(@PathVariable Long id) {
+    public ApiResponse<ChapterResponse> getChapterById(@PathVariable String id) {
         return ApiResponse.<ChapterResponse>builder()
                 .data(chapterService.getChapterById(id))
                 .message("Chapter fetched")
@@ -41,7 +41,7 @@ public class ChapterController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ChapterResponse> updateChapter(@PathVariable Long id, @RequestBody ChapterRequest request) {
+    public ApiResponse<ChapterResponse> updateChapter(@PathVariable String id, @RequestBody ChapterRequest request) {
         return ApiResponse.<ChapterResponse>builder()
                 .data(chapterService.updateChapter(id, request))
                 .message("Chapter updated")
@@ -49,7 +49,7 @@ public class ChapterController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteChapter(@PathVariable Long id) {
+    public ApiResponse<Void> deleteChapter(@PathVariable String id) {
         chapterService.deleteChapter(id);
         return ApiResponse.<Void>builder()
                 .message("Chapter deleted")

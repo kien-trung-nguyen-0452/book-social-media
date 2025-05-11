@@ -1,52 +1,35 @@
 package org.chapterservice.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Document(collection = "chapters") // Dùng @Document thay cho @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(indexes = {
-        @Index(name = "idx_book_id", columnList = "bookId"),
-        @Index(name = "idx_book_chapter", columnList = "bookId, chapterNumber")
-})
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Chapter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String id; // MongoDB sử dụng String id theo ObjectId, không cần @GeneratedValue
 
     Long bookId;
-
     String title;
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
-    String content;
+    String content; // Không cần @Lob hoặc @Column
 
     Integer chapterNumber;
+    List<String> imageUrls;
 
-    LocalDateTime createdAt;
-
-    LocalDateTime updatedAt;
-    @ElementCollection
-     List<String> imageUrls; // Thêm dòng này
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
+    // Tự động gán thời gian tạo/cập nhật
+    @Builder.Default
+    LocalDateTime createdAt = LocalDateTime.now();
+    @Builder.Default
+    LocalDateTime updatedAt = LocalDateTime.now();
 }

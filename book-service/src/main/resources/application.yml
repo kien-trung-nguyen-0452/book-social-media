@@ -1,7 +1,6 @@
 server:
   port: 8086
-  servlet:
-    context-path: /reading
+
 spring:
   application:
     name: book-service

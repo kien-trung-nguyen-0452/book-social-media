@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookInfo {
+    String id;
     String title;
     String author;
     String description;

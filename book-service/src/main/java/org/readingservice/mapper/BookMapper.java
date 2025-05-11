@@ -10,5 +10,7 @@ import org.mapstruct.*;
 public interface BookMapper {
 
     Book toEntity(BookRequest request);
+    @Mapping(source = "id", target = "id")
+
     BookResponse toResponse(Book book);
 }
