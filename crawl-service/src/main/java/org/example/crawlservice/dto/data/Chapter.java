@@ -1,18 +1,16 @@
 package org.example.crawlservice.dto.data;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Chapter {
+     String id;
      String chapter;
      String title;
      List<String> images;

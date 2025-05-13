@@ -13,35 +13,11 @@ import java.util.List;
 
 public interface BookService {
 
-    // ======================= CRUD và xử lý nội bộ =======================
+    // ======================= CRUD Books =======================
     BookResponse createBook(BookRequest request);
-    BookResponse getBookById(Long id);
+    BookResponse getBookById(String id);
     List<BookResponse> getAllBooks();
-    BookResponse updateBook(Long id, BookRequest request);
-    void deleteBook(Long id);
+    BookResponse updateBook(String id, BookRequest request);
+    void deleteBook(String id); // Đã sửa từ Long -> String
 
-    // ======================= Truy vấn nội bộ =======================
-    List<BookResponse> getBooksByAuthor(String author);
-    List<BookResponse> getBooksByCategory(String category);
-    List<BookResponse> getTopRatedBooks(int limit);
-    List<BookResponse> searchBooks(String keyword);
-
-    // ======================= Gọi CHAPTER SERVICE (Feign) =======================
-    List<ChapterResponse> getChaptersByBookId(Long bookId);
-    ChapterResponse getLastChapter(Long bookId);
-    ChapterResponse getChapterById(Long chapterId);
-    ChapterResponse getChapterByBookIdAndNumber(Long bookId, int chapterNumber);
-
-    // ======================= Gọi WISHLIST SERVICE (Feign) =======================
-    List<WishlistResponse> getWishlistByUser(Long userId);
-    public void removeBookFromWishlist(Long userId, Long bookId);
-
-    // ======================= Gọi COMMENT SERVICE (Feign) =======================
-    List<CommentResponse> getCommentsByChapterId(Long chapterId);
-    CommentResponse addComment(CommentRequest request);
-    void deleteComment(String commentId);
-
-    // ======================= Gọi ANALYTICS SERVICE (Feign) =======================
-    void trackReading(AnalyticsRequest request);
-    List<AnalyticsResponse> getUserReadingStats(Long userId);
 }

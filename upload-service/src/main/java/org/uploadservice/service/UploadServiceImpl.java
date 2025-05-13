@@ -32,6 +32,7 @@ public class UploadServiceImpl implements UploadService {
     public FromUrlUploadResponse uploadChapterImage(String url, String bookId, String chapterId, String name) {
         String baseFolder = "manga/";
         String path = generateChapterPath(bookId,chapterId, name);
+        path = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
         try {
             Map<?, ?> options = ObjectUtils.asMap(
                     "folder", baseFolder,
@@ -40,7 +41,7 @@ public class UploadServiceImpl implements UploadService {
                     "context", String.format("book=%s|chapter=%s|page=%s", bookId, chapterId, name)
             );
 
-            Map <?, ?> uploadResult = cloudinary.uploader().upload(url, options);
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(url, options);
             return FromUrlUploadResponse.builder()
                     .url((String) uploadResult.get("url"))
                     .public_id((String) uploadResult.get("public_id"))

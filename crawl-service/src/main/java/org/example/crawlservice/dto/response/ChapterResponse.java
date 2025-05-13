@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterResponse {
-    Long id;
-    Long bookId;
+    String id;
+    String bookId;
     String title;
     String content;
     Integer chapterNumber;

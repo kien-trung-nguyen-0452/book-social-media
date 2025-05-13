@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookResponse {
     Long id;
+    String bookId;
     String title;
     String subtitle;
     String description;

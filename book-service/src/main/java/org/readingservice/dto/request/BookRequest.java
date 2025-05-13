@@ -27,8 +27,6 @@ public class BookRequest {
     Boolean isCompleted;
 
     @NotNull
-    Long categoryId;
+    List<String> categories;// Gộp thành một trường categoryIds và sửa kiểu thành List<Long> (ID thể loại)
 
-    @NotNull
-    List<String> categories;  // Nếu muốn thêm trường thể loại vào khi người dùng tạo sách
 }

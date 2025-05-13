@@ -15,9 +15,9 @@ public interface ChapterServiceClient {
 
     @GetMapping("/chapters/book/{bookId}/last")
     ApiResponse<ChapterResponse> getLastChapterByBookId(@PathVariable("bookId") Long bookId);
-
+    // Feign Client
     @GetMapping("/chapters/{id}")
-    ApiResponse<ChapterResponse> getChapterById(@PathVariable("id") Long id);
+    ApiResponse<ChapterResponse> getChapterById(@PathVariable("id") String id);
 
     @GetMapping("/chapters/book/{bookId}/number/{chapterNumber}")
     ApiResponse<ChapterResponse> getChapterByBookIdAndNumber(

@@ -8,17 +8,21 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface InternalMapper {
 
-    @Mapping(target = "subtitle", constant = "null")
-    @Mapping(target = "categoryId", constant = "0L")
-    @Mapping(target = "isCompleted", constant = "false")
-    @Mapping(source = "image_url", target = "coverUrl")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "author", target = "author")
+    @Mapping(target = "categoryId", expression = "java(org.example.crawlservice.mapper.MapperHelper.defaultCategoryId())")
+    @Mapping(source = "image_url", target = "imageUrl")
     BookRequest toBookRequest(BookInfo bookInfo);
 
-    @Mapping(target = "bookId", ignore = true)        // bỏ qua
-    @Mapping(target = "content", ignore = true)       // bỏ qua
+    @Mapping(target = "bookId", ignore = true)
+    @Mapping(target = "content", ignore = true)
     @Mapping(source = "chapter", target = "chapterNumber", qualifiedByName = "parseChapterNumber")
     @Mapping(source = "title", target = "title")
     @Mapping(source = "images", target = "imageUrls")
@@ -32,4 +36,6 @@ public interface InternalMapper {
             return 0;
         }
     }
+
+
 }

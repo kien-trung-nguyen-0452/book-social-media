@@ -10,10 +10,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class ChapterRequest{
-
-    private Long bookId;
+    private String bookId;
     private String title;
-    private String content;
+    private String content;//nếu dùng truyện chữ thì thêm
     private Integer chapterNumber;
     private List<String> imageUrls;
 }

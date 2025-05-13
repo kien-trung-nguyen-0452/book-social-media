@@ -45,6 +45,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -92,7 +101,6 @@
             <version>8.2.0</version>
             <scope>runtime</scope>
         </dependency>
-
         <!-- Spring Boot DevTools (optional, for development) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

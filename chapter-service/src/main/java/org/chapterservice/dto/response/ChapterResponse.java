@@ -12,12 +12,10 @@ import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterResponse {
-    Long id;
-    Long bookId;
-    String title;
-    String content;
-    Integer chapterNumber;
-    List<String> imageUrls;
+    private String id;
+    private String chapter;
+    private String title;
+    private List<String> images;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

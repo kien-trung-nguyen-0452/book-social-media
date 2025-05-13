@@ -2,22 +2,27 @@ package org.readingservice.repository;
 
 import org.readingservice.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, String> {
+
+    // Tìm theo tên tác giả (không phân biệt hoa thường)
     List<Book> findByAuthorContainingIgnoreCase(String author);
 
-    // Đã sửa từ categoryId sang category (danh sách)
-    @Query("SELECT b FROM Book b JOIN b.categories c WHERE LOWER(c) = LOWER(:category)")
-    List<Book> findByCategory(@Param("category") String category);
+    // Tìm theo category (giả sử categories là List<String>)
+    List<Book> findByCategoriesIgnoreCase(String category);
+    // Nếu categories là List<Category>:
+    // List<Book> findByCategories_NameIgnoreCase(String categoryName);
 
-    @Query("SELECT b FROM Book b ORDER BY b.averageRating DESC")
-    List<Book> findTopRatedBooks(Pageable pageable);
+    // Lấy sách có đánh giá cao nhất
+    List<Book> findAllByOrderByAverageRatingDesc(Pageable pageable);
 
-    @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE %:keyword% OR LOWER(b.author) LIKE %:keyword% OR LOWER(b.description) LIKE %:keyword%")
-    List<Book> searchBooks(@Param("keyword") String keyword);
+    // Tìm sách theo tiêu đề, tác giả, hoặc mô tả chứa keyword (không phân biệt hoa thường)
+    List<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            String keyword1,
+            String keyword2,
+            String keyword3
+    );
 }

@@ -12,19 +12,22 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookResponse {
-    Long id;
+
+    String  id;
     String title;
     String subtitle;
     String description;
     String author;
     String coverUrl;
     Boolean isCompleted;
-    Long categoryId;
+
+
     Integer chapterCount;
-    Long viewCount;
+    String viewCount;
     Double averageRating;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-    List<String> categories;
+    // Nếu bạn muốn giữ danh sách thể loại (category) dưới dạng chuỗi, thì giữ nguyên List<String>
+    List<String> categories;  // Các thể loại có thể là tên (String) hoặc mô tả
 }

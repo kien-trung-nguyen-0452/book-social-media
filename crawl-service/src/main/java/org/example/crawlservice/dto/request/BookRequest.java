@@ -12,12 +12,10 @@ import java.util.List;
 @Builder
 public class BookRequest{
     String title;
-    String subtitle;
     String description;
     String author;
-    String coverUrl;
-    Boolean isCompleted;
-    Long categoryId;
+    List<String> categoryId;
+    String imageUrl;
 
 }
 

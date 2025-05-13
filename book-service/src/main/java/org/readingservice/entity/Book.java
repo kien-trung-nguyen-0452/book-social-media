@@ -20,7 +20,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String id;
 
     String title;
     String author;
@@ -55,6 +55,5 @@ public class Book {
 
     @PostPersist
     public void postPersist() {
-        // Logic để đồng bộ hóa khi lưu Book, nếu cần
     }
 }
