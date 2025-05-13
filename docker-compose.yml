@@ -31,6 +31,16 @@ services:
     networks:
       - api-network
 
+  mongodb:
+    image: mongo:6.0
+    container_name: frere-mongo-db
+    ports:
+      - "27018:27017"
+    networks:
+      - api-network
+    volumes:
+      - frere_mongo_data:/data/db
+
   auth-service:
     build: ./auth-service
     container_name: auth
@@ -64,19 +74,64 @@ services:
   chapter-service:
     build:
       context: ./chapter-service
-    container_name: chapter
     depends_on:
-      - mysql-db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/frere_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
-    ports:
-      - "8087:8087"
+      - mongodb
     networks:
       - api-network
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/frere_db
+    ports:
+      - "8087:8087"
+
+  comment-service:
+    build:
+      context: ./comment-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=comment_db
+    depends_on:
+      - mongodb
+    networks:
+      - api-network
+
+  crawl-service:
+    build:
+      context: ./crawl-service
+    networks:
+      - api-network
+    ports:
+      - "8082:8082"
+
+  upload-service:
+    build:
+      context: ./upload-service
+    networks:
+      - api-network
+    ports:
+      - "8085:8085"
+
+  wishlist-service:
+    build:
+      context: ./wishlist-service
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/frere_db
+    networks:
+      - api-network
+    ports:
+      - "8081:8081"
+
+
+
+
 volumes:
   frere_mysql_data:  # Đổi tên volume để phù hợp với dự án Frere
+    driver: local
+  frere_mongo_data:
     driver: local
 networks:
   api-network:

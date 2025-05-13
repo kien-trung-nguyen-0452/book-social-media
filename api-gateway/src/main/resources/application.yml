@@ -12,11 +12,63 @@ spring:
     gateway:
       routes:
         - id: auth-service
-          uri: http://auth:8080
+          uri: lb://auth-service:8080
           predicates:
-            - Path=/api/v1/identity/**
+            - Path=${app.api-prefix}/identity/**
           filters:
             - StripPrefix=2
 
+        - id: book-service
+          uri: lb://book-service:8086
+          predicates:
+            - Path=${app.api-prefix}/book/**
+          filters:
+            - StripPrefix=2
 
+        - id: bookmark-service
+          uri: lb://book-service:8084
+          predicates:
+            - Path=${app.api-prefix}/bookmark/**
+          filters:
+            - StripPrefix=2
+
+        - id: chapter-service
+          uri: lb://book-service:8087
+          predicates:
+            - Path=${app.api-prefix}/chapter/**
+          filters:
+            - StripPrefix=2
+
+        - id: comment-service
+          uri: lb://book-service:8083
+          predicates:
+            - Path=${app.api-prefix}/comment/**
+          filters:
+            - StripPrefix=2
+
+        - id: crawl-service
+          uri: lb://crawl-service:8082
+          predicates:
+            - Path=${app.api-prefix}/crawl/**
+          filters:
+            - StripPrefix=2
+        - id: upload-service
+          uri: lb://upload-service:8085
+          predicates:
+            - Path=${app.api-prefix}/upload/**
+          filters:
+            - StripPrefix=2
+
+        - id: book-service
+          uri: lb://wishlist-service:8081
+          predicates:
+            - Path=${app.api-prefix}/recommend/**
+          filters:
+            - StripPrefix=2
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
 
