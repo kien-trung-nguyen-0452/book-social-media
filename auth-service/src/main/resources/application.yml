@@ -21,7 +21,9 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:8761/eureka
+      defaultZone: http://eureka:8761/eureka/
+      fetch-registry: true
+      register-with-eureka: true
 
 jwt:
   signerKey: "A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq"

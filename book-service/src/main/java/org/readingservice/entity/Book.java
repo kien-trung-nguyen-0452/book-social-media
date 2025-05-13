@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "book")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
 
@@ -25,7 +24,6 @@ public class Book {
     String title;
     String author;
 
-    @Column(columnDefinition = "TEXT")
     String description;
 
     String coverUrl;

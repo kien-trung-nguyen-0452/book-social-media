@@ -9,7 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>crawlservice</name>
+    <name>crawl-service</name>
     <description>Crawl Service</description>
 
     <parent>

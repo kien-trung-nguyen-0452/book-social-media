@@ -1,14 +1,20 @@
-# Sử dụng base image Java 17
-FROM openjdk:17-jdk-slim
+FROM maven:3.9.8-amazoncorretto-21 AS build
 
-# Tạo thư mục làm việc trong container
+# Copy source code and pom.xml file to /app folder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
 
-# Copy file JAR từ thư mục target vào container
-COPY target/comment-service-0.0.1-SNAPSHOT.jar comment-service.jar
+# Build source code with maven
+RUN mvn clean package spring-boot:repackage -DskipTests
 
-# Mở cổng 8083
-EXPOSE 8083
+#Stage 2: create image
+# Start with Amazon Correto JDK 21
+FROM amazoncorretto:21.0.4
 
-# Chạy ứng dụng Spring Boot
-ENTRYPOINT ["java", "-jar", "comment-service.jar"]
+# Set working folder to App and copy complied file from above step
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -2,6 +2,9 @@ package org.example.apigateway.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apigateway.dto.common.ApiResponse;
@@ -25,6 +28,8 @@ import java.util.List;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthenticationFilter implements GlobalFilter, Ordered {
     IdentityService identityService;
     ObjectMapper objectMapper;
@@ -33,7 +38,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     private String[] publicEndpoints = {
             "/identity/auth/.*",
             "/identity/users/registration",
-            "/notification/email/send"
+            "/notification/email/send",
+            "/book/.*"
     };
 
     @Value("${app.api-prefix}")

@@ -1,6 +1,7 @@
 server:
   port: 8084
-
+  servlet:
+    context-path: /bookmark
 spring:
   application:
     name: bookmark-service
@@ -22,4 +23,4 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
