@@ -2,24 +2,15 @@ package org.readingservice.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.readingservice.repository.httpClient.AnalyticsServiceClient;
-import org.readingservice.repository.httpClient.ChapterServiceClient;
-import org.readingservice.repository.httpClient.CommentServiceClient;
-import org.readingservice.repository.httpClient.WishlistServiceClient;
-import org.readingservice.repository.httpClient.dto.analytics.AnalyticsRequest;
-import org.readingservice.repository.httpClient.dto.analytics.AnalyticsResponse;
-import org.readingservice.repository.httpClient.dto.chapter.ChapterResponse;
-import org.readingservice.repository.httpClient.dto.wishlist.WishlistResponse;
+
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
-import org.readingservice.repository.httpClient.dto.comment.CommentResponse;
-import org.readingservice.repository.httpClient.dto.comment.CommentRequest;
+
 import org.readingservice.entity.Book;
 import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
 import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,12 +24,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final ChapterServiceClient chapterClient;
-    private final WishlistServiceClient wishlistClient;
-    private final CommentServiceClient commentServiceClient;
-    private final AnalyticsServiceClient analyticsServiceClient;
 
-    // =========================== CRUD BOOKS ===========================
     @Override
     public BookResponse createBook(BookRequest request) {
         Book book = bookMapper.toEntity(request);

@@ -1,7 +1,6 @@
 package org.readingservice.controler;
 
 import lombok.RequiredArgsConstructor;
-import org.readingservice.repository.httpClient.dto.chapter.ChapterResponse;
 import org.readingservice.dto.common.ApiResponse;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
