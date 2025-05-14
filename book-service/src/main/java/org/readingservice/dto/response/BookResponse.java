@@ -22,9 +22,9 @@ public class BookResponse {
     Boolean isCompleted;
 
 
-    Integer chapterCount;
+    int chapterCount;
     String viewCount;
-    Double averageRating;
+    int averageRating;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 

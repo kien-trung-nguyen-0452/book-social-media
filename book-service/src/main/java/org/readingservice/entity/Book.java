@@ -29,9 +29,9 @@ public class Book {
     String coverUrl;
 
     Boolean isCompleted;
-    Integer chapterCount;
-    Long viewCount;
-    Double averageRating;
+    int chapterCount;
+    long viewCount;
+    double averageRating;
 
     @ElementCollection
     List<String> categories;  // Các thể loại được truyền từ DTO
@@ -44,9 +44,6 @@ public class Book {
 
     @PrePersist
     public void prePersist() {
-        if (viewCount == null) viewCount = 0L;
-        if (averageRating == null) averageRating = 0.0;
-        if (chapterCount == null) chapterCount = 0;
         if (isCompleted == null) isCompleted = false;
         createdAt = LocalDateTime.now();
     }

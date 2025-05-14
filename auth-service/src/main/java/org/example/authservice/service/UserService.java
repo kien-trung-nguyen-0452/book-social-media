@@ -65,7 +65,6 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(userUpdateRequest, user);
-
         return userMapper.toUserResponse(userRepository.save(user));
     }
 }

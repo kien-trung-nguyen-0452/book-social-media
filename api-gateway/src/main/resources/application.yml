@@ -65,6 +65,14 @@ spring:
             - Path=${app.api-prefix}/recommend/**
           filters:
             - StripPrefix=2
+
+        - id: search-service
+          uri: lb://search-service:8090
+          predicates:
+            - Path=${app.api-prefix}/search/**
+          filters:
+            - StripPrefix=2
+
 eureka:
   client:
     service-url:

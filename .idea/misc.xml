@@ -23,6 +23,7 @@
         <option value="$PROJECT_DIR$/crawl-service/pom.xml" />
         <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/upload-service/pom.xml" />
+        <option value="$PROJECT_DIR$/search-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
