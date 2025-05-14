@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Document(indexName = "BookIndex")
+@Document(indexName = "book-index")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -18,7 +18,7 @@ public class BookIndexResponse {  String id;
     String description;
     String author;
     String coverUrl;
-    Boolean isCompleted;
+    boolean isCompleted;
     int chapterCount;
     LocalDate createdAt;
     LocalDate updatedAt;

@@ -116,7 +116,7 @@ services:
     networks:
       - api-network
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/frere_db
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/frere_db
     ports:
       - "8087:8087"
 
@@ -179,9 +179,6 @@ services:
       - api-network
     ports:
       - "8090:8090"
-
-
-
 
 volumes:
   frere_mysql_data:  # Đổi tên volume để phù hợp với dự án Frere

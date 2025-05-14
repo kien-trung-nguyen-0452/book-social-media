@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
         book.setDescription(request.getDescription());
         book.setAuthor(request.getAuthor());
         book.setCoverUrl(request.getCoverUrl());
-        book.setIsCompleted(request.getIsCompleted());
+        book.setCompleted(request.getIsCompleted());
         book.setCategories(request.getCategories());
         book.setUpdatedAt(LocalDateTime.now());
         return bookMapper.toResponse(bookRepository.save(book));

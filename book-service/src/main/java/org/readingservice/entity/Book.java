@@ -28,7 +28,7 @@ public class Book {
 
     String coverUrl;
 
-    Boolean isCompleted;
+    boolean isCompleted;
     int chapterCount;
     long viewCount;
     double averageRating;
@@ -42,13 +42,6 @@ public class Book {
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
-    @PrePersist
-    public void prePersist() {
-        if (isCompleted == null) isCompleted = false;
-        createdAt = LocalDateTime.now();
-    }
 
-    @PostPersist
-    public void postPersist() {
-    }
+
 }

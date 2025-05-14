@@ -26,11 +26,17 @@ public class ChapterServiceImpl implements ChapterService {
             Chapter chapter = chapterMapper.toEntity(request);
             chapter.setCreatedAt(LocalDateTime.now());
             chapter.setUpdatedAt(LocalDateTime.now());
+
+            // Đảm bảo set các trường nếu mapper không map đúng
+            chapter.setImageUrls(request.getImages());
+            chapter.setChapter(request.getChapter());  // nếu mapper chưa map đúng
+
             return chapterMapper.toResponse(chapterRepository.save(chapter));
         } catch (Exception ex) {
             throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);
         }
     }
+
 
     @Override
     public ChapterResponse getChapterById(String id) {

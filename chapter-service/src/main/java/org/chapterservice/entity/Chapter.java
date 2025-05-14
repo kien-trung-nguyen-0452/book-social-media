@@ -20,11 +20,12 @@ public class Chapter {
     @Id
     String id; // MongoDB sử dụng String id theo ObjectId, không cần @GeneratedValue
 
-    Long bookId;
+    String bookId;
     String title;
     String content; // Không cần @Lob hoặc @Column
+    String chapter;
 
-    Integer chapterNumber;
+    int chapterNumber;
     List<String> imageUrls;
 
     // Tự động gán thời gian tạo/cập nhật
