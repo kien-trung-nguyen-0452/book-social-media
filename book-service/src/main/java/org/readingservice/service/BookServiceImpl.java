@@ -1,12 +1,15 @@
 package org.readingservice.service;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import lombok.experimental.FieldDefaults;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
 
 import org.readingservice.entity.Book;
+import org.readingservice.event.BookEvent;
 import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
 import org.readingservice.mapper.BookMapper;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 @Valid
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookServiceImpl implements BookService {
 
-    private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+    BookRepository bookRepository;
+    BookMapper bookMapper;
+    BookProducerService producerService;
 
     @Override
     public BookResponse createBook(BookRequest request) {
@@ -34,6 +39,11 @@ public class BookServiceImpl implements BookService {
         book.setAverageRating(0.0);
         book.setChapterCount(0);
         Book savedBook = bookRepository.save(book);
+
+        BookEvent event = bookMapper.toBookEvent(request);
+        event.setCategories(request.getCategories());
+        producerService.creationEven(event);
+
         return bookMapper.toResponse(savedBook);
     }
 

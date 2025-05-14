@@ -15,10 +15,9 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class KafkaBookConsumerService {
     BookIndexRepository bookIndexRepository;
-    KafkaTemplate<String, BookEvent> kafkaTemplate;
     BookIndexMapper mapper;
 
-    @KafkaListener(topics = "create-topic", groupId = "elasticsearch", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "book-creation-topic", groupId = "elasticsearch", containerFactory = "kafkaListenerContainerFactory")
     public void listen(BookEvent bookEvent) {
        bookIndexRepository.save(mapper.toBookIndex(bookEvent));
     }
