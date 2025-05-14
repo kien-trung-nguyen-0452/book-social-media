@@ -1,4 +1,35 @@
 services:
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    networks:
+      - api-network
+
+  elasticsearch:
+    image: bitnami/elasticsearch:latest
+    container_name: elasticsearch
+    environment:
+      - ELASTICSEARCH_ENABLE_SECURITY=false       # Tắt security cho dev/test
+    ports:
+      - "9200:9200"                                # REST API
+      - "9300:9300"                                # Transport layer
+    volumes:
+      - frere_elasticsearch_data:/bitnami/elasticsearch
+    networks:
+      - api-network
+
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -7,6 +38,8 @@ services:
       - "8888:8888"
     networks:
       - api-network
+    depends_on:
+      - eureka-server
 
   eureka-server:
     build:
@@ -62,6 +95,8 @@ services:
     container_name: book
     depends_on:
       - mysql-db
+      - eureka-server
+      - api-gateway
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/frere_db
       SPRING_DATASOURCE_USERNAME: root
@@ -76,6 +111,8 @@ services:
       context: ./chapter-service
     depends_on:
       - mongodb
+      - eureka-server
+      - api-gateway
     networks:
       - api-network
     environment:
@@ -94,6 +131,8 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=comment_db
     depends_on:
       - mongodb
+      - eureka-server
+      - api-gateway
     networks:
       - api-network
 
@@ -112,18 +151,34 @@ services:
       - api-network
     ports:
       - "8085:8085"
+    depends_on:
+      - api-gateway
+      - eureka-server
 
   wishlist-service:
     build:
       context: ./wishlist-service
     depends_on:
       - mongodb
+      - eureka-server
+      - api-gateway
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/frere_db
     networks:
       - api-network
     ports:
       - "8081:8081"
+
+  search-service:
+    build:
+      context: ./search-service
+    depends_on:
+      - eureka-server
+      - elasticsearch
+    networks:
+      - api-network
+    ports:
+      - "8090:8090"
 
 
 
@@ -132,6 +187,8 @@ volumes:
   frere_mysql_data:  # Đổi tên volume để phù hợp với dự án Frere
     driver: local
   frere_mongo_data:
+    driver: local
+  frere_elasticsearch_data:
     driver: local
 networks:
   api-network:

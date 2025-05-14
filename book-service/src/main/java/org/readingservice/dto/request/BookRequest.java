@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -22,6 +23,7 @@ public class BookRequest {
     String description;
     String author;
     String coverUrl;
+    int chapterCount;
 
     @NotNull
     Boolean isCompleted;
