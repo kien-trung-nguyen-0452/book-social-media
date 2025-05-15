@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
         Book savedBook = bookRepository.save(book);
         BookEvent event = bookMapper.toBookEvent(savedBook);;
         event.setCategories(request.getCategories());
-         producerService.creationEven(event);
+        producerService.creationEven(event);
 
         return bookMapper.toResponse(savedBook);
     }

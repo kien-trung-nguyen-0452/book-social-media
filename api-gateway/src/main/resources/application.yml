@@ -3,6 +3,10 @@ server:
 
 app:
   api-prefix: /api/v1
+  public-endpoints:
+    - /api/v1/identity/auth/.*
+    - /api/v1/identity/users/registration
+    - /api/v1/book/books/.*
 
 spring:
   application:
