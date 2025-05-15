@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
+
 
 @Valid
 @Service
@@ -33,19 +35,16 @@ public class BookServiceImpl implements BookService {
     BookProducerService producerService;
 
     @Override
-    @PreAuthorize("hasRole('admin')")
     public BookResponse createBook(BookRequest request) {
         Book book = bookMapper.toEntity(request);
-        book.setCreatedAt(LocalDateTime.now());
-        book.setUpdatedAt(LocalDateTime.now());
-        book.setViewCount(0L);
+        book.setViewCount(0);
         book.setAverageRating(0.0);
         book.setChapterCount(0);
+        book.setSubtitle(request.getSubtitle());
         Book savedBook = bookRepository.save(book);
-
         BookEvent event = bookMapper.toBookEvent(request);
         event.setCategories(request.getCategories());
-        producerService.creationEven(event);
+//      producerService.creationEven(event);
 
         return bookMapper.toResponse(savedBook);
     }
@@ -76,7 +75,6 @@ public class BookServiceImpl implements BookService {
         book.setCoverUrl(request.getCoverUrl());
         book.setCompleted(request.getIsCompleted());
         book.setCategories(request.getCategories());
-        book.setUpdatedAt(LocalDateTime.now());
         return bookMapper.toResponse(bookRepository.save(book));
     }
 

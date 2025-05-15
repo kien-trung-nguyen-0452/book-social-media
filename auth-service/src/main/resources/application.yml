@@ -6,10 +6,10 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service?user=kien}
+    url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service}
     driverClassName: "com.mysql.cj.jdbc.Driver"
-    username: ${DBMS_USERNAME:kien}
-    password: ${DBMS_PASSWORD:123456789}
+    username: ${DBMS_USERNAME:root}
+    password: ${DBMS_PASSWORD:1234}
   jpa:
     hibernate:
       ddl-auto: update

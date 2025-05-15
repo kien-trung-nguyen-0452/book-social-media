@@ -6,7 +6,7 @@ spring:
   application:
     name: search-service
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: search-service-group
       auto-offset-reset: earliest
@@ -18,7 +18,7 @@ spring:
       missing-topics-fatal: false
 
   elasticsearch:
-    uris: http://elasticsearch:9200
+    uris: http://localhost:9200
     connection-timeout: 10s
     socket-timeout: 30s
 eureka:

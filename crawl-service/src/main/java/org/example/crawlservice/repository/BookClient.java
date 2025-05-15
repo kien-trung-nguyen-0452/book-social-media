@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "book-service")
 public interface BookClient {
-    @PostMapping("/books")
+    @PostMapping("/book/books")
     ApiResponse<BookResponse> createBook(@RequestBody BookRequest request);
 }

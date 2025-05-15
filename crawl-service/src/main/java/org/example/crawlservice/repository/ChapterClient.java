@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "chapter-service")
 public interface ChapterClient {
-    @PostMapping("/chapters")
+    @PostMapping("chapter/chapters")
     ApiResponse<ChapterResponse> createChapter(@RequestBody ChapterRequest request);
 }

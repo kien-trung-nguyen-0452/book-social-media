@@ -1,16 +1,17 @@
 package org.readingservice.event;
 
-import jakarta.persistence.ElementCollection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookEvent {
     String id;
     String title;
@@ -19,7 +20,7 @@ public class BookEvent {
     String coverUrl;
     boolean isCompleted;
     int chapterCount;
-    long viewCount;
+    int viewCount;
     double averageRating;
     List<String> categories;
     LocalDateTime createdAt;
