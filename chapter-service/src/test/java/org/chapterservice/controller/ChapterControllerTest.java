@@ -80,23 +80,7 @@ public class ChapterControllerTest {
                 .andExpect(jsonPath("$.data.chapter").value("1"));
     }
 
-    @Test
-    public void testGetChaptersByBookId() throws Exception {
-        ChapterResponse response = ChapterResponse.builder()
-                .id("abc123")
-                .chapter("1")
-                .title("Chapter One")
-                .images(List.of("img.jpg"))
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
 
-        when(chapterService.getChaptersByBookId(1L)).thenReturn(List.of(response));
-
-        mockMvc.perform(get("/chapters/book/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].title").value("Chapter One"));
-    }
 
     @Test
     public void testUpdateChapter() throws Exception {

@@ -27,9 +27,8 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setCreatedAt(LocalDateTime.now());
             chapter.setUpdatedAt(LocalDateTime.now());
 
-            // Đảm bảo set các trường nếu mapper không map đúng
             chapter.setImageUrls(request.getImages());
-            chapter.setChapter(request.getChapter());  // nếu mapper chưa map đúng
+            chapter.setChapter(request.getChapter());
 
             return chapterMapper.toResponse(chapterRepository.save(chapter));
         } catch (Exception ex) {
@@ -46,7 +45,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public List<ChapterResponse> getChaptersByBookId(Long bookId) {
+    public List<ChapterResponse> getChaptersByBookId(String bookId) {
         try {
             return chapterRepository.findByBookIdOrderByChapterNumberAsc(bookId)
                     .stream()
@@ -79,26 +78,26 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public ChapterResponse getLastChapterByBookId(Long bookId) {
+    public ChapterResponse getLastChapterByBookId(String bookId) {
         return chapterRepository.findFirstByBookIdOrderByChapterNumberDesc(bookId)
                 .map(chapterMapper::toResponse)
                 .orElseThrow(() -> new RuntimeException("No chapters found for book ID: " + bookId));
     }
 
     @Override
-    public ChapterResponse getChapterByBookIdAndNumber(Long bookId, int chapterNumber) {
+    public ChapterResponse getChapterByBookIdAndNumber(String bookId, int chapterNumber) {
         return chapterRepository.findByBookIdAndChapterNumber(bookId, chapterNumber)
                 .map(chapterMapper::toResponse)
                 .orElseThrow(() -> new RuntimeException("Chapter " + chapterNumber + " not found for book ID: " + bookId));
     }
 
     @Override
-    public long countChaptersByBookId(Long bookId) {
+    public long countChaptersByBookId(String bookId) {
         return chapterRepository.countByBookId(bookId);
     }
 
     @Override
-    public void deleteChaptersByBookId(Long bookId) {
+    public void deleteChaptersByBookId(String bookId) {
         chapterRepository.deleteByBookId(bookId);
     }
 }

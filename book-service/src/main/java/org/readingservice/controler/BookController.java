@@ -16,18 +16,12 @@ public class BookController {
 
     private final BookService bookService;
 
-    @PostMapping
-    public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
-        BookResponse response = bookService.createBook(request);
-        return ApiResponse.<BookResponse>builder()
-                .data(response)
-                .message("Book created successfully")
-                .build();
-    }
+
 
     @GetMapping
     public ApiResponse<List<BookResponse>> getAllBooks() {
         return ApiResponse.<List<BookResponse>>builder()
+                .code(1000)
                 .data(bookService.getAllBooks())
                 .message("All books retrieved")
                 .build();
@@ -36,24 +30,9 @@ public class BookController {
     @GetMapping("/{id}")
     public ApiResponse<BookResponse> getBookById(@PathVariable String id) {
         return ApiResponse.<BookResponse>builder()
+                .code(1000)
                 .data(bookService.getBookById(id))
                 .message("Book found")
-                .build();
-    }
-
-    @PutMapping("/{id}")
-    public ApiResponse<BookResponse> updateBook(@PathVariable String id, @RequestBody BookRequest request) {
-        return ApiResponse.<BookResponse>builder()
-                .data(bookService.updateBook(id, request))
-                .message("Book updated successfully")
-                .build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteBook(@PathVariable String id) {
-        bookService.deleteBook(id);
-        return ApiResponse.<Void>builder()
-                .message("Book deleted successfully")
                 .build();
     }
 

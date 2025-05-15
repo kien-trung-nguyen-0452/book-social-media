@@ -3,6 +3,7 @@ package org.uploadservice.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.uploadservice.dto.response.FromUrlUploadResponse;
@@ -29,6 +30,7 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
+    @PreAuthorize("hasRole('admin')")
     public FromUrlUploadResponse uploadChapterImage(String url, String bookId, String chapterId, String name) {
         String baseFolder = "manga/";
         String path = generateChapterPath(bookId,chapterId, name);

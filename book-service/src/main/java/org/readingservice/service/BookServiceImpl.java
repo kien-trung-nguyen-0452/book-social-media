@@ -14,6 +14,8 @@ import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
 import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ public class BookServiceImpl implements BookService {
     BookProducerService producerService;
 
     @Override
+    @PreAuthorize("hasRole('admin')")
     public BookResponse createBook(BookRequest request) {
         Book book = bookMapper.toEntity(request);
         book.setCreatedAt(LocalDateTime.now());
@@ -63,6 +66,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PostAuthorize("hasRole('admin')")
     public BookResponse updateBook(String id, BookRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
@@ -77,6 +81,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('admin')")
     public void deleteBook(String id) {
         if (!bookRepository.existsById(id)) {
             throw new ServiceException(ErrorCode.BOOK_NOT_FOUND);

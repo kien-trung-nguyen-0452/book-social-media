@@ -8,15 +8,13 @@ import java.util.Optional;
 
 public interface ChapterRepository extends MongoRepository<Chapter, String> {
 
-    List<Chapter> findByBookIdOrderByChapterNumberAsc(Long bookId);
+    List<Chapter> findByBookIdOrderByChapterNumberAsc(String bookId);
 
-    Optional<Chapter> findByBookIdAndChapterNumber(Long bookId, Integer chapterNumber);
+    Optional<Chapter> findByBookIdAndChapterNumber(String bookId, Integer chapterNumber);
 
-    long countByBookId(Long bookId); // Mongo dùng `long` cho count
+    long countByBookId(String bookId); // Mongo dùng `long` cho count
 
-    List<Chapter> findByTitleContainingIgnoreCase(String title);
+    Optional<Chapter> findFirstByBookIdOrderByChapterNumberDesc(String bookId);
 
-    Optional<Chapter> findFirstByBookIdOrderByChapterNumberDesc(Long bookId);
-
-    void deleteByBookId(Long bookId);
+    void deleteByBookId(String bookId);
 }

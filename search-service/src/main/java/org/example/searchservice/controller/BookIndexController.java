@@ -18,17 +18,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequestMapping("/search")
+@RequestMapping("/indexing")
 public class BookIndexController {
     BookIndexService bookIndexService;
-
-    @GetMapping
-    ApiResponse<List<BookSearchingResult>> getAll (){
-        return ApiResponse.<List<BookSearchingResult>>builder()
-                .code(1000)
-                .data(bookIndexService.getAll())
-                .build();
-    }
 
     @PutMapping("/update_book")
     ApiResponse<BookIndexResponse> updateBook (BookIndexUpdateRequest request){

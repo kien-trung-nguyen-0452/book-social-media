@@ -22,7 +22,7 @@ public class UploadController {
         return ApiResponse.<String>builder()
                 .data(url)
                 .message("Image uploaded successfully")
-                .status(200)
+                .code(1000)
                 .build();
     }
 

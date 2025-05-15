@@ -11,17 +11,17 @@ public interface ChapterService {
 
     ChapterResponse getChapterById(String id); // Đổi Long -> String
 
-    List<ChapterResponse> getChaptersByBookId(Long bookId);
+    List<ChapterResponse> getChaptersByBookId(String bookId);
 
     ChapterResponse updateChapter(String id, ChapterRequest request); // Đổi Long -> String
 
     void deleteChapter(String id); // Đổi Long -> String
 
-    ChapterResponse getLastChapterByBookId(Long bookId);
+    ChapterResponse getLastChapterByBookId(String bookId);
 
-    ChapterResponse getChapterByBookIdAndNumber(Long bookId, int chapterNumber);
+    ChapterResponse getChapterByBookIdAndNumber(String bookId, int chapterNumber);
 
-    long countChaptersByBookId(Long bookId);
+    long countChaptersByBookId(String bookId);
 
-    void deleteChaptersByBookId(Long bookId);
+    void deleteChaptersByBookId(String bookId);
 }
