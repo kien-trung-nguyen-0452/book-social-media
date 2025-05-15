@@ -30,7 +30,7 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public FromUrlUploadResponse uploadChapterImage(String url, String bookId, String chapterId, String name) {
         String baseFolder = "manga/";
         String path = generateChapterPath(bookId,chapterId, name);
@@ -54,6 +54,46 @@ public class UploadServiceImpl implements UploadService {
         }
 
     }
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public String uploadCover(MultipartFile coverFile, String bookId) {
+        try {
+            String folder = "covers/";
+            String publicId = "book_" + bookId;
+            Map<?, ?> options = ObjectUtils.asMap(
+                    "folder", folder,
+                    "public_id", publicId,
+                    "overwrite", true,
+                    "resource_type", "image"
+            );
+
+            Map<?, ?> result = cloudinary.uploader().upload(coverFile.getBytes(), options);
+            return (String) result.get("secure_url");
+        } catch (IOException e) {
+            throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public String uploadAvatar(MultipartFile avatarFile, String userId) {
+        try {
+            String folder = "avatars/";
+            String publicId = "user_" + userId;
+            Map<?, ?> options = ObjectUtils.asMap(
+                    "folder", folder,
+                    "public_id", publicId,
+                    "overwrite", true,
+                    "resource_type", "image"
+            );
+
+            Map<?, ?> result = cloudinary.uploader().upload(avatarFile.getBytes(), options);
+            return (String) result.get("secure_url");
+        } catch (IOException e) {
+            throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+    }
+
 
     private String generateChapterPath(String bookId, String chapterId, String name){
        return String.format("/%s/%s/%s", bookId, chapterId, name);

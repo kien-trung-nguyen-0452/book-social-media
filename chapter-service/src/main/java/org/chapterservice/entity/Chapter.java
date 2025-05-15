@@ -24,6 +24,7 @@ public class Chapter {
     String title;
     String content; // Không cần @Lob hoặc @Column
     String chapter;
+    String updatedBy;
 
     int chapterNumber;
     List<String> imageUrls;

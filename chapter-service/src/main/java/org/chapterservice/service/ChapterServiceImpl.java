@@ -8,6 +8,7 @@ import org.chapterservice.exception.ErrorCode;
 import org.chapterservice.exception.ServiceException;
 import org.chapterservice.mapper.ChapterMapper;
 import org.chapterservice.repository.ChapterRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class ChapterServiceImpl implements ChapterService {
 
             chapter.setImageUrls(request.getImages());
             chapter.setChapter(request.getChapter());
-
+            chapter.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
             return chapterMapper.toResponse(chapterRepository.save(chapter));
         } catch (Exception ex) {
             throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);

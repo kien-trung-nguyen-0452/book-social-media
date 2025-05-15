@@ -94,17 +94,16 @@ services:
       context: ./book-service
     container_name: book
     depends_on:
-      - mysql-db
+      - mongodb
       - eureka-server
       - api-gateway
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/frere_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATSOURCE_PASSWORD: 1234
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/frere_db
     ports:
       - "8086:8086"
     networks:
       - api-network
+
 
   chapter-service:
     build:

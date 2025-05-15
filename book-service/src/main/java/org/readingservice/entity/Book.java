@@ -1,47 +1,48 @@
 package org.readingservice.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
-@Entity
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Document(collection = "books")
+
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String id;
 
     String title;
     String author;
-
     String description;
-
     String coverUrl;
+    String createdBy;
+    String lastUpdatedBy;
+    String subtitle;
 
-    boolean isCompleted;
+
+    boolean completed;
     int chapterCount;
-    long viewCount;
+    int viewCount;
     double averageRating;
 
-    @ElementCollection
-    List<String> categories;  // Các thể loại được truyền từ DTO
+    List<String> categories;
 
-    @CreationTimestamp
+    @CreatedDate
     LocalDateTime createdAt;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     LocalDateTime updatedAt;
-
-
 
 }

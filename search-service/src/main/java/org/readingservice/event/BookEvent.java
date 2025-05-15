@@ -1,11 +1,13 @@
-package org.example.searchservice.event;
+package org.readingservice.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,8 +23,11 @@ public class BookEvent {
     String coverUrl;
     Boolean isCompleted;
     int chapterCount;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    LocalDateTime updatedAt;
 
     List<String> categories;
 

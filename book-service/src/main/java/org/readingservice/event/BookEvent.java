@@ -1,16 +1,18 @@
 package org.readingservice.event;
 
-import jakarta.persistence.ElementCollection;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookEvent {
     String id;
     String title;
@@ -19,9 +21,13 @@ public class BookEvent {
     String coverUrl;
     boolean isCompleted;
     int chapterCount;
-    long viewCount;
+    int viewCount;
     double averageRating;
     List<String> categories;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime updatedAt;
+
 }

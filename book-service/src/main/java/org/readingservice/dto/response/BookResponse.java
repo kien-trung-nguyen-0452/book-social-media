@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,21 +12,20 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookResponse {
 
-    String  id;
+    String id;
     String title;
-    String subtitle;
+    String subtitle;  // nếu cần, entity cũng phải có
     String description;
     String author;
     String coverUrl;
     Boolean isCompleted;
 
-
     int chapterCount;
-    String viewCount;
-    int averageRating;
+    int viewCount;
+    double averageRating;
+
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-    // Nếu bạn muốn giữ danh sách thể loại (category) dưới dạng chuỗi, thì giữ nguyên List<String>
-    List<String> categories;  // Các thể loại có thể là tên (String) hoặc mô tả
+    List<String> categories;
 }

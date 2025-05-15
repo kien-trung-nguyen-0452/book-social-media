@@ -5,6 +5,7 @@ import org.readingservice.dto.common.ApiResponse;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
 import org.readingservice.service.BookService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class InternalBookController {
     private final BookService bookService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
         BookResponse response = bookService.createBook(request);
         return ApiResponse.<BookResponse>builder()

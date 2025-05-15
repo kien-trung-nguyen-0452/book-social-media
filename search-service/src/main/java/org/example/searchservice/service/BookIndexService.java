@@ -10,6 +10,7 @@ import org.example.searchservice.dto.response.BookSearchingResult;
 import org.example.searchservice.entity.BookIndex;
 import org.example.searchservice.mapper.BookIndexMapper;
 import org.example.searchservice.repository.BookIndexRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookIndexService {
     BookIndexRepository bookIndexRepository;
+
+    @Qualifier("bookIndexMapperImpl")
     BookIndexMapper mapper;
 
     public List<BookSearchingResult> getAll(){
