@@ -15,11 +15,12 @@ public class Comment {
     @Id
     private String id;
 
-    private Long bookId;
-    private Long chapterId;
+    private String bookId;
+    private String chapterId;
     private String userId;
     private String content;
 
+    @
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

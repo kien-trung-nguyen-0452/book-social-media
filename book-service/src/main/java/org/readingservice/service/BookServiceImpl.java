@@ -42,9 +42,9 @@ public class BookServiceImpl implements BookService {
         book.setChapterCount(0);
         book.setSubtitle(request.getSubtitle());
         Book savedBook = bookRepository.save(book);
-        BookEvent event = bookMapper.toBookEvent(request);
+        BookEvent event = bookMapper.toBookEvent(savedBook);;
         event.setCategories(request.getCategories());
-//      producerService.creationEven(event);
+         producerService.creationEven(event);
 
         return bookMapper.toResponse(savedBook);
     }
@@ -86,8 +86,6 @@ public class BookServiceImpl implements BookService {
         }
         bookRepository.deleteById(id);
     }
-
-
 
 
 }

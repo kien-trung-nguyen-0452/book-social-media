@@ -17,7 +17,6 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Document(collection = "books")
-@Configuration
 
 public class Book {
 

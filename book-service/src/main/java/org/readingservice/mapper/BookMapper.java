@@ -27,4 +27,6 @@ public interface BookMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "categories", ignore = true)
     BookEvent toBookEvent(BookRequest request);
+    @Mapping(source = "completed", target = "isCompleted")
+    BookEvent toBookEvent(Book book);
 }

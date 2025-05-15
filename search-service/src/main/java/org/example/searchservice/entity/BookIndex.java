@@ -25,6 +25,7 @@ public class BookIndex {
     String coverUrl;
     Boolean isCompleted;
     int chapterCount;
+
     LocalDate createdAt;
     LocalDate updatedAt;
 

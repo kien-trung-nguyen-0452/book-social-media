@@ -4,7 +4,7 @@ import org.example.searchservice.dto.request.BookIndexUpdateRequest;
 import org.example.searchservice.dto.response.BookIndexResponse;
 import org.example.searchservice.dto.response.BookSearchingResult;
 import org.example.searchservice.entity.BookIndex;
-import org.example.searchservice.event.BookEvent;
+import org.readingservice.event.BookEvent;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
