@@ -19,8 +19,6 @@ public class Comment {
     private String chapterId;
     private String userId;
     private String content;
-
-    @
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

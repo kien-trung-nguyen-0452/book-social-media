@@ -79,8 +79,10 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     private boolean isPublicEndpoint(ServerHttpRequest request) {
         String path = request.getURI().getPath();
+
+        // Duyệt qua danh sách publicEndpoints và kiểm tra nếu path khớp với regex
         return Arrays.stream(publicEndpoints)
-                .map(pattern -> Pattern.compile(apiPrefix + pattern))
+                .map(pattern -> Pattern.compile(apiPrefix + pattern))  // ghép với prefix như "/api"
                 .anyMatch(regex -> regex.matcher(path).matches());
     }
 
