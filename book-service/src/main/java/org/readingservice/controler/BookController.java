@@ -2,7 +2,7 @@ package org.readingservice.controler;
 
 import lombok.RequiredArgsConstructor;
 import org.readingservice.dto.common.ApiResponse;
-import org.readingservice.dto.request.BookRequest;
+
 import org.readingservice.dto.response.BookResponse;
 import org.readingservice.service.BookService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class BookController {
 
 
 
-    @GetMapping
+    @GetMapping("/all")
     public ApiResponse<List<BookResponse>> getAllBooks() {
         return ApiResponse.<List<BookResponse>>builder()
                 .code(1000)

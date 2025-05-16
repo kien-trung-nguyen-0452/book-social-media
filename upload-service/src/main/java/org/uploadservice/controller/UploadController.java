@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.uploadservice.dto.common.ApiResponse;
 import org.uploadservice.dto.request.FromUrlUploadRequest;
-import org.uploadservice.dto.response.FromUrlUploadResponse;
+import org.uploadservice.dto.response.*;
 import org.uploadservice.service.UploadService;
+
 @RestController
 @RequestMapping("/upload")
 @RequiredArgsConstructor
@@ -15,52 +16,49 @@ public class UploadController {
 
     private final UploadService uploadService;
 
+    // Upload ảnh bình thường MultipartFile
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<String> uploadImage(@RequestParam("file") MultipartFile file) {
-        String url = uploadService.uploadImage(file);
-        return ApiResponse.<String>builder()
-                .data(url)
+    public ApiResponse<UploadResponse> uploadImage(@RequestParam("file") MultipartFile file) {
+        UploadResponse response = uploadService.uploadImage(file);
+        return ApiResponse.<UploadResponse>builder()
+                .data(response)
                 .message("Image uploaded successfully")
                 .code(1000)
                 .build();
     }
 
+    // Upload ảnh chương từ URL
     @PostMapping("/from-url")
     public ApiResponse<FromUrlUploadResponse> uploadFromUrl(@RequestBody FromUrlUploadRequest request) {
-        FromUrlUploadResponse response = uploadService.uploadChapterImage(
-                request.getUrl(),
-                request.getBookId(),
-                request.getChapterId(),
-                request.getName()
-        );
+        FromUrlUploadResponse response = uploadService.uploadChapterImage(request);
         return ApiResponse.<FromUrlUploadResponse>builder()
                 .data(response)
+                .message("Image uploaded from URL successfully")
+                .code(1000)
                 .build();
     }
 
-    // Upload ảnh cover truyện
+    // Upload ảnh bìa sách
     @PostMapping(value = "/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<String> uploadCover(@RequestParam("file") MultipartFile file,
-                                           @RequestParam("bookId") String bookId) {
-        String url = uploadService.uploadCover(file, bookId);
-        return ApiResponse.<String>builder()
-                .data(url)
+    public ApiResponse<CoverUploadResponse> uploadCover(@RequestParam("file") MultipartFile file,
+                                                        @RequestParam("bookId") String bookId) {
+        CoverUploadResponse response = uploadService.uploadCover(file, bookId);
+        return ApiResponse.<CoverUploadResponse>builder()
+                .data(response)
                 .message("Cover uploaded successfully")
                 .code(1000)
                 .build();
     }
 
-
-    // Upload avatar user
+    // Upload avatar người dùng
     @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<String> uploadAvatar(@RequestParam("file") MultipartFile file,
-                                            @RequestParam("userId") String userId) {
-        String url = uploadService.uploadAvatar(file, userId);
-        return ApiResponse.<String>builder()
-                .data(url)
+    public ApiResponse<AvatarUploadResponse> uploadAvatar(@RequestParam("file") MultipartFile file,
+                                                          @RequestParam("userId") String userId) {
+        AvatarUploadResponse response = uploadService.uploadAvatar(file, userId);
+        return ApiResponse.<AvatarUploadResponse>builder()
+                .data(response)
                 .message("Avatar uploaded successfully")
                 .code(1000)
                 .build();
     }
 }
-

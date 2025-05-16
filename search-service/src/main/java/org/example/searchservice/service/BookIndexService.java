@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 public class BookIndexService {
     BookIndexRepository bookIndexRepository;
 
-    @Qualifier("bookIndexMapperImpl")
+
     BookIndexMapper mapper;
 
     public List<BookSearchingResult> getAll(){

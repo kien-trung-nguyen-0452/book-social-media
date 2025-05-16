@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface BookService {
     BookResponse createBook(BookRequest request);
-    BookResponse getBookById(String id); // ✅ đổi Long -> String
+    BookResponse getBookById(String id);
     List<BookResponse> getAllBooks();
-    BookResponse updateBook(String id, BookRequest request); // ✅ đổi Long -> String
+    BookResponse updateBook(String id, BookRequest request);
     void deleteBook(String id); // ✅ đổi Long -> String
 }
 

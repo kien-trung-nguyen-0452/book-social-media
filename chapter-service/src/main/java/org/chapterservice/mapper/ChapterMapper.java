@@ -8,10 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ChapterMapper {
 
-    @Mapping(source = "images", target = "imageUrls")
+    @Mapping(source = "images", target = "imageUrl")
     Chapter toEntity(ChapterRequest request);
     @Mapping(source = "chapter", target = "chapter")
 
-    @Mapping(source = "imageUrls", target = "images")
+    @Mapping(source = "imageUrl", target = "images")
     ChapterResponse toResponse(Chapter chapter);
 }

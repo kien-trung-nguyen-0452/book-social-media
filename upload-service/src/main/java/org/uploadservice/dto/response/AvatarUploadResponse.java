@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CoverUploadResponse {
+public class AvatarUploadResponse {
     String url;
-    String bookId;
+    String userId;
 }

@@ -31,8 +31,7 @@ public class Book {
     String lastUpdatedBy;
     String subtitle;
 
-
-    boolean completed;
+    Boolean isCompleted;
     int chapterCount;
     int viewCount;
     double averageRating;

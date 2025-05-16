@@ -1,10 +1,27 @@
 package org.uploadservice.mapper;
 
-import org.uploadservice.dto.response.UploadResponse;
-import org.uploadservice.entity.FileMetadata;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.uploadservice.dto.response.*;
+import org.uploadservice.entity.FileMetadata;
 
 @Mapper(componentModel = "spring")
 public interface FileMetadataMapper {
-    UploadResponse toResponse(FileMetadata fileMetadata);
+
+    @Mapping(source = "fileUrl", target = "url")
+    @Mapping(source = "id", target = "publicId")
+    FromUrlUploadResponse toFromUrlUploadResponse(FileMetadata fileMetadata);
+
+    @Mapping(source = "fileUrl", target = "url")
+    @Mapping(source = "bookId", target = "bookId")
+    CoverUploadResponse toCoverUploadResponse(FileMetadata fileMetadata);
+
+    @Mapping(source = "fileUrl", target = "url")
+    @Mapping(source = "relatedId", target = "userId")
+    AvatarUploadResponse toAvatarUploadResponse(FileMetadata fileMetadata);
+
+    @Mapping(source = "fileUrl", target = "url")
+    @Mapping(source = "id", target = "publicId")
+    @Mapping(source = "category", target = "category")
+    UploadResponse toUploadResponse(FileMetadata metadata);
 }

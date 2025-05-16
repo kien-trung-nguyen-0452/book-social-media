@@ -1,13 +1,18 @@
 package org.uploadservice.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import org.uploadservice.dto.response.FromUrlUploadResponse;
+import org.uploadservice.dto.request.FromUrlUploadRequest;
+import org.uploadservice.dto.response.*;
 
 public interface UploadService {
-    String uploadImage(MultipartFile file);
-    FromUrlUploadResponse uploadChapterImage (String url, String bookId, String chapterId, String name);
-    // Upload cover image for book
-    String uploadAvatar(MultipartFile avatarFile, String userId);
 
-    String uploadCover(MultipartFile coverFile, String bookId);
+    UploadResponse uploadImage(MultipartFile file);
+
+    FromUrlUploadResponse uploadChapterImage(FromUrlUploadRequest request);
+
+    CoverUploadResponse uploadCover(MultipartFile file, String bookId);
+
+    AvatarUploadResponse uploadAvatar(MultipartFile file, String userId);
+
+
 }

@@ -12,9 +12,10 @@ import java.util.List;
 @Builder
 @Data
 public class ChapterRequest {
-    private String id;
+    private String bookId;
     private String chapter;
     private String title;
+    private String updatedBy;
     private List<String> images;  // List of image URLs (local paths in your case)
     private String content;       // Thêm trường content nếu cần
     private Integer chapterNumber; // Thêm trường chapterNumber nếu cần

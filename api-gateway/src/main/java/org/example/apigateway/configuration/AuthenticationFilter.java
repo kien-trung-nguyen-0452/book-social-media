@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
+
 
 @Component
 @Slf4j
@@ -36,8 +36,14 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     ObjectMapper objectMapper;
 
     @NonFinal
-    @Value("${app.public-endpoints}")
-    private String[] publicEndpoints;
+    private final String[] publicEndpoints = new String[]{".*"};
+//    private String[] publicEndpoints = {
+//            "/identity/auth/.*",
+//            "/identity/users/registration",
+//            "/notification/email/send",
+//            "/book/books/.*",
+//            "/search/search/.*"
+//    };
 
     @Value("${app.api-prefix}")
     @NonFinal
@@ -48,10 +54,10 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         log.info("Enter authentication filter....");
 
         if (isPublicEndpoint(exchange.getRequest())){
-            log.info("✅ This is a public endpoint. Proceeding without authentication.");
+            log.info("this is a public endpoint: " + exchange.getRequest());
             return chain.filter(exchange);}
         else {
-            log.info("not a public end point: {}", exchange.getRequest());
+            log.info("this is not a public endpoint "+ exchange.getRequest());
         }
 
         // Get token from authorization header
@@ -64,45 +70,27 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         return identityService.introspect(token).flatMap(introspectResponse -> {
             if (introspectResponse.getResult().isAuthenticated()){
-                log.info("✅ Token is valid. Proceeding to next filter.");
                 log.info(token);
                 return chain.filter(exchange);}
-            else{
-                log.warn("❌ Token is NOT authenticated.");
-                return unauthenticated(exchange.getResponse());}
-        }) .onErrorResume(throwable -> {
-            log.error("🔥 Error during token introspection", throwable);
-            return unauthenticated(exchange.getResponse());
-        });
+            else
+                return unauthenticated(exchange.getResponse());
+        }).onErrorResume(throwable -> unauthenticated(exchange.getResponse()));
     }
 
     @Override
     public int getOrder() {
         return -1;
     }
-
     private boolean isPublicEndpoint(ServerHttpRequest request) {
         String path = request.getURI().getPath();
-        log.info("Request path: {}", path);
-        boolean matched = false;
+        log.info("Checking path: {}", path);
 
-        for (String pattern : publicEndpoints) {
-            String fullPattern = apiPrefix + pattern;
-            log.info("Trying to match with pattern: {}", fullPattern);
-
-            Pattern regex = Pattern.compile(fullPattern);
-            if (regex.matcher(path).matches()) {
-                matched = true;
-                log.info("Matched public endpoint: {}", fullPattern);
-                break;
-            }
-        }
-
-        if (!matched) {
-            log.warn("No public endpoint matched for path: {}", path);
-        }
-
-        return matched;
+        return Arrays.stream(publicEndpoints)
+                .anyMatch(pattern -> {
+                    String regex = "^" + apiPrefix + pattern;  // bắt đầu chuỗi
+                    log.info("Matching regex: {}", regex);
+                    return path.matches(regex);
+                });
     }
 
 
@@ -121,6 +109,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
 
         return response.writeWith(
                 Mono.just(response.bufferFactory().wrap(body.getBytes())));

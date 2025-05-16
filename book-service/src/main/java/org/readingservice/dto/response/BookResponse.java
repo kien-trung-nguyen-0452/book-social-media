@@ -14,12 +14,13 @@ public class BookResponse {
 
     String id;
     String title;
-    String subtitle;  // nếu cần, entity cũng phải có
+    String subtitle;
     String description;
     String author;
     String coverUrl;
     Boolean isCompleted;
-
+    String createdBy;
+    String lastUpdatedBy;
     int chapterCount;
     int viewCount;
     double averageRating;

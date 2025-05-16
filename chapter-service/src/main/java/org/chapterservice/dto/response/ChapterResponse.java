@@ -13,10 +13,12 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterResponse {
     String id;
+    String bookId;
     String chapter;
     String title;
     List<String> images;
     String UpdateBy;
+    String createdBy;
     String content;
     int chapterNumber;
     LocalDateTime createdAt;

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class InternalBookController {
     private final BookService bookService;
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+
     public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
         BookResponse response = bookService.createBook(request);
         return ApiResponse.<BookResponse>builder()

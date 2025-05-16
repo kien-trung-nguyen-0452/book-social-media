@@ -25,18 +25,28 @@ public class ChapterServiceImpl implements ChapterService {
     public ChapterResponse createChapter(ChapterRequest request) {
         try {
             Chapter chapter = chapterMapper.toEntity(request);
-            chapter.setCreatedAt(LocalDateTime.now());
-            chapter.setUpdatedAt(LocalDateTime.now());
+            LocalDateTime now = LocalDateTime.now();
+            chapter.setCreatedAt(now);
+            chapter.setUpdatedAt(now);
 
-            chapter.setImageUrls(request.getImages());
+            chapter.setBookId(request.getBookId()); // set bookId
+            chapter.setImageUrl(request.getImages()); // set danh sách ảnh đúng tên trường
             chapter.setChapter(request.getChapter());
-            chapter.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            if (SecurityContextHolder.getContext().getAuthentication() != null) {
+                username = SecurityContextHolder.getContext().getAuthentication().getName();
+            }
+            System.out.println("Current username: " + username);
+
+            chapter.setCreatedBy(username);
+            chapter.setUpdatedBy(username );
             return chapterMapper.toResponse(chapterRepository.save(chapter));
         } catch (Exception ex) {
             throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);
         }
     }
-
 
     @Override
     public ChapterResponse getChapterById(String id) {
@@ -65,7 +75,20 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setTitle(request.getTitle());
         chapter.setContent(request.getContent());
         chapter.setChapterNumber(request.getChapterNumber());
+
+        chapter.setBookId(request.getBookId()); // cập nhật bookId nếu có
+        chapter.setImageUrl(request.getImages()); // cập nhật ảnh
+        chapter.setChapter(request.getChapter());  // cập nhật tên chương
+
         chapter.setUpdatedAt(LocalDateTime.now());
+
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            username = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
+        System.out.println("Current username: " + username);
+        chapter.setUpdatedBy(username);
 
         return chapterMapper.toResponse(chapterRepository.save(chapter));
     }

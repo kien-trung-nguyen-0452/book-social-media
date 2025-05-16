@@ -1,11 +1,19 @@
 package org.uploadservice.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FromUrlUploadResponse {
     String url;
-    String public_id;
+    String publicId;
+    String fileName;
+    LocalDateTime createdAt;
 }

@@ -17,7 +17,6 @@ public interface BookMapper {
     @Mapping(target = "updatedAt", ignore = true)    // set thủ công
     Book toEntity(BookRequest request);
 
-    @Mapping(source = "completed", target = "isCompleted")  // nếu tên khác bạn cần map rõ
     BookResponse toResponse(Book book);
 
     @Mapping(target = "id", ignore = true)
@@ -27,6 +26,6 @@ public interface BookMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "categories", ignore = true)
     BookEvent toBookEvent(BookRequest request);
-    @Mapping(source = "completed", target = "isCompleted")
+    @Mapping(source = "isCompleted", target = "isCompleted")
     BookEvent toBookEvent(Book book);
 }

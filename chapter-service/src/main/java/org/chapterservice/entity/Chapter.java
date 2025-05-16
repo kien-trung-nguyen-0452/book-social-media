@@ -18,18 +18,16 @@ import java.util.List;
 public class Chapter {
 
     @Id
-    String id; // MongoDB sử dụng String id theo ObjectId, không cần @GeneratedValue
+    String id;
 
     String bookId;
     String title;
-    String content; // Không cần @Lob hoặc @Column
+    String content;
     String chapter;
     String updatedBy;
-
+    String createdBy;
     int chapterNumber;
-    List<String> imageUrls;
-
-    // Tự động gán thời gian tạo/cập nhật
+    List<String> imageUrl;
     @Builder.Default
     LocalDateTime createdAt = LocalDateTime.now();
     @Builder.Default

@@ -6,11 +6,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.uploadservice.dto.response.FromUrlUploadResponse;
+import org.uploadservice.dto.request.FromUrlUploadRequest;
+import org.uploadservice.dto.response.*;
+import org.uploadservice.entity.FileMetadata;
 import org.uploadservice.exception.ErrorCode;
 import org.uploadservice.exception.ServiceException;
+import org.uploadservice.mapper.FileMetadataMapper;
+import org.uploadservice.repository.FileMetadataRepository;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -18,57 +23,26 @@ import java.util.Map;
 public class UploadServiceImpl implements UploadService {
 
     private final Cloudinary cloudinary;
+    private final FileMetadataMapper mapper;
+    private final FileMetadataRepository repository;
 
     @Override
-    public String uploadImage(MultipartFile file) {
+    public UploadResponse uploadImage(MultipartFile file) {
         try {
-            Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            return result.get("secure_url").toString();
-        } catch (IOException e) {
-            throw new RuntimeException("Upload failed: " + e.getMessage());
-        }
-    }
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public FromUrlUploadResponse uploadChapterImage(String url, String bookId, String chapterId, String name) {
-        String baseFolder = "manga/";
-        String path = generateChapterPath(bookId,chapterId, name);
-        path = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
-        try {
-            Map<?, ?> options = ObjectUtils.asMap(
-                    "folder", baseFolder,
-                    "public_id", path,
-                    "overwrite", true,
-                    "context", String.format("book=%s|chapter=%s|page=%s", bookId, chapterId, name)
-            );
-
-            Map<?, ?> uploadResult = cloudinary.uploader().upload(url, options);
-            return FromUrlUploadResponse.builder()
-                    .url((String) uploadResult.get("url"))
-                    .public_id((String) uploadResult.get("public_id"))
+            FileMetadata metadata = FileMetadata.builder()
+                    .id((String) uploadResult.get("public_id"))
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .uploadedAt(LocalDateTime.now())
+                    .category("other")
+                    .isExternalUrl(false)
                     .build();
 
-        } catch (IOException e) {
-            throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
-        }
-
-    }
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public String uploadCover(MultipartFile coverFile, String bookId) {
-        try {
-            String folder = "covers/";
-            String publicId = "book_" + bookId;
-            Map<?, ?> options = ObjectUtils.asMap(
-                    "folder", folder,
-                    "public_id", publicId,
-                    "overwrite", true,
-                    "resource_type", "image"
-            );
-
-            Map<?, ?> result = cloudinary.uploader().upload(coverFile.getBytes(), options);
-            return (String) result.get("secure_url");
+            FileMetadata saved = repository.save(metadata);
+            return mapper.toUploadResponse(saved);
         } catch (IOException e) {
             throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
         }
@@ -76,28 +50,95 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public String uploadAvatar(MultipartFile avatarFile, String userId) {
+    public FromUrlUploadResponse uploadChapterImage(FromUrlUploadRequest request) {
         try {
-            String folder = "avatars/";
-            String publicId = "user_" + userId;
-            Map<?, ?> options = ObjectUtils.asMap(
-                    "folder", folder,
-                    "public_id", publicId,
+            String path = generateChapterPath(request.getBookId(), request.getChapterId(), request.getName());
+            Map<String, Object> options = ObjectUtils.asMap(
+                    "folder", "manga/",
+                    "public_id", path,
                     "overwrite", true,
-                    "resource_type", "image"
+                    "context", String.format("book=%s|chapter=%s|page=%s",
+                            request.getBookId(), request.getChapterId(), request.getName())
             );
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getUrl(), options);
 
-            Map<?, ?> result = cloudinary.uploader().upload(avatarFile.getBytes(), options);
-            return (String) result.get("secure_url");
+            FileMetadata metadata = FileMetadata.builder()
+                    .id((String) uploadResult.get("public_id"))
+                    .fileName(request.getName())
+                    .fileUrl((String) uploadResult.get("url"))
+                    .uploadedAt(LocalDateTime.now())
+                    .bookId(request.getBookId())
+                    .relatedId(request.getChapterId())
+                    .category("chapter-image")
+                    .isExternalUrl(true)
+                    .build();
+
+            FileMetadata saved = repository.save(metadata);
+            return mapper.toFromUrlUploadResponse(saved);
         } catch (IOException e) {
             throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
         }
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public CoverUploadResponse uploadCover(MultipartFile file, String bookId) {
+        try {
+            Map<String, Object> options = ObjectUtils.asMap(
+                    "folder", "covers/",
+                    "public_id", "book_" + bookId,
+                    "overwrite", true,
+                    "resource_type", "image"
+            );
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
 
-    private String generateChapterPath(String bookId, String chapterId, String name){
-       return String.format("/%s/%s/%s", bookId, chapterId, name);
+            FileMetadata metadata = FileMetadata.builder()
+                    .id((String) uploadResult.get("public_id"))
+                    .fileName(file.getOriginalFilename())
+                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .uploadedAt(LocalDateTime.now())
+                    .bookId(bookId)
+                    .category("cover")
+                    .isExternalUrl(false)
+                    .build();
+
+            FileMetadata saved = repository.save(metadata);
+            return mapper.toCoverUploadResponse(saved);
+        } catch (IOException e) {
+            throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public AvatarUploadResponse uploadAvatar(MultipartFile file, String userId) {
+        try {
+            Map<String, Object> options = ObjectUtils.asMap(
+                    "folder", "avatars/",
+                    "public_id", "user_" + userId,
+                    "overwrite", true,
+                    "resource_type", "image"
+            );
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
 
+            FileMetadata metadata = FileMetadata.builder()
+                    .id((String) uploadResult.get("public_id"))
+                    .fileName(file.getOriginalFilename())
+                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .uploadedAt(LocalDateTime.now())
+                    .relatedId(userId)
+                    .category("avatar")
+                    .isExternalUrl(false)
+                    .build();
+
+            FileMetadata saved = repository.save(metadata);
+            return mapper.toAvatarUploadResponse(saved);
+        } catch (IOException e) {
+            throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+    }
+
+    private String generateChapterPath(String bookId, String chapterId, String name) {
+        return String.format("%s/%s/%s", bookId, chapterId, name);
+    }
 }

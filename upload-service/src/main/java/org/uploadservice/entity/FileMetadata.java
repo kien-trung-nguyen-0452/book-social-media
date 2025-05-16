@@ -14,9 +14,13 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileMetadata {
     @Id
-    private String id;
-    private String fileName;
-    private String fileType;
-    private String fileUrl;
-    private LocalDateTime uploadedAt;
+    String id;               // publicId trên Cloudinary hoặc ID lưu Mongo
+    String fileName;         // tên file
+    String fileType;         // loại file (image/png, ...)
+    String fileUrl;          // URL truy cập file
+    LocalDateTime uploadedAt;
+    String bookId;           // nếu là file liên quan sách
+    String relatedId;        // có thể là chapterId, userId, ...
+    String category;         // "chapter-image", "avatar", "cover", "other"
+    Boolean isExternalUrl;   // true nếu upload từ URL bên ngoài, false nếu upload trực tiếp
 }

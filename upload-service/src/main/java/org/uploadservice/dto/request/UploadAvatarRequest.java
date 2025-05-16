@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CoverImageRequest {
+public class UploadAvatarRequest {
     MultipartFile file;
-    String bookId;
+    String userId;   // hoặc username, tùy theo hệ thống
 }

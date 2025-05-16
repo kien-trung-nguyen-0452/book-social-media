@@ -1,9 +1,8 @@
-package org.uploadservice.dto.response;
+package org.uploadservice.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CoverUploadResponse {
-    String url;
+public class UploadCoverRequest {
+    MultipartFile file;
     String bookId;
 }

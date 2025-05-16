@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
 @Slf4j
@@ -27,12 +27,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CrawlService {
-
     BookClient bookClient;
     ChapterClient chapterClient;
     UploadClient uploadClient;
     InternalMapper internalMapper;
-
     public CrawlResponse crawl(Metadata metadata) {
         BookInfo info = metadata.getInfo();
         List<Chapter> inputChapters = metadata.getChapters();

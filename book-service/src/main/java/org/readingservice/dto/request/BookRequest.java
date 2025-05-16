@@ -23,7 +23,6 @@ public class BookRequest {
     String description;
     String author;
     String coverUrl;
-    int chapterCount;
 
     @NotNull
     Boolean isCompleted;

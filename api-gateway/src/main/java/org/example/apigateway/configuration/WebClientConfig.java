@@ -1,6 +1,7 @@
 package org.example.apigateway.configuration;
 
 import org.example.apigateway.repository.IdentityClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Configuration
 public class WebClientConfig {
+    @LoadBalanced
     @Bean
     WebClient webClient(){
         return WebClient.builder()

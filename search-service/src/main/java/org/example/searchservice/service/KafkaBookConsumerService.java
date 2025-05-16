@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class KafkaBookConsumerService {
     BookIndexRepository bookIndexRepository;
-
-    @Qualifier("bookIndexMapperImpl")
     BookIndexMapper mapper;
 
     @KafkaListener(topics = "book-creation-topic", groupId = "elasticsearch")

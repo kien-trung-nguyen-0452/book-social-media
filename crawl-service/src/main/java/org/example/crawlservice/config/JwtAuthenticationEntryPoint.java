@@ -1,13 +1,13 @@
-package org.readingservice.config;
+package org.example.crawlservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.readingservice.dto.common.ApiResponse;
-import org.readingservice.exception.ErrorCode;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.example.crawlservice.dto.response.ApiResponse;
+import org.example.crawlservice.exception.ErrorCode;
 
 import java.io.IOException;
 

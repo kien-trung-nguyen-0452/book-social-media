@@ -8,7 +8,6 @@ import org.commentservice.exception.ErrorCode;
 import org.commentservice.exception.ServiceException;
 import org.commentservice.mapper.CommentMapper;
 import org.commentservice.repository.CommentRepository;
-import org.commentservice.service.CommentService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +18,7 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository repository;
+
     private final CommentMapper mapper;
 
     @Override
@@ -32,19 +32,23 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentResponse> getByBookId(Long bookId) {
         return repository.findByBookId(bookId)
-                .stream().map(mapper::toResponse).toList();
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     @Override
     public List<CommentResponse> getByChapterId(Long chapterId) {
         return repository.findByChapterId(chapterId)
-                .stream().map(mapper::toResponse).toList();
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     @Override
     public void delete(String id) {
         if (!repository.existsById(id)) {
-            throw new ServiceException(ErrorCode.COMMENT_NOT_FOUND, "Comment not found");
+            throw new ServiceException(ErrorCode.COMMENT_NOT_FOUND);
         }
         repository.deleteById(id);
     }

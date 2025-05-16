@@ -14,14 +14,12 @@ import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
 import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 
 @Valid
@@ -35,6 +33,7 @@ public class BookServiceImpl implements BookService {
     BookProducerService producerService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public BookResponse createBook(BookRequest request) {
         Book book = bookMapper.toEntity(request);
         book.setViewCount(0);
@@ -42,7 +41,7 @@ public class BookServiceImpl implements BookService {
         book.setChapterCount(0);
         book.setSubtitle(request.getSubtitle());
         Book savedBook = bookRepository.save(book);
-        BookEvent event = bookMapper.toBookEvent(savedBook);;
+        BookEvent event = bookMapper.toBookEvent(savedBook);
         event.setCategories(request.getCategories());
         producerService.creationEven(event);
 
@@ -65,7 +64,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @PostAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookResponse updateBook(String id, BookRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
@@ -73,13 +72,14 @@ public class BookServiceImpl implements BookService {
         book.setDescription(request.getDescription());
         book.setAuthor(request.getAuthor());
         book.setCoverUrl(request.getCoverUrl());
-        book.setCompleted(request.getIsCompleted());
+        book.setIsCompleted(request.getIsCompleted());
         book.setCategories(request.getCategories());
+        book.setSubtitle(request.getSubtitle());
         return bookMapper.toResponse(bookRepository.save(book));
     }
 
     @Override
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteBook(String id) {
         if (!bookRepository.existsById(id)) {
             throw new ServiceException(ErrorCode.BOOK_NOT_FOUND);

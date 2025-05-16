@@ -1,5 +1,6 @@
 package org.example.crawlservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +19,10 @@ public class BookResponse {
     String description;
     String author;
     String coverUrl;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
     LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
     LocalDateTime updatedAt;
+
 }
