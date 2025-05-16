@@ -5,12 +5,10 @@ import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserProfileCreationRequest;
 import org.example.authservice.dto.response.UserProfileCreationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "user-profile-service")
-@Repository
 public interface UserProfileClient {
     @PostMapping(value = "/internal/create-user-profile", produces = MediaType.APPLICATION_JSON)
     ApiResponse<UserProfileCreationResponse> createUserProfile(@RequestBody UserProfileCreationRequest request);

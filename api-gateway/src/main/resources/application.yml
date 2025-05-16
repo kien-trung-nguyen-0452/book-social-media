@@ -74,6 +74,20 @@ spring:
           filters:
             - StripPrefix=2
 
+        - id: reading-history-service
+          uri: lb://reading-history-service:8093
+          predicates:
+            - Path=${app.api-prefix}/history/**
+          filters:
+            - StripPrefix=2
+
+        - id: user-profile-service
+          uri: lb://user-profile-service:8099
+          predicates:
+            - Path=${app.api-prefix}/profile/**
+          filters:
+            - StripPrefix=2
+
 eureka:
   client:
     service-url:
