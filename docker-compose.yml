@@ -1,4 +1,21 @@
 services:
+  neo4j:
+    image: neo4j:5.19  # hoặc bản mới nhất
+    container_name: neo4j
+    ports:
+      - "7474:7474"   # Neo4j Browser (HTTP)
+      - "7687:7687"   # Bolt protocol (dùng để Spring Boot kết nối)
+    environment:
+      NEO4J_AUTH: neo4j/123456789           # username:password
+      NEO4J_PLUGINS: '["apoc"]'           # bật plugin APOC nếu cần
+      NEO4J_dbms_security_procedures_unrestricted: 'apoc.*,algo.*'  # cho phép dùng hàm APOC
+      NEO4J_dbms_default__listen__address: 0.0.0.0
+    volumes:
+      - frere_neo4j_data:/data
+    restart: always
+    networks:
+      - api-network
+
   kafka:
     image: 'bitnami/kafka:latest'
     container_name: kafka
@@ -185,6 +202,8 @@ volumes:
   frere_mongo_data:
     driver: local
   frere_elasticsearch_data:
+    driver: local
+  frere_neo4j_data:
     driver: local
 networks:
   api-network:

@@ -16,8 +16,6 @@ public class BookController {
 
     private final BookService bookService;
 
-
-
     @GetMapping
     public ApiResponse<List<BookResponse>> getAllBooks() {
         return ApiResponse.<List<BookResponse>>builder()

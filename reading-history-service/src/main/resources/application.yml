@@ -1,0 +1,18 @@
+server:
+  port: 8093
+  servlet:
+    context-path: /history
+
+spring:
+  application:
+    name: reading-history-service
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/history_db
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

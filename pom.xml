@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>user-profile-service</module>
         <module>crawl-service</module>
         <module>book-service</module>
         <module>api-gateway</module>
