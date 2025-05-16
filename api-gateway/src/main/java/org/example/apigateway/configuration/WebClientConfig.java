@@ -20,7 +20,6 @@ public class WebClientConfig {
     WebClient webClient(){
         return WebClient.builder()
                 .baseUrl("lb://auth-service:8080/identity")
-
                 .build();
     }
 

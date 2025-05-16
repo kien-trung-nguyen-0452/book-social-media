@@ -1,0 +1,19 @@
+server:
+  port: 8099
+  servlet:
+    context-path: /profile
+spring:
+  application:
+    name: user-profile-service
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: 123456789
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

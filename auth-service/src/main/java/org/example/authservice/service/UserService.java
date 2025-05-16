@@ -1,16 +1,23 @@
 package org.example.authservice.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.UserResponse;
+import org.example.authservice.entity.Role;
 import org.example.authservice.entity.User;
+import org.example.authservice.enumerate.PredefinedRole;
 import org.example.authservice.exception.ErrorCode;
 import org.example.authservice.exception.ServiceException;
+import org.example.authservice.mapper.ProfileMapper;
 import org.example.authservice.mapper.UserMapper;
+import org.example.authservice.repository.RoleRepository;
 import org.example.authservice.repository.UserRepository;
+import org.example.authservice.repository.httpClient.UserProfileClient;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,20 +33,36 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class UserService {
+    UserRepository userRepository;
+    UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
+    UserProfileClient userProfileClient;
+    ProfileMapper profileMapper;
+    RoleRepository roleRepository;
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
+    public UserResponse createUser(UserCreateRequest request) {
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        HashSet<Role> roles = new HashSet<>();
 
-    public UserResponse createUser(UserCreateRequest userCreateRequest) {
-        if (userRepository.existsByEmail(userCreateRequest.getEmail())
-                || userRepository.existsByUsername(userCreateRequest.getUsername())) {
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+
+        user.setRoles(roles);
+
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException exception){
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
-        User user = userMapper.toUser(userCreateRequest);
-        user.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        var profileRequest = profileMapper.toProfileCreationRequest(request);
+        profileRequest.setUserId(user.getUserId());
+        var profile = userProfileClient.createUserProfile(profileRequest);
+
+        var userCreationResponse = userMapper.toUserResponse(user);
+        userCreationResponse.setProfileId(profile.getResult().getId());
+
+        return userCreationResponse;
     }
 
     public List<UserResponse> findAllUser() {

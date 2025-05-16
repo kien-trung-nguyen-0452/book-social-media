@@ -4,6 +4,7 @@ server:
 app:
   api-prefix: /api/v1
 
+
 spring:
   application:
     name: api-gateway
@@ -33,7 +34,7 @@ spring:
             - StripPrefix=2
 
         - id: chapter-service
-          uri: lb://chapter-service:8087
+          uri: lb://book-service:8087
           predicates:
             - Path=${app.api-prefix}/chapter/**
           filters:
@@ -52,7 +53,6 @@ spring:
             - Path=${app.api-prefix}/crawl/**
           filters:
             - StripPrefix=2
-
         - id: upload-service
           uri: lb://upload-service:8085
           predicates:
@@ -60,7 +60,7 @@ spring:
           filters:
             - StripPrefix=2
 
-        - id: wishlist-service
+        - id: book-service
           uri: lb://wishlist-service:8081
           predicates:
             - Path=${app.api-prefix}/recommend/**
@@ -71,6 +71,20 @@ spring:
           uri: lb://search-service:8090
           predicates:
             - Path=${app.api-prefix}/search/**
+          filters:
+            - StripPrefix=2
+
+        - id: reading-history-service
+          uri: lb://reading-history-service:8093
+          predicates:
+            - Path=${app.api-prefix}/history/**
+          filters:
+            - StripPrefix=2
+
+        - id: user-profile-service
+          uri: lb://user-profile-service:8099
+          predicates:
+            - Path=${app.api-prefix}/profile/**
           filters:
             - StripPrefix=2
 

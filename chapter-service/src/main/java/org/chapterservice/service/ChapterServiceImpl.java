@@ -1,25 +1,39 @@
 package org.chapterservice.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.chapterservice.dto.request.ChapterRequest;
+import org.chapterservice.dto.request.HistoryRecordRequest;
 import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.entity.Chapter;
 import org.chapterservice.exception.ErrorCode;
 import org.chapterservice.exception.ServiceException;
 import org.chapterservice.mapper.ChapterMapper;
 import org.chapterservice.repository.ChapterRepository;
+import org.chapterservice.repository.ReadingHistoryClient;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Slf4j
 public class ChapterServiceImpl implements ChapterService {
 
-    private final ChapterRepository chapterRepository;
-    private final ChapterMapper chapterMapper;
+    ChapterRepository chapterRepository;
+    ChapterMapper chapterMapper;
+    ReadingHistoryClient readingHistoryClient;
 
     @Override
     public ChapterResponse createChapter(ChapterRequest request) {
@@ -50,10 +64,37 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public ChapterResponse getChapterById(String id) {
-        return chapterRepository.findById(id)
-                .map(chapterMapper::toResponse)
+        Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
+
+        ChapterResponse response = chapterMapper.toResponse(chapter);
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+            String userId = authentication.getName();
+
+
+            try {
+               var historyRequest = HistoryRecordRequest.builder().chapterId(chapter.getId())
+                       .userId(userId)
+                       .lastReadAt(LocalDate.now())
+                       .bookId(chapter.getBookId())
+                       .chapterId(chapter.getId())
+                       .build();
+
+               var saveResult = readingHistoryClient.saveRecord(historyRequest);
+               log.info("save result: {}", saveResult.getData());
+            } catch (Exception e) {
+                log.warn("can not save reading record: {}", e.getMessage());
+            }
+        }
+
+        return response;
     }
+
 
     @Override
     public List<ChapterResponse> getChaptersByBookId(String bookId) {
