@@ -17,12 +17,11 @@ import java.util.List;
 public class WebClientConfig {
     @LoadBalanced
     @Bean
-    WebClient webClient(){
+    public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("lb://auth-service:8080/identity")
+                .baseUrl("http://localhost:8080/identity")  // Đây là base url của service
                 .build();
     }
-
     @Bean
     CorsWebFilter corsWebFilter(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();

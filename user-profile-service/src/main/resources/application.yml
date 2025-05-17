@@ -3,6 +3,9 @@ server:
   servlet:
     context-path: /profile
 spring:
+  profiles:
+    active:
+      local
   application:
     name: user-profile-service
   neo4j:
@@ -10,7 +13,6 @@ spring:
     authentication:
       username: neo4j
       password: 123456789
-
 eureka:
   client:
     register-with-eureka: true

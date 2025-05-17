@@ -25,7 +25,7 @@ import java.util.List;
 public class InternalUserProfileController {
     UserProfileService userProfileService;
 
-    @PostMapping("/create-user-profile")
+    @PostMapping("/create")
     public ApiResponse<UserProfileCreationResponse> createUserProfile(@RequestBody UserProfileCreationRequest request){
         return ApiResponse.<UserProfileCreationResponse>builder()
                 .code(1000)

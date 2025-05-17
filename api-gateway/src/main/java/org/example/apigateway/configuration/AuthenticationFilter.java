@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
+
 
 @Component
 @Slf4j
@@ -36,8 +36,15 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     ObjectMapper objectMapper;
 
     @NonFinal
-    @Value("${app.public-endpoints}")
-    private String[] publicEndpoints;
+//    private final String[] publicEndpoints = new String[]{".*"};
+    private String[] publicEndpoints = {
+            "/profile/info/.*",
+            "/identity/auth/.*",
+            "/identity/users/registration",
+            "/notification/email/send",
+            "/book/books/.*",
+            "/search/search/.*"
+    };
 
     @Value("${app.api-prefix}")
     @NonFinal
@@ -48,30 +55,32 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         log.info("Enter authentication filter....");
 
         if (isPublicEndpoint(exchange.getRequest())){
-            log.info("✅ This is a public endpoint. Proceeding without authentication.");
+            log.info("this is a public endpoint: " + exchange.getRequest());
             return chain.filter(exchange);}
         else {
-            log.info("not a public end point: {}", exchange.getRequest());
+            log.info("this is not a public endpoint "+ exchange.getRequest());
         }
 
         // Get token from authorization header
         List<String> authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
-        if (CollectionUtils.isEmpty(authHeader))
+        if (CollectionUtils.isEmpty(authHeader)) {
+            log.info("lỗi đính kèm header");
             return unauthenticated(exchange.getResponse());
+        }
 
         String token = authHeader.get(0).replace("Bearer ", "");
         log.info("Token: {}", token);
 
         return identityService.introspect(token).flatMap(introspectResponse -> {
-            if (introspectResponse.getResult().isAuthenticated()){
-                log.info("✅ Token is valid. Proceeding to next filter.");
+            if (introspectResponse.getResult().isValid()){
                 log.info(token);
                 return chain.filter(exchange);}
             else{
-                log.warn("❌ Token is NOT authenticated.");
+                log.info("lỗi introspect");
                 return unauthenticated(exchange.getResponse());}
-        }) .onErrorResume(throwable -> {
-            log.error("🔥 Error during token introspection", throwable);
+        }).onErrorResume(throwable ->{
+            log.info("introspect đang bị throwable" );
+            throwable.printStackTrace();
             return unauthenticated(exchange.getResponse());
         });
     }
@@ -80,17 +89,24 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public int getOrder() {
         return -1;
     }
+    private boolean isPublicEndpoint(ServerHttpRequest request) {
+        String path = request.getURI().getPath();
+        log.info("Checking path: {}", path);
 
-    private boolean isPublicEndpoint(ServerHttpRequest request){
         return Arrays.stream(publicEndpoints)
-                .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));}
-
+                .anyMatch(pattern -> {
+                    String regex = "^" + apiPrefix + pattern;  // bắt đầu chuỗi
+                    log.info("Matching regex: {}", regex);
+                    return path.matches(regex);
+                });
+    }
 
 
     Mono<Void> unauthenticated(ServerHttpResponse response){
+        log.info("gateway lỗi");
         ApiResponse<?> apiResponse = ApiResponse.builder()
                 .code(1401)
-                .message("Unauthenticated")
+                .message("Unauthenticated, gateway")
                 .build();
 
         String body = null;
@@ -102,6 +118,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
 
         return response.writeWith(
                 Mono.just(response.bufferFactory().wrap(body.getBytes())));

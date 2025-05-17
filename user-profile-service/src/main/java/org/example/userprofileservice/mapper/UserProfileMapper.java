@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "sping")
+@Mapper(componentModel = "spring")
 public interface UserProfileMapper {
     UserProfileCreationResponse toUserProfileCreationResponse(UserProfile userProfile);
     UserProfile toUserProfile (UserProfileCreationRequest request);

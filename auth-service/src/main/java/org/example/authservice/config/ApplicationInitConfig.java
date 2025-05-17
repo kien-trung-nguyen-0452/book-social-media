@@ -2,11 +2,13 @@ package org.example.authservice.config;
 
 import java.util.HashSet;
 
+import org.example.authservice.dto.request.UserProfileCreationRequest;
 import org.example.authservice.entity.Role;
 import org.example.authservice.entity.User;
 import org.example.authservice.enumerate.PredefinedRole;
 import org.example.authservice.repository.RoleRepository;
 import org.example.authservice.repository.UserRepository;
+import org.example.authservice.repository.httpClient.UserProfileClient;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +40,8 @@ public class ApplicationInitConfig {
             prefix = "spring",
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
-    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
+
+    ApplicationRunner applicationRunner(UserProfileClient userProfileClient, UserRepository userRepository, RoleRepository roleRepository) {
         log.info("Initializing application.....");
         return args -> {
             if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
@@ -63,6 +66,11 @@ public class ApplicationInitConfig {
                         .build();
 
                 userRepository.save(user);
+                userProfileClient.createUserProfile(UserProfileCreationRequest.builder()
+                                .email(user.getEmail())
+                                .name(user.getUsername())
+                                .userId(user.getUserId())
+                                .build());
                 log.warn("admin user has been created with default password: admin, please change it");
             }
             log.info("Application initialization completed .....");

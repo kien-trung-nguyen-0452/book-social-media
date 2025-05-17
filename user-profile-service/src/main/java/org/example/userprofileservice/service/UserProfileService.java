@@ -31,16 +31,19 @@ public class UserProfileService {
     HistoryRecordMapper recordMapper;
 
     public UserProfileCreationResponse createUserProfile(UserProfileCreationRequest request){
-        userProfileRepository.findUserProfileById(request.getId())
-                .orElseThrow(()-> new ServiceException(ErrorCode.USER_EXISTED));
+        if(userProfileRepository.existsUserProfileByUserId(request.getUserId())){
+            throw new ServiceException(ErrorCode.USER_EXISTED);
+        }
         UserProfile userProfile = userProfileMapper.toUserProfile(request);
         return userProfileMapper.toUserProfileCreationResponse(userProfileRepository.save(userProfile));
 
     }
 
     public UserProfileUpdateResponse updateUserProfile(UserProfileUpdateRequest request){
-        UserProfile userProfile = userProfileRepository.findUserProfileById(request.getId())
-                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        if(!userProfileRepository.existsUserProfileByUserId(request.getId())){
+            throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
+        }
+        var userProfile = userProfileRepository.findUserProfileByUserId(request.getId());
         userProfile.setName(request.getNewName());
         userProfileRepository.save(userProfile);
         return UserProfileUpdateResponse.builder()
@@ -50,8 +53,10 @@ public class UserProfileService {
     }
 
     public UserProfileChangeAvatarResponse changeAvatar (UserProfileChangeAvatarRequest request){
-        UserProfile userProfile = userProfileRepository.findUserProfileById(request.getId())
-                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        if(!userProfileRepository.existsUserProfileByUserId(request.getId())){
+            throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
+        }
+        var userProfile = userProfileRepository.findUserProfileByUserId(request.getId());
         userProfile.setAvatarUrl(request.getNewAvatarUrl());
         return UserProfileChangeAvatarResponse.builder()
                 .newAvatarUrl(userProfile.getAvatarUrl())
@@ -59,9 +64,12 @@ public class UserProfileService {
                 .build();
     }
 
-    public UserProfileResponse getUserProfileById(String id){
-        UserProfile userProfile = userProfileRepository.findUserProfileById(id)
-                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+    public UserProfileResponse getUserProfileByUserId(String id){
+
+       if(!userProfileRepository.existsUserProfileByUserId(id)){
+           throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
+       }
+        var userProfile = userProfileRepository.findUserProfileByUserId(id);
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
 

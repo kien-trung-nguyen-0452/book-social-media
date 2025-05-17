@@ -7,7 +7,7 @@ import java.util.Optional;
 
 
 public interface UserProfileRepository extends Neo4jRepository<UserProfile, String> {
-    Optional<UserProfile> findUserProfileById(String id);
-
+    boolean existsUserProfileByUserId(String userId);
+    UserProfile findUserProfileByUserId(String userId);
 
 }

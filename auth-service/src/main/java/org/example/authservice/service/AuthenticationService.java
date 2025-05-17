@@ -85,6 +85,7 @@ public class AuthenticationService {
         } catch (ServiceException e) {
             isValid = false;
         }
+        log.info("Token introspection result: {}", isValid);
         return IntrospectTokenResponse.builder().valid(isValid).build();
     }
 

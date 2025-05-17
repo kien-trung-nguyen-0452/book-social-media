@@ -41,6 +41,13 @@ public class UserService {
     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreateRequest request) {
+        if(userRepository.existsByUsername(request.getUsername())){
+            throw new ServiceException(ErrorCode.USER_EXISTED);
+        }
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new ServiceException(ErrorCode.EMAIL_EXISTED);
+        }
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         HashSet<Role> roles = new HashSet<>();
@@ -75,7 +82,7 @@ public class UserService {
                 userRepository.findById(id).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED)));
     }
 
-    @PostAuthorize("returnObject.username= authentication.name")
+    @PostAuthorize("returnObject != null and returnObject.username.equals(authentication.name)")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
