@@ -15,7 +15,7 @@ public class BookRequest{
     String description;
     String author;
     List<String> categoryId;
-    String imageUrl;
+    String coverUrl;
 
 }
 

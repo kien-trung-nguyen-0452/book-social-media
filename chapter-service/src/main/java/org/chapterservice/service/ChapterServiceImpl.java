@@ -44,7 +44,7 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setUpdatedAt(now);
 
             chapter.setBookId(request.getBookId()); // set bookId
-            chapter.setImageUrl(request.getImages()); // set danh sách ảnh đúng tên trường
+            chapter.setImageUrl(request.getImageUrl()); // set danh sách ảnh đúng tên trường
             chapter.setChapter(request.getChapter());
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -118,7 +118,7 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setChapterNumber(request.getChapterNumber());
 
         chapter.setBookId(request.getBookId()); // cập nhật bookId nếu có
-        chapter.setImageUrl(request.getImages()); // cập nhật ảnh
+        chapter.setImageUrl(request.getImageUrl()); // cập nhật ảnh
         chapter.setChapter(request.getChapter());  // cập nhật tên chương
 
         chapter.setUpdatedAt(LocalDateTime.now());

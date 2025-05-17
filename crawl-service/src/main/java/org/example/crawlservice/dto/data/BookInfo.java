@@ -17,6 +17,6 @@ public class BookInfo {
     String author;
     String description;
     List<String> categories;
-    String image_url;
+    String coverUrl;
 
 }

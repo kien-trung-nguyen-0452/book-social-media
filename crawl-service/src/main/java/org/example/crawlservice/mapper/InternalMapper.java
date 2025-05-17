@@ -18,7 +18,7 @@ public interface InternalMapper {
     @Mapping(source = "description", target = "description")
     @Mapping(source = "author", target = "author")
     @Mapping(target = "categoryId", expression = "java(org.example.crawlservice.mapper.MapperHelper.defaultCategoryId())")
-    @Mapping(source = "image_url", target = "imageUrl")
+    @Mapping(source = "coverUrl", target = "coverUrl")
     BookRequest toBookRequest(BookInfo bookInfo);
 
     @Mapping(target = "bookId", ignore = true)

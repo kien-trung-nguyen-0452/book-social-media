@@ -43,49 +43,33 @@ public class CrawlService {
         for (Chapter chapter : inputChapters) {
             ChapterRequest chapterRequest = internalMapper.toChapterRequest(chapter);
             chapterRequest.setBookId(bookId);
-            chapterRequest.setContent(chapter.getTitle());
+            chapterRequest.setTitle(chapter.getTitle());
 
+            List<String> newImageUrls = new ArrayList<>();
+            if (chapter.getImages() != null) {
+                for (String imageUrl : chapter.getImages()) {
+                    UploadRequest uploadRequest = UploadRequest.builder()
+                            .bookId(bookId)
+                            .name(chapter.getTitle())
+                            .url(imageUrl)
+                            .build();
+
+                    UploadResponse uploadResponse = uploadClient.uploadFromUrl(uploadRequest);
+                    newImageUrls.add(uploadResponse.getUrl());
+                }
+            }
+            chapterRequest.setImageUrls(newImageUrls);
 
             ChapterResponse chapterResponse = chapterClient.createChapter(chapterRequest).getData();
 
-            List<String> newImageUrls = new ArrayList<>();
-            for (String imageUrl : chapter.getImages()) {
-                UploadRequest uploadRequest = UploadRequest.builder()
-                        .bookId(bookId)
-                        .chapterId(chapterResponse.getId())
-                        .name(chapterResponse.getTitle())
-                        .url(imageUrl)
-                        .build();
-log.info("Uploading image: {}", uploadRequest.getUrl());
-                UploadResponse uploadResponse = uploadClient.uploadFromUrl(uploadRequest);
-                String uploadedUrl = uploadResponse.getUrl();
-
-                newImageUrls.add(uploadedUrl);
-                log.info("Uploaded image: {}", uploadedUrl);
-            }
-
-            ChapterRequest updatedChapterRequest = ChapterRequest.builder()
-
-                    .title(chapterResponse.getTitle())
-                    .content(chapterResponse.getContent())
-                    .chapterNumber(chapterRequest.getChapterNumber())
-                    .bookId(bookId)
-                    .imageUrls(newImageUrls.stream().toList())
-                    .build();
-
-            log.info("Updated chapter request: {}", updatedChapterRequest.getImageUrls());
-
-
-            ChapterResponse updatedResponse = chapterClient.createChapter(updatedChapterRequest).getData();
-            log.info("Updated chapter: {}", updatedResponse.getImageUrls());
-
             outputChapters.add(Chapter.builder()
-                    .id(updatedResponse.getId())
-                    .title(updatedResponse.getTitle())
-                    .chapter(String.valueOf(updatedResponse.getChapterNumber()))
-                    .images(updatedResponse.getImageUrls())
+                    .id(chapterResponse.getId())
+                    .title(chapterResponse.getTitle())
+                    .chapter(String.valueOf(chapterResponse.getChapterNumber()))
+                    .images(chapterResponse.getImageUrls())
                     .build());
         }
+
 
         return CrawlResponse.builder()
                 .info(info)
