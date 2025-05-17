@@ -50,6 +50,7 @@
             <version>5.14.0</version> <!-- hoặc phiên bản tương thích -->
         </dependency>
 
+
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>

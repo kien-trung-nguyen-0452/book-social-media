@@ -4,9 +4,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.chapterservice.dto.common.ApiResponse;
-import org.chapterservice.dto.request.ChapterRequest;
+
+import org.chapterservice.dto.request.UploadViewCountRequest;
 import org.chapterservice.dto.response.ChapterResponse;
+import org.chapterservice.service.ChapterKafkaProducerService;
 import org.chapterservice.service.ChapterService;
+import org.chapterservice.service.ViewCountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +21,20 @@ import java.util.List;
 public class ChapterController {
 
     ChapterService chapterService;
+    ViewCountService viewCountService;
+    ChapterKafkaProducerService chapterKafkaProducerService;
+    @GetMapping("/{bookId}/{chapterId}")
+    public ApiResponse<ChapterResponse> getChapterById(@PathVariable String bookId, @PathVariable String chapterId) {
+        var result = chapterService.getChapterById(chapterId);
 
-    @GetMapping("/{id}")
-    public ApiResponse<ChapterResponse> getChapterById(@PathVariable String id) {
+        // Tăng lượt xem trong Redis (1 lần mỗi lần đọc chương)
+        viewCountService.incrementViewCount(bookId);
+
+        // Không gửi viewCount trực tiếp ở đây nữa,
+        // vì việc gửi Kafka sẽ do scheduler xử lý định kỳ trong RedisKafkaScheduler.
+
         return ApiResponse.<ChapterResponse>builder()
-                .data(chapterService.getChapterById(id))
+                .data(result)
                 .message("Chapter fetched")
                 .build();
     }

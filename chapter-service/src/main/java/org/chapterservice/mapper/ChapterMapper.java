@@ -9,9 +9,18 @@ import org.mapstruct.Mapping;
 public interface ChapterMapper {
 
     @Mapping(source = "imageUrl", target = "imageUrl")
-    Chapter toEntity(ChapterRequest request);
+    @Mapping(source = "bookId", target = "bookId")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "content", target = "content")
     @Mapping(source = "chapter", target = "chapter")
+    @Mapping(source = "updatedBy", target = "updatedBy")
+    @Mapping(source = "chapterNumber", target = "chapterNumber")
+    @Mapping(target = "id", ignore = true)
 
-    @Mapping(source = "imageUrl", target = "images")
+    Chapter toEntity(ChapterRequest request);
+
+    @Mapping(source = "chapter", target = "chapter")
+    @Mapping(source = "updatedAt", target = "updatedAt")
+
     ChapterResponse toResponse(Chapter chapter);
 }

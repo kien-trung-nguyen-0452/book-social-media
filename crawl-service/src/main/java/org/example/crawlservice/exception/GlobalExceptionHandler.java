@@ -2,7 +2,7 @@ package org.example.crawlservice.exception;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Map;
-import java.util.Objects;
+
 
 import jakarta.validation.ConstraintViolation;
 

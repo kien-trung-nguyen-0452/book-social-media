@@ -8,10 +8,7 @@ import org.example.searchservice.dto.request.BookIndexUpdateRequest;
 import org.example.searchservice.dto.response.BookIndexResponse;
 import org.example.searchservice.dto.response.BookSearchingResult;
 import org.example.searchservice.service.BookIndexService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class BookIndexController {
     BookIndexService bookIndexService;
 
     @PutMapping("/update_book")
-    ApiResponse<BookIndexResponse> updateBook (BookIndexUpdateRequest request){
+    ApiResponse<BookIndexResponse> updateBook (@RequestBody BookIndexUpdateRequest request){
         return ApiResponse.<BookIndexResponse>builder()
                 .code(1000)
                 .data(bookIndexService.updateBookIndex(request))

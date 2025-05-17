@@ -2,20 +2,46 @@ server:
   port: 8087
   servlet:
     context-path: /chapter
+
 spring:
   application:
     name: chapter-service
 
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: book-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+            value:
+              default:
+                type: org.chapterservice.dto.request.UploadViewCountRequest
+
+
+    listener:
+      missing-topics-fatal: false
 
   data:
     mongodb:
       uri: mongodb://localhost:27017/chapterdb
+    redis:
+      host: localhost
+      port: 6379
 
 logging:
   level:
-    org:
-      springframework: DEBUG
-
+    org.apache.kafka.clients: DEBUG
 eureka:
   client:
     service-url:

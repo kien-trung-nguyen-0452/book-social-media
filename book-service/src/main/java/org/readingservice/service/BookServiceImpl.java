@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.readingservice.dto.request.BookRequest;
 import org.readingservice.dto.response.BookResponse;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 
 @Valid
 @Service
@@ -57,7 +58,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookResponse> getAllBooks() {
-        return bookRepository.findAll()
+        var bookList = bookRepository.findAll();
+        if (bookList.isEmpty()) {
+            log.info("empty list");
+        }
+        return bookList
                 .stream()
                 .map(bookMapper::toResponse)
                 .collect(Collectors.toList());

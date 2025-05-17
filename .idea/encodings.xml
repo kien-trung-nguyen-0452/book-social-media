@@ -9,6 +9,7 @@
     <file url="file://$PROJECT_DIR$/bookmark-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/chapter-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/comment-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common-dto-event/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common-dto/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crawl-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crawl-service/src/main/resources" charset="UTF-8" />

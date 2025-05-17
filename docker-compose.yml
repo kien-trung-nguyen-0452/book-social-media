@@ -1,4 +1,27 @@
 services:
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - frere_redis_data:/data
+    restart: unless-stopped
+    command: [ "redis-server", "--appendonly", "yes" ]
+    networks:
+      - api-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - api-network
+
   neo4j:
     image: neo4j:5.17  # hoặc dùng latest: neo4j:latest
     container_name: neo4j
@@ -22,13 +45,14 @@ services:
     container_name: kafka
     hostname: kafka
     ports:
+      - '9092:9092'
       - '9094:9094'
     environment:
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092,EXTERNAL://localhost:9094
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     networks:
@@ -198,6 +222,8 @@ services:
       - "8090:8090"
 
 volumes:
+  frere_redis_data: # Đổi tên volume để phù hợp với dự án Frere
+    driver: local
   frere_mysql_data:  # Đổi tên volume để phù hợp với dự án Frere
     driver: local
   frere_mongo_data:
