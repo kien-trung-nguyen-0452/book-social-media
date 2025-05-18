@@ -18,8 +18,8 @@ public class BookKafkaConsumer {
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "upload-view-count", groupId = "book-service-group")
-    public void handleUpdateViewCount(UpdateViewCountRequest request) {
-        log.info("Received view count update: {}", request);
+    public void listen(UpdateViewCountRequest request) {
+        log.info("Received raw message from Kafka: {}", request);
         var book = bookRepository.findBookById(request.getBookId());
         int newViewCount = request.getViewCount() + book.getViewCount();
         book.setViewCount(newViewCount);

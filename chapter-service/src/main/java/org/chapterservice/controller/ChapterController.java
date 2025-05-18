@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.chapterservice.dto.common.ApiResponse;
 
-import org.chapterservice.dto.request.UploadViewCountRequest;
 import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.service.ChapterKafkaProducerService;
 import org.chapterservice.service.ChapterService;
@@ -26,13 +25,9 @@ public class ChapterController {
     @GetMapping("/{bookId}/{chapterId}")
     public ApiResponse<ChapterResponse> getChapterById(@PathVariable String bookId, @PathVariable String chapterId) {
         var result = chapterService.getChapterById(chapterId);
-
-        // Tăng lượt xem trong Redis (1 lần mỗi lần đọc chương)
+        // -- RECORD VIEW COUNT TO REDIS --
         viewCountService.incrementViewCount(bookId);
-
-        // Không gửi viewCount trực tiếp ở đây nữa,
-        // vì việc gửi Kafka sẽ do scheduler xử lý định kỳ trong RedisKafkaScheduler.
-
+        // -- RECORD VIEW COUNT TO REDIS --
         return ApiResponse.<ChapterResponse>builder()
                 .data(result)
                 .message("Chapter fetched")

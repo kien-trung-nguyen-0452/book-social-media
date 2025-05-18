@@ -24,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -98,14 +99,11 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public List<ChapterResponse> getChaptersByBookId(String bookId) {
-        try {
-            return chapterRepository.findByBookIdOrderByChapterNumberAsc(bookId)
-                    .stream()
-                    .map(chapterMapper::toResponse)
-                    .toList();
-        } catch (Exception ex) {
-            throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);
+        if (chapterRepository.existsChaptersByBookId(bookId)){
+            throw new ServiceException(ErrorCode.CHAPTER_NOT_FOUND);
         }
+        var chapList = chapterRepository.findByBookIdOrderByChapterNumberAsc(bookId);
+        return chapList.stream().map(chapterMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
