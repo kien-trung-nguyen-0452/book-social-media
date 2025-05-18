@@ -11,15 +11,22 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/bookdb
 
+
   kafka:
     bootstrap-servers: localhost:9094
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: true  # Gửi __TypeId__ vào header
 
     consumer:
-      group-id: search-service-group
+      group-id: book-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -27,10 +34,10 @@ spring:
         spring:
           json:
             trusted:
-              packages: '*'
-            value:
-              default:
-                type: org.readingservice.event.BookEvent
+              packages: "org.readingservice.dto.request,org.readingservice.event"
+            use:
+              type:
+                headers: true  # Đọc __TypeId__ từ header (mặc định là true)
 
     listener:
       missing-topics-fatal: false

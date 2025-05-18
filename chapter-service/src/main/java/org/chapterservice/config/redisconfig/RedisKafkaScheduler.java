@@ -25,7 +25,7 @@ public class RedisKafkaScheduler {
     ViewCountService viewCountService;
     ChapterKafkaProducerService chapterKafkaProducerService;
 
-    @Scheduled(fixedRate = 10000) // 60 giây
+    @Scheduled(fixedRate = 5000) // 60 giây
     public void flushViewCountsToKafka() {
         Map<String, Integer> views = viewCountService.getViewCount();
         if (views.isEmpty()) {

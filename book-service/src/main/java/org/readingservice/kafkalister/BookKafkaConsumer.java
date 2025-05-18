@@ -18,17 +18,12 @@ public class BookKafkaConsumer {
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "upload-view-count", groupId = "book-service-group")
-    public void listen(String message) {
-        log.info("Received raw message from Kafka: {}", message);
-        try {
-            UpdateViewCountRequest request = objectMapper.readValue(message, UpdateViewCountRequest.class);
-            var book = bookRepository.findBookById(request.getBookId());
-            int newViewCount = request.getViewCount() + book.getViewCount();
-            book.setViewCount(newViewCount);
-            bookRepository.save(book);
-            log.info("Updated book: {}", book);
-        } catch (JsonProcessingException e) {
-            log.error("Error parsing JSON message to UpdateViewCountRequest", e);
-        }
+    public void handleUpdateViewCount(UpdateViewCountRequest request) {
+        log.info("Received view count update: {}", request);
+        var book = bookRepository.findBookById(request.getBookId());
+        int newViewCount = request.getViewCount() + book.getViewCount();
+        book.setViewCount(newViewCount);
+        bookRepository.save(book);
+        log.info("Updated book: {}", book);
     }
 }
