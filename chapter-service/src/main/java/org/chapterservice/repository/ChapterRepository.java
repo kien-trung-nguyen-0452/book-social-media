@@ -17,4 +17,6 @@ public interface ChapterRepository extends MongoRepository<Chapter, String> {
     Optional<Chapter> findFirstByBookIdOrderByChapterNumberDesc(String bookId);
 
     void deleteByBookId(String bookId);
+
+    boolean existsChaptersByBookId(String bookId);
 }

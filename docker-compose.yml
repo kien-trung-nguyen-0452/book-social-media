@@ -57,6 +57,7 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     networks:
       - api-network
+    restart: always
 
   elasticsearch:
     image: bitnami/elasticsearch:latest
@@ -70,6 +71,7 @@ services:
       - frere_elasticsearch_data:/bitnami/elasticsearch
     networks:
       - api-network
+    restart: always
 
 
   api-gateway:
@@ -91,7 +93,7 @@ services:
       - "8761:8761"
     networks:
       - api-network
-
+    restart: always
 
   mysql-db:
     image: mysql:8.0

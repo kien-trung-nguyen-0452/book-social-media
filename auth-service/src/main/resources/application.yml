@@ -8,8 +8,8 @@ spring:
   datasource:
     url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service}
     driverClassName: "com.mysql.cj.jdbc.Driver"
-    username: ${DBMS_USERNAME:root}
-    password: ${DBMS_PASSWORD:1234}
+    username: ${DBMS_USERNAME:kien}
+    password: ${DBMS_PASSWORD:123456789}
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,6 +18,7 @@ logging:
   level:
     com.zaxxer.hikari: DEBUG
 
+
 eureka:
   client:
     service-url:
@@ -25,7 +26,14 @@ eureka:
       fetch-registry: true
       register-with-eureka: true
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
 jwt:
   signerKey: "A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq"
   valid-duration: 3600 # in second
   refreshable-duration: 360000 # in seconds
+

@@ -1,4 +1,4 @@
-package org.chapterservice.dto.request;
+package org.readingservice.event;
 
 import lombok.Builder;
 import lombok.Data;

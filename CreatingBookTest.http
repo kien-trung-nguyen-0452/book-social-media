@@ -1,0 +1,84 @@
+@env = local
+
+### @name login
+POST http://{{authUrl}}/identity/auth/token
+Authorization:
+Content-Type: application/json
+
+{
+  "username" : "admin",
+  "password" : "admin"
+}
+
+> {%
+    let data = response.body;
+    client.global.set("token", data.result.token);
+%}
+
+
+### @name create_book
+@title = Spring Boot In Action
+@subtitle = Build modern web apps
+@description = A practical guide to Spring Boot
+@author = Craig Walls
+@coverUrl = https://example.com/cover.jpg
+@isCompleted = true
+
+###
+POST http://{{bookUrl}}/book/internal/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "{{title}}",
+  "subtitle": "{{subtitle}}",
+  "description": "{{description}}",
+  "author": "{{author}}",
+  "coverUrl": "{{coverUrl}}",
+  "isCompleted": {{isCompleted}},
+  "categories": ["Java", "Backend", "Spring"]
+}
+
+> {%
+    const data = response.body;
+    client.global.set("bookId", data.data.id);
+%}
+
+
+###
+
+### @name create_chapter
+@chapter = 1
+@chapterTitle = Chapter 1
+@updatedBy = NguyenVanA
+@content = chapter content
+@chapterNumber = 1
+
+###
+POST http://localhost:8087/chapter/internal/add
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "bookId": "{{bookId}}",
+  "chapter": "{{chapter}}",
+  "title": "{{chapterTitle}}",
+  "updatedBy": "{{updatedBy}}",
+  "imageUrl": ["file:///path/to/image1.jpg" ,"file:///path/to/image2.jpg"],
+  "content": "{{content}}",
+  "chapterNumber": {{chapterNumber}}
+}
+
+> {%
+    let data = response.body;
+    client.global.set("chapterId", data.data.id);
+%}
+
+###
+
+### @name read_chapter
+GET http://localhost:8087/chapter/chapters/{{bookId}}/{{chapterId}}
+Authorization:
+
+###
+GET {{bookUrl}}/book/books/{{bookId}}
