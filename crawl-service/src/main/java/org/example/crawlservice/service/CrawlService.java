@@ -31,45 +31,59 @@ public class CrawlService {
     ChapterClient chapterClient;
     UploadClient uploadClient;
     InternalMapper internalMapper;
+
     public CrawlResponse crawl(Metadata metadata) {
         BookInfo info = metadata.getInfo();
         List<Chapter> inputChapters = metadata.getChapters();
         List<Chapter> outputChapters = new ArrayList<>();
 
+        // 1. Tạo sách, lấy bookId
         BookRequest bookRequest = internalMapper.toBookRequest(info);
         BookResponse bookResponse = bookClient.createBook(bookRequest).getData();
         String bookId = String.valueOf(bookResponse.getId());
 
+        // 2. Duyệt qua từng chapter đầu vào
         for (Chapter chapter : inputChapters) {
+            log.info("Chapter {} images: {}", chapter.getChapter(), chapter.getImages());
             ChapterRequest chapterRequest = internalMapper.toChapterRequest(chapter);
             chapterRequest.setBookId(bookId);
             chapterRequest.setTitle(chapter.getTitle());
 
+            // 3. Tạo chapter để lấy chapterId
+            ChapterResponse chapterResponse = chapterClient.createChapter(chapterRequest).getData();
+            String chapterId = chapterResponse.getId();
+
+            // 4. Upload ảnh dùng chapterId mới lấy được
             List<String> newImageUrls = new ArrayList<>();
             if (chapter.getImages() != null) {
                 for (String imageUrl : chapter.getImages()) {
                     UploadRequest uploadRequest = UploadRequest.builder()
                             .bookId(bookId)
+                            .chapterId(chapterId)
                             .name(chapter.getTitle())
                             .url(imageUrl)
                             .build();
-
-                    UploadResponse uploadResponse = uploadClient.uploadFromUrl(uploadRequest);
-                    newImageUrls.add(uploadResponse.getUrl());
+                    try {
+                        ApiResponse<UploadResponse> uplresponse = uploadClient.uploadFromUrl(uploadRequest);
+                        UploadResponse uploadResponse = uplresponse.getData();
+                        log.info("Uploaded image URL: {}", uploadResponse.getUrl());
+                        newImageUrls.add(uploadResponse.getUrl());
+                    } catch (Exception e) {
+                        log.error("Failed to upload image from URL: {}", imageUrl, e);
+                        // fallback trả về URL gốc nếu upload lỗi
+                        newImageUrls.add(imageUrl);
+                    }
                 }
             }
-            chapterRequest.setImageUrls(newImageUrls);
 
-            ChapterResponse chapterResponse = chapterClient.createChapter(chapterRequest).getData();
-
+            // 6. Build output chapter cho response trả về client
             outputChapters.add(Chapter.builder()
-                    .id(chapterResponse.getId())
+                    .id(chapterId)
                     .title(chapterResponse.getTitle())
                     .chapter(String.valueOf(chapterResponse.getChapterNumber()))
-                    .images(chapterResponse.getImageUrls())
+                    .images(newImageUrls)
                     .build());
         }
-
 
         return CrawlResponse.builder()
                 .info(info)

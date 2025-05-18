@@ -34,7 +34,7 @@ spring:
             - StripPrefix=2
 
         - id: chapter-service
-          uri: lb://book-service:8087
+          uri: lb://chapter-service:8087
           predicates:
             - Path=${app.api-prefix}/chapter/**
           filters:
@@ -53,6 +53,7 @@ spring:
             - Path=${app.api-prefix}/crawl/**
           filters:
             - StripPrefix=2
+
         - id: upload-service
           uri: lb://upload-service:8085
           predicates:
@@ -60,7 +61,7 @@ spring:
           filters:
             - StripPrefix=2
 
-        - id: book-service
+        - id: wishlist-service
           uri: lb://wishlist-service:8081
           predicates:
             - Path=${app.api-prefix}/recommend/**

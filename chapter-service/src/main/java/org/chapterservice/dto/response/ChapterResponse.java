@@ -17,7 +17,7 @@ public class ChapterResponse {
     String chapter;
     String title;
     List<String> images;
-    String UpdateBy;
+    String updatedBy;
     String createdBy;
     String content;
     int chapterNumber;

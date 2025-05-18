@@ -14,5 +14,5 @@ public class ChapterRequest{
     private String title;
     private String content;//nếu dùng truyện chữ thì thêm
     private Integer chapterNumber;
-    private List<String> imageUrls;
+    private List<String> images;
 }

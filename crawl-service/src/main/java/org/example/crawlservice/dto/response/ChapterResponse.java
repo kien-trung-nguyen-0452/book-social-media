@@ -17,7 +17,7 @@ public class ChapterResponse {
     String title;
     String content;
     Integer chapterNumber;
-    List<String> imageUrls;
+    List<String> images;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }
