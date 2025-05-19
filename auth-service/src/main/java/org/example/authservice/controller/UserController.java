@@ -146,4 +146,13 @@ public class UserController {
         var userResponse = userService.updateUser(userUpdateRequest, userId);
         return ApiResponse.<UserResponse>builder().result(userResponse).build();
     }
+
+    @DeleteMapping("/{userId}")
+    ApiResponse<Void> deleteUser(@PathVariable String userId) {
+        userService.deleteUserProfile(userId);
+        return ApiResponse.<Void>builder()
+                .message("User and profile deleted successfully")
+                .build();
+    }
+
 }

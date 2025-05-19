@@ -61,9 +61,9 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setCreatedBy(username);
             chapter.setUpdatedBy(username );
             Chapter saved = chapterRepository.save(chapter);
-
+            long chapterCount = chapterRepository.countByBookId(saved.getBookId());
             // Gửi event kafka
-            ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), 1);
+            ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), (int) chapterCount);
             chapterKafkaProducerService.sendChapterCountEvent(event);
 
             return chapterMapper.toResponse(saved);

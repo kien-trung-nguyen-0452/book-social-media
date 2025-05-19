@@ -8,12 +8,10 @@ import org.example.userprofileservice.dto.ApiResponse;
 import org.example.userprofileservice.dto.request.UserProfileChangeAvatarRequest;
 import org.example.userprofileservice.dto.request.UserProfileCreationRequest;
 import org.example.userprofileservice.dto.request.UserProfileUpdateRequest;
-import org.example.userprofileservice.dto.response.UserProfileChangeAvatarResponse;
-import org.example.userprofileservice.dto.response.UserProfileCreationResponse;
-import org.example.userprofileservice.dto.response.UserProfileUpdateResponse;
-import org.example.userprofileservice.dto.response.UserReadingHistory;
+import org.example.userprofileservice.dto.response.*;
 import org.example.userprofileservice.service.UserProfileService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -24,6 +22,7 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class InternalUserProfileController {
     UserProfileService userProfileService;
+    private final RestClient.Builder builder;
 
     @PostMapping("/create")
     public ApiResponse<UserProfileCreationResponse> createUserProfile(@RequestBody UserProfileCreationRequest request){
@@ -57,6 +56,13 @@ public class InternalUserProfileController {
                 .message("user id :" + userId)
                 .build();
     }
-
+    @DeleteMapping("delete/{userId}")
+    public ApiResponse<UserProfileDeleteResponse> deleteUserProfile(@PathVariable String userId) {
+        return ApiResponse.<UserProfileDeleteResponse>builder()
+                .code(1000)
+                .result(userProfileService.deleteUserProfile(userId))
+                .message("Deleted profile for userId: " + userId)
+                .build();
+    }
 
 }

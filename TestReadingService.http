@@ -1,1 +1,54 @@
-###
+@env = testReadingService
+
+### create user
+
+@username = phucdeptrai123455
+@password = 12345678912355
+@name = phuc dep trai12365
+@email = phucdepzai2021d2365@lgbt.com5
+POST http://{{base-url}}/{{prefix}}/identity/users/registration
+Authorization:
+Content-Type: application/json
+
+{
+  "username" : "{{username}}",
+  "password" : "{{password}}",
+  "email" : "{{email}}",
+  "name": "{{name}}"
+  }
+
+> {%
+let result = response.body
+client.global.set("userId", result.result.userId)
+client.global.set("profileId", result.result.profileId)
+%}
+
+### login user
+POST http://{{base-url}}/{{prefix}}/identity/auth/token
+Authorization:
+Content-Type: application/json
+
+{
+  "username" : "{{username}}",
+  "password" : "{{password}}"
+  }
+
+> {%
+let result = response.body
+client.global.set("token", result.result.token)
+%}
+
+### get user profile
+
+GET http://{{base-url}}/{{prefix}}/profile/info/profile/{{userId}}
+Authorization: Bearer {{token}}
+
+> {%
+    let result = response.body
+    client.log("id tra ve " +result.result.id)
+    client.log("id goc " + client.global.get("profileId"))
+
+ %}
+### delete userProfile
+DELETE http://{{base-url}}/{{prefix}}/identity/users/{{userId}}
+Authorization: Bearer {{token}}

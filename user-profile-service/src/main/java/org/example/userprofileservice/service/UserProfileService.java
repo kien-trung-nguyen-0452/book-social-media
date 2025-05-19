@@ -30,8 +30,8 @@ public class UserProfileService {
     HistoryRecordClient historyRecordClient;
     HistoryRecordMapper recordMapper;
 
-    public UserProfileCreationResponse createUserProfile(UserProfileCreationRequest request){
-        if(userProfileRepository.existsUserProfileByUserId(request.getUserId())){
+    public UserProfileCreationResponse createUserProfile(UserProfileCreationRequest request) {
+        if (userProfileRepository.existsUserProfileByUserId(request.getUserId())) {
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
         UserProfile userProfile = userProfileMapper.toUserProfile(request);
@@ -39,8 +39,8 @@ public class UserProfileService {
 
     }
 
-    public UserProfileUpdateResponse updateUserProfile(UserProfileUpdateRequest request){
-        if(!userProfileRepository.existsUserProfileByUserId(request.getId())){
+    public UserProfileUpdateResponse updateUserProfile(UserProfileUpdateRequest request) {
+        if (!userProfileRepository.existsUserProfileByUserId(request.getId())) {
             throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
         }
         var userProfile = userProfileRepository.findUserProfileByUserId(request.getId());
@@ -52,8 +52,8 @@ public class UserProfileService {
                 .build();
     }
 
-    public UserProfileChangeAvatarResponse changeAvatar (UserProfileChangeAvatarRequest request){
-        if(!userProfileRepository.existsUserProfileByUserId(request.getId())){
+    public UserProfileChangeAvatarResponse changeAvatar(UserProfileChangeAvatarRequest request) {
+        if (!userProfileRepository.existsUserProfileByUserId(request.getId())) {
             throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
         }
         var userProfile = userProfileRepository.findUserProfileByUserId(request.getId());
@@ -64,17 +64,35 @@ public class UserProfileService {
                 .build();
     }
 
-    public UserProfileResponse getUserProfileByUserId(String id){
+    public UserProfileResponse getUserProfileByUserId(String id) {
 
-       if(!userProfileRepository.existsUserProfileByUserId(id)){
-           throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
-       }
+        if (!userProfileRepository.existsUserProfileByUserId(id)) {
+            throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
+        }
         var userProfile = userProfileRepository.findUserProfileByUserId(id);
         return userProfileMapper.toUserProfileResponse(userProfile);
     }
 
-    public List<UserReadingHistory> getUserReadingHistory (String userId){
+    public List<UserReadingHistory> getUserReadingHistory(String userId) {
         var readingHistoryResponse = historyRecordClient.getUserReadingHistory(userId).getResult();
         return readingHistoryResponse.stream().map(recordMapper::toUserReadingHistory).collect(Collectors.toList());
     }
+
+    public UserProfileDeleteResponse deleteUserProfile(String userId) {
+        if (!userProfileRepository.existsUserProfileByUserId(userId)) {
+            throw new ServiceException(ErrorCode.USER_NOT_EXISTED);
+        }
+
+        var userProfile = userProfileRepository.findUserProfileByUserId(userId);
+        userProfileRepository.delete(userProfile);
+
+        return UserProfileDeleteResponse.builder()
+                .id(userProfile.getId())
+                .userId(userProfile.getUserId())
+                .name(userProfile.getName())
+                .avatarUrl(userProfile.getAvatarUrl())
+                .build();
+    }
+
+
 }
