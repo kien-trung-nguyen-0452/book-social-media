@@ -107,22 +107,15 @@ public class UserService {
     public void deleteUserProfile(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
-
         try {
             log.info("Attempting to delete profile for user: {}", user.getUsername());
-
-            // Gọi client với userId string
             ApiResponse<UserProfileDeleteResponse> response = userProfileClient.deleteUserProfile(userId);
-
             if (response == null || response.getCode() != 1000) {
                 throw new ServiceException(ErrorCode.USER_PROFILE_DELETE_FAILED);
             }
-
             log.info("Deleted profile for user: {}", user.getUsername());
-
             userRepository.delete(user);
             log.info("Deleted user with ID: {}", userId);
-
         } catch (Exception e) {
             log.error("Failed to delete user/profile for userId {}: {}", userId, e.getMessage());
             throw new ServiceException(ErrorCode.UNCATEGORIZED_EXCEPTION);
