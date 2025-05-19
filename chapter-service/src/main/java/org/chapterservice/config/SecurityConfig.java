@@ -15,8 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-
-
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {"/chapters/.*"};
@@ -30,6 +28,11 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers("/chapters/**").permitAll()
                 .requestMatchers("/internal/**").authenticated()
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer

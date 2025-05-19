@@ -41,10 +41,10 @@ public class UserService {
     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreateRequest request) {
-        if(userRepository.existsByUsername(request.getUsername())){
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
-        if(userRepository.existsByEmail(request.getEmail())){
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new ServiceException(ErrorCode.EMAIL_EXISTED);
         }
 
@@ -58,7 +58,7 @@ public class UserService {
 
         try {
             user = userRepository.save(user);
-        } catch (DataIntegrityViolationException exception){
+        } catch (DataIntegrityViolationException exception) {
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
 

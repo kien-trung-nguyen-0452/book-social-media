@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nimbusds.jose.JOSEException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,18 +28,31 @@ import lombok.experimental.FieldDefaults;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(
+        name = "Authentication API",
+        description = "API using for Authentication including log in, log out and refresh token")
 public class AuthenticationController {
 
     AuthenticationService authenticationService;
 
     @PostMapping("/token")
-
+    @Operation(summary = "Log in", description = "Log in by username and password")
+    @ApiResponses(
+            value = {
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "200",
+                        description = "login success"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "1006",
+                        description = "wrong username or password")
+            })
     ApiResponse<AuthenticateResponse> authenticate(@RequestBody AuthenticateRequest authenticateRequest) {
         var result = authenticationService.authenticate(authenticateRequest);
         return ApiResponse.<AuthenticateResponse>builder().result(result).build();
     }
 
     @PostMapping("/introspect")
+    @Operation(summary = "Introspect/verify token", description = "verify token bear header, response to true or false")
     ApiResponse<IntrospectTokenResponse> introspectToken(@RequestBody IntrospectTokenRequest introspectTokenRequest)
             throws JOSEException, ParseException {
         var result = authenticationService.introspectToken(introspectTokenRequest);
@@ -44,6 +60,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
+    @Operation(summary = "Refresh token", description = "Calling when front-app want to refresh token's time duration")
     ApiResponse<AuthenticateResponse> authenticate(@RequestBody RefreshRequest request)
             throws ParseException, JOSEException {
         var result = authenticationService.refreshToken(request);
@@ -51,6 +68,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "log out")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder().build();
