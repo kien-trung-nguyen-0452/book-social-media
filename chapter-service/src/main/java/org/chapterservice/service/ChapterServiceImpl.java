@@ -1,6 +1,6 @@
 package org.chapterservice.service;
 
-import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -9,6 +9,7 @@ import org.chapterservice.dto.request.ChapterRequest;
 import org.chapterservice.dto.request.HistoryRecordRequest;
 import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.entity.Chapter;
+import org.chapterservice.event.ChapterCountEvent;
 import org.chapterservice.exception.ErrorCode;
 import org.chapterservice.exception.ServiceException;
 import org.chapterservice.mapper.ChapterMapper;
@@ -35,6 +36,8 @@ public class ChapterServiceImpl implements ChapterService {
     ChapterRepository chapterRepository;
     ChapterMapper chapterMapper;
     ReadingHistoryClient readingHistoryClient;
+    private final ChapterKafkaProducerService chapterKafkaProducerService;
+
 
     @Override
     public ChapterResponse createChapter(ChapterRequest request) {
@@ -44,8 +47,8 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setCreatedAt(now);
             chapter.setUpdatedAt(now);
 
-            chapter.setBookId(request.getBookId()); // set bookId
-            chapter.setImageUrl(request.getImageUrl()); // set danh sách ảnh đúng tên trường
+            chapter.setBookId(request.getBookId());
+            chapter.setImages(request.getImages());
             chapter.setChapter(request.getChapter());
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -57,7 +60,14 @@ public class ChapterServiceImpl implements ChapterService {
 
             chapter.setCreatedBy(username);
             chapter.setUpdatedBy(username );
-            return chapterMapper.toResponse(chapterRepository.save(chapter));
+            Chapter saved = chapterRepository.save(chapter);
+
+            // Gửi event kafka
+            ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), 1);
+            chapterKafkaProducerService.sendChapterCountEvent(event);
+
+            return chapterMapper.toResponse(saved);
+
         } catch (Exception ex) {
             throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);
         }
@@ -116,7 +126,7 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setChapterNumber(request.getChapterNumber());
 
         chapter.setBookId(request.getBookId()); // cập nhật bookId nếu có
-        chapter.setImageUrl(request.getImageUrl()); // cập nhật ảnh
+        chapter.setImages(request.getImages()); // cập nhật ảnh
         chapter.setChapter(request.getChapter());  // cập nhật tên chương
 
         chapter.setUpdatedAt(LocalDateTime.now());

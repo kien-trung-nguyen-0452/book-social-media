@@ -11,30 +11,26 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/bookdb
 
+
   kafka:
     bootstrap-servers: localhost:9094
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true   # Bật thêm header __TypeId__ khi gửi
 
     consumer:
       group-id: book-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
-        spring:
-          json:
-            trusted:
-              packages: 'org.readingservice.event,*'
-            value:
-              use:
-                type:
-                  header: true
-
-    listener:
-      missing-topics-fatal: false
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.value.default.type: org.readingservice.event.UploadViewCountRequest  # Thay bằng class bạn dùng ở consumer
+        spring.json.value.use.type.headers: false
+        spring.json.trusted.packages: "org.readingservice.event,org.readingservice.dto.request"
 
 eureka:
   client:

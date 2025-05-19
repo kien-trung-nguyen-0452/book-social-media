@@ -27,7 +27,7 @@ public class Chapter {
     String updatedBy;
     String createdBy;
     int chapterNumber;
-    List<String> imageUrl;
+    List<String> images;
     @Builder.Default
     LocalDateTime createdAt = LocalDateTime.now();
     @Builder.Default

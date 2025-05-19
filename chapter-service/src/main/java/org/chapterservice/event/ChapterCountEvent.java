@@ -1,15 +1,16 @@
-package org.readingservice.event;
+package org.chapterservice.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadViewCountRequest {
+public class ChapterCountEvent {
     private String bookId;
-    private int viewCount;
+    private int count;
 }
+

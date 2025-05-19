@@ -25,7 +25,7 @@ public interface InternalMapper {
     @Mapping(target = "content", ignore = true)
     @Mapping(source = "chapter", target = "chapterNumber", qualifiedByName = "parseChapterNumber")
     @Mapping(source = "title", target = "title")
-    @Mapping(source = "images", target = "imageUrls")
+    @Mapping(source = "images", target = "images")
     ChapterRequest toChapterRequest(Chapter chapter);
 
     @Named("parseChapterNumber")

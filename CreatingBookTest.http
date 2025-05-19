@@ -1,4 +1,4 @@
-@env = local
+@env = testReadingService
 
 ### @name login
 POST http://{{authUrl}}/identity/auth/token
@@ -16,7 +16,7 @@ Content-Type: application/json
 %}
 
 
-### @name create_book
+###
 @title = Spring Boot In Action
 @subtitle = Build modern web apps
 @description = A practical guide to Spring Boot
@@ -24,7 +24,7 @@ Content-Type: application/json
 @coverUrl = https://example.com/cover.jpg
 @isCompleted = true
 
-###
+### creation book
 POST http://{{bookUrl}}/book/internal/create
 Authorization: Bearer {{token}}
 Content-Type: application/json

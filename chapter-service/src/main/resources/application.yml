@@ -7,30 +7,26 @@ spring:
   application:
     name: chapter-service
 
-  kafka:
-    bootstrap-servers: localhost:9092
 
+  kafka:
+    bootstrap-servers: localhost:9094
+    topic.chapter-count: chapter-count
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      properties:
+        spring.json.add.type.headers: true
     consumer:
-      group-id: book-service-group
+      group-id: chapter-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
-        spring:
-          json:
-            trusted:
-              packages: '*'
-            value:
-              default:
-                type: org.chapterservice.dto.request.UploadViewCountRequest
-
-
+        spring.json.value.use.type.headers: true
+        spring.json.trusted.packages: "*"
     listener:
       missing-topics-fatal: false
+
 
   data:
     mongodb:

@@ -14,16 +14,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class BookKafkaConsumer {
-    private final BookRepository bookRepository;
+
     private final ObjectMapper objectMapper;
+    private final BookRepository bookRepository;
 
     @KafkaListener(topics = "upload-view-count", groupId = "book-service-group")
-    public void listen(UpdateViewCountRequest request) {
-        log.info("Received raw message from Kafka: {}", request);
-        var book = bookRepository.findBookById(request.getBookId());
-        int newViewCount = request.getViewCount() + book.getViewCount();
-        book.setViewCount(newViewCount);
-        bookRepository.save(book);
-        log.info("Updated book: {}", book);
+    public void listen(String message) {
+        log.info("Received raw Kafka message: {}", message);
+
+        try {
+            // Deserialize sang DTO của BookService
+            UpdateViewCountRequest request = objectMapper.readValue(message, UpdateViewCountRequest.class);
+
+            var book = bookRepository.findBookById(request.getBookId());
+            int newViewCount = request.getViewCount() + book.getViewCount();
+            book.setViewCount(newViewCount);
+            bookRepository.save(book);
+
+            log.info("Updated view count for book {}", request.getBookId());
+        } catch (Exception e) {
+            log.error("Failed to deserialize or update book", e);
+        }
     }
 }
+
