@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import org.example.authservice.dto.common.ApiResponse;
+import org.example.authservice.dto.request.ChangePasswordRequest;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.ChangePasswordResponse;
