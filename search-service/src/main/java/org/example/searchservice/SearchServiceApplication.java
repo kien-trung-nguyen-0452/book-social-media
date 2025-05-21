@@ -6,10 +6,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
-@EnableElasticsearchRepositories
+
 @EnableMethodSecurity
 @SpringBootApplication
 @EnableFeignClients
+@EnableElasticsearchRepositories(considerNestedRepositories = true)
 public class SearchServiceApplication {
 
     public static void main(String[] args) {

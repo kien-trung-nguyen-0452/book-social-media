@@ -8,6 +8,7 @@ import org.example.searchservice.dto.response.BookSearchingResult;
 import org.example.searchservice.service.BookIndexService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,6 +24,20 @@ public class BookSearchingController {
         return ApiResponse.<List<BookSearchingResult>>builder()
                 .code(1000)
                 .data(bookIndexService.getAll())
+                .build();
+    }
+    @GetMapping("/categories")
+    ApiResponse<List<BookSearchingResult>> getBookByCategories (@RequestParam List<String> categories){
+        return ApiResponse.<List<BookSearchingResult>>builder()
+                .code(1000)
+                .data(bookIndexService.findByCategories(categories))
+                .build();
+    }
+    @GetMapping("/title")
+    ApiResponse<List<BookSearchingResult>> getBookByTitle (@RequestParam String title){
+        return ApiResponse.<List<BookSearchingResult>>builder()
+                .code(1000)
+                .data(bookIndexService.findByTitleContaining(title))
                 .build();
     }
 
