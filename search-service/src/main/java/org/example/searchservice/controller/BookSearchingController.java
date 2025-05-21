@@ -40,5 +40,17 @@ public class BookSearchingController {
                 .data(bookIndexService.findByTitleContaining(title))
                 .build();
     }
+    @GetMapping("/autocomplete")
+    public ApiResponse<List<BookSearchingResult>> autocompleteTitle(@RequestParam("prefix") String prefix) {
+        List<BookSearchingResult> results = bookIndexService.autocompleteTitle(prefix);
+
+        return ApiResponse.<List<BookSearchingResult>>builder()
+                .code(1000)
+                .message("Success")
+                .data(results)
+                .build();
+    }
+
+
 
 }

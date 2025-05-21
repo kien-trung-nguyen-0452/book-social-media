@@ -30,6 +30,7 @@ public class BookIndexService {
         Iterable<BookIndex> result = bookIndexRepository.findAll();
         return StreamSupport.stream(result.spliterator(), false).map(mapper::toBookSearchingResult).collect(Collectors.toList());
     }
+
     public List<BookSearchingResult> findByTitleContaining(String keyword){
         List<BookIndex> result = bookIndexRepository.findByTitleContainingIgnoreCase(keyword);
         return result.stream().map(mapper::toBookSearchingResult).collect(Collectors.toList());

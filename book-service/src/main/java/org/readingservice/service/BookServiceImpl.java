@@ -102,9 +102,12 @@ public class BookServiceImpl implements BookService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteBook(String id) {
-        if (!bookRepository.existsById(id)) {
-            throw new ServiceException(ErrorCode.BOOK_NOT_FOUND);
-        }
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
+
+        // Gửi event trước khi xóa để giữ đủ thông tin nếu cần
+        BookEvent event = bookMapper.toBookDeletionEvent(book);
+        producerService.deletionEvent(event);
         bookRepository.deleteById(id);
     }
 

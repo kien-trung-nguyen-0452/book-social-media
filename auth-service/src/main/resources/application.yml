@@ -19,13 +19,16 @@ spring:
 logging:
   level:
     com.zaxxer.hikari: DEBUG
-
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
-    fetch-registry: true
+      defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
 
 springdoc:
   api-docs:
@@ -35,6 +38,6 @@ springdoc:
     path: /swagger-ui.html
 
 jwt:
-  signerKey: ${JWT_SIGNER_KEY}
+  signerKey: A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq
   valid-duration: ${JWT_VALID_DURATION:3600}
   refreshable-duration: ${JWT_REFRESHABLE_DURATION:360000}

@@ -28,5 +28,14 @@ public interface BookMapper {
     @Mapping(source = "isCompleted", target = "isCompleted")
     BookEvent toBookEvent(Book book);
 
+
     BookCreationResponse toBookCreationResponse(Book book);
+    default BookEvent toBookDeletionEvent(Book book) {
+        if (book == null) return null;
+        return BookEvent.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .build();
+    }
 }
