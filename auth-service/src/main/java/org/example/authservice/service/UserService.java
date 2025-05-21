@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.example.authservice.dto.request.ChangePasswordRequest;
 import jakarta.transaction.Transactional;
 import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserDeleteRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
+import org.example.authservice.dto.response.ChangePasswordResponse;
 import org.example.authservice.dto.response.UserProfileDeleteResponse;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.entity.Role;
@@ -102,6 +104,34 @@ public class UserService {
 
         userMapper.updateUser(userUpdateRequest, user);
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public ChangePasswordResponse changePassword(String userId, ChangePasswordRequest request){
+        User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        boolean isMatch = passwordEncoder.matches(request.getCurrentPassword(), user.getPassword());
+        if(isMatch){
+            return ChangePasswordResponse.builder()
+                    .success(true)
+                    .build();
+        }
+        else {
+            throw new ServiceException(ErrorCode.INVALID_CURRENT_PASSWORD);
+        }
+    }
+
+
+    @PostAuthorize("returnObject != null and returnObject.equals(authentication.name)")
+    public String getUserId() {
+        var authenticated = SecurityContextHolder.getContext().getAuthentication();
+        if (authenticated == null || !authenticated.isAuthenticated()) {
+            throw new ServiceException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        String username = authenticated.getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        return user.getUserId();
     }
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUserProfile(String userId) {

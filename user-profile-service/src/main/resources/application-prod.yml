@@ -1,0 +1,16 @@
+
+spring:
+  profiles:
+    active:
+      prod
+  neo4j:
+    uri:
+    authentication:
+      username: neo4j
+      password: 123456789
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

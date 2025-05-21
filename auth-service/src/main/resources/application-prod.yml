@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: prod
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+jwt:
+  signerKey: ${JWT_SIGNER_KdocEY}
+  valid-duration: ${JWT_VALID_DURATION}
+  refreshable-duration: ${JWT_REFRESHABLE_DURATION}

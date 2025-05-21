@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
+import org.example.authservice.dto.response.ChangePasswordResponse;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -127,8 +128,6 @@ public class UserController {
 
     @Operation(
             method = "PUT",
-            summary = "change password",
-            description = "get the user's profile",
             security =
                     @SecurityRequirement(
                             name = "BearToken",
@@ -155,4 +154,49 @@ public class UserController {
                 .build();
     }
 
+
+    @Operation(
+            method = "PUT",
+            summary = "change password",
+            security =
+            @SecurityRequirement(
+                    name = "BearToken",
+                    scopes = {"this user"}))
+    @ApiResponses(
+            value = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "1005",
+                            description = "user not existed"),
+            })
+    @PutMapping("/change-password/{userId}")
+    ApiResponse<ChangePasswordResponse> changePassword(@PathVariable String userId, @RequestBody ChangePasswordRequest request){
+        return ApiResponse.<ChangePasswordResponse>builder()
+                .result(userService.changePassword(userId, request))
+                .build();
+    }
+
+    @Operation(
+            method = "GET",
+            summary = "get current user id",
+            security =
+            @SecurityRequirement(
+                    name = "BearToken",
+                    scopes = {"this user"}))
+    @ApiResponses(
+            value = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "", description = "success"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "1005",
+                            description = "user not existed"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "1006",
+                            description = "unauthenticated")
+            })
+    @GetMapping("/get-user-id")
+    ApiResponse<String> geUserId(){
+        return ApiResponse.<String>builder()
+                .result(userService.getUserId())
+                .build();
+    }
 }
