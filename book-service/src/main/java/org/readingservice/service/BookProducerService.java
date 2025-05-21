@@ -22,4 +22,10 @@ public class BookProducerService {
         log.info("Sending book creation event: {}", event);
         kafkaTemplate.send("book-creation-topic", event);
     }
+    @Async
+    public void deletionEvent(BookEvent event) {
+        log.info("Sending book deletion event: {}", event);
+        kafkaTemplate.send("book-deletion-topic", event);
+    }
+
 }

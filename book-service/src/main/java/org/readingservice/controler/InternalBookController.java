@@ -47,6 +47,7 @@ public class InternalBookController {
                 .code(1000)
                 .message("Book deleted successfully")
                 .build();
+
     }
 
     @GetMapping("/{bookId}/exists")

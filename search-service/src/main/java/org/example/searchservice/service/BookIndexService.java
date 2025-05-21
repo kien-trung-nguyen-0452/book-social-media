@@ -21,20 +21,31 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookIndexService {
-    BookIndexRepository bookIndexRepository;
+    final BookIndexRepository bookIndexRepository;
 
 
-    BookIndexMapper mapper;
+    final BookIndexMapper mapper;
 
     public List<BookSearchingResult> getAll(){
         Iterable<BookIndex> result = bookIndexRepository.findAll();
         return StreamSupport.stream(result.spliterator(), false).map(mapper::toBookSearchingResult).collect(Collectors.toList());
     }
+
     public List<BookSearchingResult> findByTitleContaining(String keyword){
         List<BookIndex> result = bookIndexRepository.findByTitleContainingIgnoreCase(keyword);
         return result.stream().map(mapper::toBookSearchingResult).collect(Collectors.toList());
     }
+    public List<BookSearchingResult> autocompleteTitle(String prefix) {
+        List<BookIndex> result = bookIndexRepository.autocompleteTitle(prefix);
+        return result.stream()
+                .map(mapper::toBookSearchingResult)
+                .collect(Collectors.toList());
+    }
 
+    public List<BookSearchingResult> findByCategories(List<String> categories){
+        List<BookIndex> result =bookIndexRepository.findBookIndicesByCategories(categories);
+        return result.stream().map(mapper::toBookSearchingResult).collect(Collectors.toList());
+    }
     public BookIndexResponse createBookIndex(BookIndex bookIndex){
         return mapper.toBookIndexResponse(bookIndexRepository.save(bookIndex));
     }
