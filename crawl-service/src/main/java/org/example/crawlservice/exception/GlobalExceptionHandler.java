@@ -17,7 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
     private static final String MIN_ATTRIBUTE = "min";
+    @ExceptionHandler(value = ServiceException.class)
+    ResponseEntity<ApiResponse<?>> handlingServiceException(ServiceException exception) {
+        ErrorCode errorCode = exception.getErrorCode();
 
+        ApiResponse<?> apiResponse = ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
+    }
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<?>> handlingRuntimeException(RuntimeException exception) {
         log.error("Exception: ", exception);
@@ -30,17 +40,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = ServiceException.class)
-    ResponseEntity<ApiResponse<?>> handlingServiceException(ServiceException exception) {
-        ErrorCode errorCode = exception.getErrorCode();
 
-        ApiResponse<?> apiResponse = ApiResponse.builder()
-                .code(errorCode.getCode())
-                .message(errorCode.getMessage())
-                .build();
-
-        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
-    }
 
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<ApiResponse<?>> handlingAccessDeniedException(AccessDeniedException exception) {

@@ -23,6 +23,8 @@ public class BookRequest {
     String description;
     String author;
     String coverUrl;
+    String createdBy;
+    String UpdatedBy;
 
     @NotNull
     Boolean isCompleted;

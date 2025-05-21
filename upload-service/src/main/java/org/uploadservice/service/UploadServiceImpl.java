@@ -16,6 +16,8 @@ import org.uploadservice.repository.FileMetadataRepository;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,7 +29,7 @@ public class UploadServiceImpl implements UploadService {
     private final FileMetadataRepository repository;
 
     @Override
-    public UploadResponse uploadImage(MultipartFile file) {
+    public UploadImageResponse uploadImage(MultipartFile file) {
         try {
             Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
 
@@ -35,7 +37,7 @@ public class UploadServiceImpl implements UploadService {
                     .id((String) uploadResult.get("public_id"))
                     .fileName(file.getOriginalFilename())
                     .fileType(file.getContentType())
-                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .fileUrl((List<String>) uploadResult.get("secure_url"))
                     .uploadedAt(LocalDateTime.now())
                     .category("other")
                     .isExternalUrl(false)
@@ -52,20 +54,34 @@ public class UploadServiceImpl implements UploadService {
     @PreAuthorize("hasRole('ADMIN')")
     public FromUrlUploadResponse uploadChapterImage(FromUrlUploadRequest request) {
         try {
-            String path = generateChapterPath(request.getBookId(), request.getChapterId(), request.getName());
-            Map<String, Object> options = ObjectUtils.asMap(
-                    "folder", "manga/",
-                    "public_id", path,
-                    "overwrite", true,
-                    "context", String.format("book=%s|chapter=%s|page=%s",
-                            request.getBookId(), request.getChapterId(), request.getName())
-            );
-            Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getUrl(), options);
+            List<String> uploadedUrls = new ArrayList<>();
+
+            for (int i = 0; i < request.getUrl().size(); i++) {
+                String imageUrl = request.getUrl().get(i);
+
+                String path = generateChapterPath(
+                        request.getBookId(),
+                        request.getChapterId(),
+                        request.getName() + "_page" + (i + 1) // unique name
+                );
+
+                Map<String, Object> options = ObjectUtils.asMap(
+                        "folder", "manga/",
+                        "public_id", path,
+                        "overwrite", true,
+                        "context", String.format("book=%s|chapter=%s|page=%d",
+                                request.getBookId(), request.getChapterId(), i + 1)
+                );
+
+                Map<?, ?> uploadResult = cloudinary.uploader().upload(imageUrl, options);
+                uploadedUrls.add((String) uploadResult.get("url"));
+            }
 
             FileMetadata metadata = FileMetadata.builder()
-                    .id((String) uploadResult.get("public_id"))
+                    .id(request.getChapterId())
                     .fileName(request.getName())
-                    .fileUrl((String) uploadResult.get("url"))
+                    .fileUrl(uploadedUrls)
+                    .fileType("URL PICTURE") // hoặc lấy từ uploadResult
                     .uploadedAt(LocalDateTime.now())
                     .bookId(request.getBookId())
                     .relatedId(request.getChapterId())
@@ -73,12 +89,16 @@ public class UploadServiceImpl implements UploadService {
                     .isExternalUrl(true)
                     .build();
 
-            FileMetadata saved = repository.save(metadata);
-            return mapper.toFromUrlUploadResponse(saved);
+            repository.save(metadata);
+
+            return FromUrlUploadResponse.builder()
+                    .url(uploadedUrls)
+                    .build();
         } catch (IOException e) {
             throw new ServiceException(ErrorCode.FILE_UPLOAD_FAILED);
         }
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -95,7 +115,8 @@ public class UploadServiceImpl implements UploadService {
             FileMetadata metadata = FileMetadata.builder()
                     .id((String) uploadResult.get("public_id"))
                     .fileName(file.getOriginalFilename())
-                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .fileType(file.getContentType())
+                    .fileUrl((List<String>) uploadResult.get("secure_url"))
                     .uploadedAt(LocalDateTime.now())
                     .bookId(bookId)
                     .category("cover")
@@ -124,7 +145,8 @@ public class UploadServiceImpl implements UploadService {
             FileMetadata metadata = FileMetadata.builder()
                     .id((String) uploadResult.get("public_id"))
                     .fileName(file.getOriginalFilename())
-                    .fileUrl((String) uploadResult.get("secure_url"))
+                    .fileType(file.getContentType())
+                    .fileUrl((List<String>) uploadResult.get("secure_url"))
                     .uploadedAt(LocalDateTime.now())
                     .relatedId(userId)
                     .category("avatar")

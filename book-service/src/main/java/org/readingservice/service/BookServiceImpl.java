@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.readingservice.dto.request.BookCreationRequest;
 import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.BookCreationResponse;
 import org.readingservice.dto.response.BookResponse;
 
 import org.readingservice.entity.Book;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Slf4j
 
@@ -35,19 +38,29 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse createBook(BookRequest request) {
+    public BookCreationResponse createBook(BookCreationRequest request) {
+        Optional<Book> existingBook = bookRepository.findByTitleAndAuthor(request.getTitle(), request.getAuthor());
+        if (existingBook.isPresent()) {
+            throw new ServiceException(ErrorCode.DUPLICATE_BOOK);
+        }
         Book book = bookMapper.toEntity(request);
         book.setViewCount(0);
-        book.setAverageRating(0.0);
+        book.setCreatedBy(request.getCreatedBy());
+        book.setIsCompleted(request.getIsCompleted());
         book.setChapterCount(0);
         book.setSubtitle(request.getSubtitle());
+        book.setTitle(request.getTitle());
+        book.setAuthor(request.getAuthor());
+        book.setCoverUrl(request.getCoverUrl());
+        book.setLastUpdatedBy(request.getLastUpdatedBy());
         Book savedBook = bookRepository.save(book);
+
         BookEvent event = bookMapper.toBookEvent(savedBook);
-        event.setCategories(request.getCategories());
         producerService.creationEven(event);
 
-        return bookMapper.toResponse(savedBook);
+        return bookMapper.toBookCreationResponse(savedBook);
     }
+
 
     @Override
     public BookResponse getBookById(String id) {
@@ -73,6 +86,9 @@ public class BookServiceImpl implements BookService {
     public BookResponse updateBook(String id, BookRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
+        book.setCreatedBy(request.getCreatedBy());
+        book.setIsCompleted(request.getIsCompleted());
+        book.setSubtitle(request.getSubtitle());
         book.setTitle(request.getTitle());
         book.setDescription(request.getDescription());
         book.setAuthor(request.getAuthor());

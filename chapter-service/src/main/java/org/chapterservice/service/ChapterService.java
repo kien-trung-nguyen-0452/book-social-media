@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChapterService {
 
-    ChapterResponse createChapter(ChapterRequest request);
+    ChapterResponse createChapter(String bookId,ChapterRequest request);
 
     ChapterResponse getChapterById(String id); // Đổi Long -> String
 
@@ -24,4 +24,5 @@ public interface ChapterService {
     long countChaptersByBookId(String bookId);
 
     void deleteChaptersByBookId(String bookId);
+
 }

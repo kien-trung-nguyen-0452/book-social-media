@@ -8,20 +8,20 @@ import org.uploadservice.entity.FileMetadata;
 @Mapper(componentModel = "spring")
 public interface FileMetadataMapper {
 
-    @Mapping(source = "fileUrl", target = "url")
+
     @Mapping(source = "id", target = "publicId")
     FromUrlUploadResponse toFromUrlUploadResponse(FileMetadata fileMetadata);
 
-    @Mapping(source = "fileUrl", target = "url")
+
     @Mapping(source = "bookId", target = "bookId")
     CoverUploadResponse toCoverUploadResponse(FileMetadata fileMetadata);
 
-    @Mapping(source = "fileUrl", target = "url")
+
     @Mapping(source = "relatedId", target = "userId")
     AvatarUploadResponse toAvatarUploadResponse(FileMetadata fileMetadata);
 
-    @Mapping(source = "fileUrl", target = "url")
+
     @Mapping(source = "id", target = "publicId")
     @Mapping(source = "category", target = "category")
-    UploadResponse toUploadResponse(FileMetadata metadata);
+    UploadImageResponse toUploadResponse(FileMetadata metadata);
 }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Builder
-public class UploadResponse {
+public class UploadImageResponse {
     private String url;
     private String publicId;
     private String category;

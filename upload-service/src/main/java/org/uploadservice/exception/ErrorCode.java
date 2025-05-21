@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
+    URLINVALID(4000,"URL INVALID",HttpStatus.BAD_REQUEST),
     FILE_UPLOAD_FAILED(4001, "File upload failed", HttpStatus.INTERNAL_SERVER_ERROR),
     FILE_NOT_FOUND(4002, "File not found", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),

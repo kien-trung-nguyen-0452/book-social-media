@@ -14,7 +14,6 @@ import java.util.List;
 public class ChapterResponse {
     String id;
     String bookId;
-    String chapter;
     String title;
     List<String> images;
     String updatedBy;

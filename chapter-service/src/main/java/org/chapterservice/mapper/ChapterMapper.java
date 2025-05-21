@@ -13,7 +13,6 @@ public interface ChapterMapper {
 
     Chapter toEntity(ChapterRequest request);
 
-    @Mapping(source = "chapter", target = "chapter")
     @Mapping(source = "updatedAt", target = "updatedAt")
     @Mapping(source = "updatedBy", target = "updatedBy") // sửa lại thành updatedBy
     @Mapping(source = "images", target = "images")

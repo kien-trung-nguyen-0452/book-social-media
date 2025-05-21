@@ -18,9 +18,9 @@ public class UploadController {
 
     // Upload ảnh bình thường MultipartFile
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<UploadResponse> uploadImage(@RequestParam("file") MultipartFile file) {
-        UploadResponse response = uploadService.uploadImage(file);
-        return ApiResponse.<UploadResponse>builder()
+    public ApiResponse<UploadImageResponse> uploadImage(@RequestParam("file") MultipartFile file) {
+        UploadImageResponse response = uploadService.uploadImage(file);
+        return ApiResponse.<UploadImageResponse>builder()
                 .data(response)
                 .message("Image uploaded successfully")
                 .code(1000)

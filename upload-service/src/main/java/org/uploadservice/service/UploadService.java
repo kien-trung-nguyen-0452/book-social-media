@@ -6,7 +6,7 @@ import org.uploadservice.dto.response.*;
 
 public interface UploadService {
 
-    UploadResponse uploadImage(MultipartFile file);
+    UploadImageResponse uploadImage(MultipartFile file);
 
     FromUrlUploadResponse uploadChapterImage(FromUrlUploadRequest request);
 

@@ -1,0 +1,45 @@
+package org.commentservice.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.commentservice.dto.common.ApiResponse;
+import org.commentservice.dto.request.CommentRequest;
+import org.commentservice.dto.response.CommentResponse;
+import org.commentservice.service.CommentService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/internal")
+@RequiredArgsConstructor
+public class InternalCommentController {
+
+    private final CommentService commentService;
+
+
+    @GetMapping("/{userId}")
+    public ApiResponse<List<CommentResponse>> getByUserId(@PathVariable String userId) {
+        return ApiResponse.<List<CommentResponse>>builder()
+                .data(commentService.getByUserId(userId))
+                .message("Comments for user")
+                .build();
+    }
+
+    @GetMapping("/book/{bookId}")
+    public ApiResponse<List<CommentResponse>> getByBookId(@PathVariable String bookId) {
+        return ApiResponse.<List<CommentResponse>>builder()
+                .data(commentService.getByBookId(bookId))
+                .message("Comments for book")
+                .build();
+    }
+
+    @GetMapping("/chapter/{chapterId}")
+    public ApiResponse<List<CommentResponse>> getByChapterId(@PathVariable String chapterId) {
+        return ApiResponse.<List<CommentResponse>>builder()
+                .data(commentService.getByChapterId(chapterId))
+                .message("Comments for chapter")
+                .build();
+    }
+
+
+}
