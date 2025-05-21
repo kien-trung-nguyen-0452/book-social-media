@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/external")
 @RequiredArgsConstructor
-public class CommentController {
+public class ExternalCommentController {
 
     private final CommentService commentService;
 
@@ -24,21 +24,6 @@ public class CommentController {
                 .build();
     }
 
-    @GetMapping("/book/{bookId}")
-    public ApiResponse<List<CommentResponse>> getByBookId(@PathVariable Long bookId) {
-        return ApiResponse.<List<CommentResponse>>builder()
-                .data(commentService.getByBookId(bookId))
-                .message("Comments for book")
-                .build();
-    }
-
-    @GetMapping("/chapter/{chapterId}")
-    public ApiResponse<List<CommentResponse>> getByChapterId(@PathVariable Long chapterId) {
-        return ApiResponse.<List<CommentResponse>>builder()
-                .data(commentService.getByChapterId(chapterId))
-                .message("Comments for chapter")
-                .build();
-    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable String id) {

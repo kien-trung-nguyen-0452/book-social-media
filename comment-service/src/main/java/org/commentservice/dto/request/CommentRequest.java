@@ -1,11 +1,15 @@
 package org.commentservice.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class CommentRequest {
-    private Long bookId;
-    private Long chapterId;
-    private String userId;
-    private String content;
+    String bookId;
+    String chapterId;
+    String userId;
+    String content;
+
 }

@@ -23,7 +23,6 @@ public class Chapter {
     String bookId;
     String title;
     String content;
-    String chapter;
     String updatedBy;
     String createdBy;
     int chapterNumber;

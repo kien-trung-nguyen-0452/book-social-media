@@ -1,12 +1,14 @@
 package org.readingservice.service;
 
+import org.readingservice.dto.request.BookCreationRequest;
 import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.BookCreationResponse;
 import org.readingservice.dto.response.BookResponse;
 
 import java.util.List;
 
 public interface BookService {
-    BookResponse createBook(BookRequest request);
+    BookCreationResponse createBook(BookCreationRequest request);
     BookResponse getBookById(String id);
     List<BookResponse> getAllBooks();
     BookResponse updateBook(String id, BookRequest request);

@@ -1,6 +1,7 @@
 package org.chapterservice.service;
 
 
+import feign.FeignException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,10 +19,7 @@ import org.chapterservice.repository.ReadingHistoryClient;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
+import org.chapterservice.repository.BookServiceClient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,39 +35,52 @@ public class ChapterServiceImpl implements ChapterService {
     ChapterMapper chapterMapper;
     ReadingHistoryClient readingHistoryClient;
     private final ChapterKafkaProducerService chapterKafkaProducerService;
-
+    private final BookServiceClient bookServiceClient;
 
     @Override
-    public ChapterResponse createChapter(ChapterRequest request) {
+    public ChapterResponse createChapter(String bookId, ChapterRequest request) {
         try {
+
+            Boolean bookExists = bookServiceClient.checkBookExists(bookId);
+            if (Boolean.FALSE.equals(bookExists)) {
+                throw new ServiceException(ErrorCode.BOOK_NOT_FOUND); // định nghĩa thêm error code nếu chưa có
+            }
+
+
+            boolean isDuplicate = chapterRepository.existsByBookIdAndTitleAndChapterNumber(
+                    bookId,
+                    request.getTitle(),
+                    request.getChapterNumber()
+            );
+            if (isDuplicate) {
+                throw new ServiceException(ErrorCode.DUPLICATE_CHAPTER);
+            }
+
             Chapter chapter = chapterMapper.toEntity(request);
             LocalDateTime now = LocalDateTime.now();
             chapter.setCreatedAt(now);
             chapter.setUpdatedAt(now);
-
-            chapter.setBookId(request.getBookId());
-            chapter.setImages(request.getImages());
-            chapter.setChapter(request.getChapter());
+            chapter.setBookId(bookId);
+            chapter.setTitle(request.getTitle());
+            chapter.setChapterNumber(request.getChapterNumber());
 
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                username = SecurityContextHolder.getContext().getAuthentication().getName();
-            }
-            System.out.println("Current username: " + username);
-
             chapter.setCreatedBy(username);
-            chapter.setUpdatedBy(username );
-            Chapter saved = chapterRepository.save(chapter);
+            chapter.setUpdatedBy(username);
 
-            // Gửi event kafka
-            ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), 1);
+            Chapter saved = chapterRepository.save(chapter);
+            long chapterCount = chapterRepository.countByBookId(saved.getBookId());
+
+            // Gửi event Kafka
+            ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), (int) chapterCount);
             chapterKafkaProducerService.sendChapterCountEvent(event);
 
             return chapterMapper.toResponse(saved);
 
-        } catch (Exception ex) {
-            throw new ServiceException(ErrorCode.INTERNAL_ERROR, ex);
+        }  catch (FeignException.NotFound ex) {
+            throw new ServiceException(ErrorCode.BOOK_NOT_FOUND);
+        } catch (FeignException ex) {
+            throw new ServiceException(ErrorCode.INTERNAL_ERROR); // hoặc một mã lỗi phù hợp
         }
     }
 
@@ -125,9 +136,8 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setContent(request.getContent());
         chapter.setChapterNumber(request.getChapterNumber());
 
-        chapter.setBookId(request.getBookId()); // cập nhật bookId nếu có
-        chapter.setImages(request.getImages()); // cập nhật ảnh
-        chapter.setChapter(request.getChapter());  // cập nhật tên chương
+        chapter.setBookId(request.getBookId());
+        chapter.setImages(request.getImages());
 
         chapter.setUpdatedAt(LocalDateTime.now());
 
@@ -166,11 +176,13 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public long countChaptersByBookId(String bookId) {
+
         return chapterRepository.countByBookId(bookId);
     }
 
     @Override
     public void deleteChaptersByBookId(String bookId) {
+
         chapterRepository.deleteByBookId(bookId);
     }
 }

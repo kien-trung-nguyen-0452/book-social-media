@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.authservice.dto.request.ChangePasswordRequest;
+import jakarta.transaction.Transactional;
+import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserCreateRequest;
+import org.example.authservice.dto.request.UserDeleteRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.ChangePasswordResponse;
+import org.example.authservice.dto.response.UserProfileDeleteResponse;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.entity.Role;
 import org.example.authservice.entity.User;
@@ -21,6 +25,7 @@ import org.example.authservice.repository.UserRepository;
 import org.example.authservice.repository.httpClient.UserProfileClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,6 +71,7 @@ public class UserService {
 
         var profileRequest = profileMapper.toProfileCreationRequest(request);
         profileRequest.setUserId(user.getUserId());
+        log.info("creating user profile for user: {}", user.getUsername());
         var profile = userProfileClient.createUserProfile(profileRequest);
 
         var userCreationResponse = userMapper.toUserResponse(user);
@@ -127,4 +133,24 @@ public class UserService {
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         return user.getUserId();
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUserProfile(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        try {
+            log.info("Attempting to delete profile for user: {}", user.getUsername());
+            ApiResponse<UserProfileDeleteResponse> response = userProfileClient.deleteUserProfile(userId);
+            if (response == null || response.getCode() != 1000) {
+                throw new ServiceException(ErrorCode.USER_PROFILE_DELETE_FAILED);
+            }
+            log.info("Deleted profile for user: {}", user.getUsername());
+            userRepository.delete(user);
+            log.info("Deleted user with ID: {}", userId);
+        } catch (Exception e) {
+            log.error("Failed to delete user/profile for userId {}: {}", userId, e.getMessage());
+            throw new ServiceException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+    }
+
+
 }

@@ -1,37 +1,34 @@
 package org.chapterservice.exception;
 
+import org.chapterservice.dto.common.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<Object> handleServiceException(ServiceException ex) {
+    public ResponseEntity<ApiResponse<Object>> handleServiceException(ServiceException ex) {
         ErrorCode errorCode = ex.getErrorCode();
-        return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(Map.of(
-                        "timestamp", LocalDateTime.now(),
-                        "status", errorCode.getStatus().value(),
-                        "error", errorCode.name(),
-                        "message", errorCode.getMessage()
-                ));
+
+        ApiResponse<Object> response = ApiResponse.builder()
+                .data(null)
+                .message(errorCode.getMessage())
+                .code(errorCode.getCode())
+                .build();
+
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception ex) {
-        return ResponseEntity
-                .status(500)
-                .body(Map.of(
-                        "timestamp", LocalDateTime.now(),
-                        "status", 500,
-                        "error", "INTERNAL_SERVER_ERROR",
-                        "message", ex.getMessage()
-                ));
+    public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
+                .data(null)
+                .message("Internal server error")
+                .code(3003) // mã lỗi giống INTERNAL_ERROR trong ErrorCode
+                .build();
+
+        return ResponseEntity.status(500).body(response);
     }
 }

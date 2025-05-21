@@ -30,15 +30,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getByBookId(Long bookId) {
+    public List<CommentResponse> getByBookId(String bookId) {
         return repository.findByBookId(bookId)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+    @Override
+    public List<CommentResponse> getByUserId(String userId){
+        return repository.findByUserId(userId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
     }
 
     @Override
-    public List<CommentResponse> getByChapterId(Long chapterId) {
+    public List<CommentResponse> getByChapterId(String chapterId) {
         return repository.findByChapterId(chapterId)
                 .stream()
                 .map(mapper::toResponse)

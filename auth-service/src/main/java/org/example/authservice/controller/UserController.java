@@ -5,7 +5,6 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import org.example.authservice.dto.common.ApiResponse;
-import org.example.authservice.dto.request.ChangePasswordRequest;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.ChangePasswordResponse;
@@ -146,6 +145,15 @@ public class UserController {
         var userResponse = userService.updateUser(userUpdateRequest, userId);
         return ApiResponse.<UserResponse>builder().result(userResponse).build();
     }
+
+    @DeleteMapping("/{userId}")
+    ApiResponse<Void> deleteUser(@PathVariable String userId) {
+        userService.deleteUserProfile(userId);
+        return ApiResponse.<Void>builder()
+                .message("User and profile deleted successfully")
+                .build();
+    }
+
 
     @Operation(
             method = "PUT",

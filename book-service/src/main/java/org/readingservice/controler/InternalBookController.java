@@ -2,9 +2,13 @@ package org.readingservice.controler;
 
 import lombok.RequiredArgsConstructor;
 import org.readingservice.dto.common.ApiResponse;
+import org.readingservice.dto.request.BookCreationRequest;
 import org.readingservice.dto.request.BookRequest;
+import org.readingservice.dto.response.BookCreationResponse;
 import org.readingservice.dto.response.BookResponse;
+import org.readingservice.repository.BookRepository;
 import org.readingservice.service.BookService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +18,14 @@ import org.springframework.web.bind.annotation.*;
 
 public class InternalBookController {
     private final BookService bookService;
+    private final BookRepository bookRepository;
+
 
     @PostMapping("/create")
 
-    public ApiResponse<BookResponse> createBook(@RequestBody BookRequest request) {
-        BookResponse response = bookService.createBook(request);
-        return ApiResponse.<BookResponse>builder()
+    public ApiResponse<BookCreationResponse> createBook(@RequestBody BookCreationRequest request) {
+        BookCreationResponse response = bookService.createBook(request);
+        return ApiResponse.<BookCreationResponse>builder()
                 .code(1000)
                 .data(response)
                 .message("Book created successfully")
@@ -43,6 +49,11 @@ public class InternalBookController {
                 .build();
     }
 
+    @GetMapping("/{bookId}/exists")
+    public ResponseEntity<Boolean> checkBookExists(@PathVariable String bookId) {
+        boolean exists = bookRepository.existsById(bookId);
+        return ResponseEntity.ok(exists);
+    }
 
 
 }

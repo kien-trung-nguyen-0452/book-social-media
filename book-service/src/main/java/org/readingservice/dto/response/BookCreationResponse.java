@@ -7,29 +7,28 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookResponse {
-
+public class BookCreationResponse {
     String id;
     String title;
-    String subtitle;
-    String description;
     String author;
+    String description;
     String coverUrl;
-    Boolean isCompleted;
     String createdBy;
     String UpdatedBy;
+    String subtitle;
+    Boolean isCompleted;
     int chapterCount;
     int viewCount;
 
-    @CreatedDate
-    LocalDateTime createdAt;
-
-    @LastModifiedDate
-    LocalDateTime updatedAt;
     List<String> categories;
+
+
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

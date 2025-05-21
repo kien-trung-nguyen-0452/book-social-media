@@ -1,6 +1,7 @@
 package org.commentservice.entity;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,17 +14,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     @Id
     private String id;
 
-    private String bookId;
-    private String chapterId;
-    private String userId;
-    private String content;
+    String bookId;
+    String chapterId;
+    String userId;
+    String content;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 }

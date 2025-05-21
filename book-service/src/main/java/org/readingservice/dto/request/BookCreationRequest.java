@@ -1,27 +1,23 @@
-package org.readingservice.entity;
+package org.readingservice.dto.request;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.annotation.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Document(collection = "books")
-
-public class Book {
-
-    @Id
-    String id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class BookCreationRequest {
 
     String title;
     String author;
@@ -30,17 +26,15 @@ public class Book {
     String createdBy;
     String lastUpdatedBy;
     String subtitle;
-
     Boolean isCompleted;
     int chapterCount;
     int viewCount;
 
     List<String> categories;
+
     @CreatedDate
-     LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @LastModifiedDate
     LocalDateTime updatedAt;
-
-
 }
