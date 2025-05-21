@@ -2,29 +2,30 @@ server:
   port: 8080
   servlet:
     context-path: /identity
+
 spring:
   application:
     name: auth-service
   datasource:
     url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service}
-    driverClassName: "com.mysql.cj.jdbc.Driver"
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DBMS_USERNAME:root}
     password: ${DBMS_PASSWORD:1234}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
 logging:
   level:
     com.zaxxer.hikari: DEBUG
 
-
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-      fetch-registry: true
-      register-with-eureka: true
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
 
 springdoc:
   api-docs:
@@ -32,8 +33,8 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /swagger-ui.html
-jwt:
-  signerKey: "A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq"
-  valid-duration: 3600 # in second
-  refreshable-duration: 360000 # in seconds
 
+jwt:
+  signerKey: ${JWT_SIGNER_KEY}
+  valid-duration: ${JWT_VALID_DURATION:3600}
+  refreshable-duration: ${JWT_REFRESHABLE_DURATION:360000}
