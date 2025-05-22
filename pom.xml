@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>favourite-service</module>
         <module>reading-history-service</module>
         <module>user-profile-service</module>
         <module>crawl-service</module>
