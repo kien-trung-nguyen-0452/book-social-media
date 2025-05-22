@@ -14,7 +14,7 @@ public class BookRequest{
     String title;
     String description;
     String author;
-    List<String> categoryId;
+    List<String> categories;
     String coverUrl;
 
 }

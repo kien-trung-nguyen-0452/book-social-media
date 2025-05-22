@@ -19,7 +19,6 @@ public class BookEvent {
     String author;
     String description;
     String coverUrl;
-    boolean isCompleted;
     int chapterCount;
     int viewCount;
     double averageRating;

@@ -30,8 +30,6 @@ public class Book {
     String createdBy;
     String lastUpdatedBy;
     String subtitle;
-
-    Boolean isCompleted;
     int chapterCount;
     int viewCount;
 

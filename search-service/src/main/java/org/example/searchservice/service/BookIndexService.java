@@ -30,7 +30,10 @@ public class BookIndexService {
         Iterable<BookIndex> result = bookIndexRepository.findAll();
         return StreamSupport.stream(result.spliterator(), false).map(mapper::toBookSearchingResult).collect(Collectors.toList());
     }
-
+    public List<BookSearchingResult> getAllBookByAuthor(String author){
+        Iterable<BookIndex> result =bookIndexRepository.findBookIndicesByAuthor(author);
+        return StreamSupport.stream(result.spliterator(), false).map(mapper::toBookSearchingResult).collect(Collectors.toList());
+    }
     public List<BookSearchingResult> findByTitleContaining(String keyword){
         List<BookIndex> result = bookIndexRepository.findByTitleContainingIgnoreCase(keyword);
         return result.stream().map(mapper::toBookSearchingResult).collect(Collectors.toList());
@@ -41,11 +44,12 @@ public class BookIndexService {
                 .map(mapper::toBookSearchingResult)
                 .collect(Collectors.toList());
     }
-
     public List<BookSearchingResult> findByCategories(List<String> categories){
-        List<BookIndex> result =bookIndexRepository.findBookIndicesByCategories(categories);
+        List<BookIndex> result = bookIndexRepository.findBookIndicesByCategories(categories);
         return result.stream().map(mapper::toBookSearchingResult).collect(Collectors.toList());
     }
+
+
     public BookIndexResponse createBookIndex(BookIndex bookIndex){
         return mapper.toBookIndexResponse(bookIndexRepository.save(bookIndex));
     }

@@ -46,6 +46,7 @@ public class CrawlService {
         BookInfo info = metadata.getInfo();
         List<Chapter> inputChapters = metadata.getChapters();
 
+        // Kiểm tra tính hợp lệ của tất cả URL ảnh
         for (Chapter chapter : inputChapters) {
             if (chapter.getImages() != null) {
                 for (String imageUrl : chapter.getImages()) {
@@ -62,43 +63,49 @@ public class CrawlService {
         BookResponse bookResponse = bookClient.createBook(bookRequest).getData();
         String bookId = String.valueOf(bookResponse.getId());
 
-        // Lưu các chapterId đã tạo để có thể xóa khi lỗi
         List<String> createdChapterIds = new ArrayList<>();
+        List<Chapter> outputChapters = new ArrayList<>();
 
         try {
-            List<Chapter> outputChapters = new ArrayList<>();
-
-            // Duyệt từng chapter
-            // ...
-
             for (Chapter chapter : inputChapters) {
+                // Bước 1: Tạo chapter trước
                 ChapterRequest chapterRequest = internalMapper.toChapterRequest(chapter);
                 chapterRequest.setBookId(bookId);
                 chapterRequest.setTitle(chapter.getTitle());
-
-                ChapterResponse chapterResponse = chapterClient.createChapter(bookId,chapterRequest).getData();
+                ChapterResponse chapterResponse = chapterClient.createChapter(bookId, chapterRequest).getData();
                 String chapterId = chapterResponse.getId();
                 createdChapterIds.add(chapterId);
 
-                // Gửi toàn bộ ảnh trong chapter một lần
+                // Bước 2: Upload ảnh
                 UploadRequest uploadRequest = UploadRequest.builder()
                         .bookId(bookId)
                         .chapterId(chapterId)
                         .name(chapter.getTitle())
-                        .url(chapter.getImages())  // truyền List<String> thay vì từng String
+                        .url(chapter.getImages())
                         .build();
 
-                ApiResponse<UploadResponse> uplresponse = uploadClient.uploadFromUrl(uploadRequest);
-                UploadResponse uploadResponse = uplresponse.getData();
+                UploadResponse uploadResponse = uploadClient.uploadFromUrl(uploadRequest).getData();
+                List<String> uploadedUrls = uploadResponse.getUrl();
 
+                // Bước 3: Cập nhật lại chapter với link ảnh mới
+                ChapterRequest updateRequest = ChapterRequest.builder()
+                        .bookId(bookId)
+                        .title(chapter.getTitle())
+                        .chapterNumber(chapterRequest.getChapterNumber())
+                        .content(chapterRequest.getContent())
+                        .images(uploadedUrls)
+                        .build();
+
+                chapterClient.updateChapter(chapterId, updateRequest); // Bạn cần đảm bảo API này tồn tại
+
+                // Bước 4: Lưu thông tin chapter để trả về
                 outputChapters.add(Chapter.builder()
                         .id(chapterId)
-                        .title(chapterResponse.getTitle())
-                        .chapter(String.valueOf(chapterResponse.getChapterNumber()))
-                        .images(uploadResponse.getUrl()) // lấy list ảnh mới upload
+                        .title(chapter.getTitle())
+                        .chapterNumber(chapter.getChapterNumber())
+                        .images(uploadedUrls)
                         .build());
             }
-
 
             return CrawlResponse.builder()
                     .info(info)
@@ -109,7 +116,7 @@ public class CrawlService {
         } catch (Exception e) {
             log.error("Error during crawl, starting compensation cleanup", e);
 
-            // Xóa từng chapter đã tạo
+            // Rollback các chapter đã tạo
             for (String chapterId : createdChapterIds) {
                 try {
                     chapterClient.deleteChapter(chapterId);
@@ -118,15 +125,15 @@ public class CrawlService {
                 }
             }
 
-            // Xóa sách đã tạo
+            // Rollback sách đã tạo
             try {
                 bookClient.deleteBook(bookId);
             } catch (Exception ex) {
                 log.error("Failed to delete book id {} during compensation", bookId, ex);
             }
 
-            // Ném lại exception để báo lỗi
             throw new ServiceException(ErrorCode.URL_INVALID);
         }
     }
+
 }

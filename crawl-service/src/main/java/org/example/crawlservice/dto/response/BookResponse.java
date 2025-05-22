@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,8 +20,8 @@ public class BookResponse {
     String description;
     String author;
     String coverUrl;
-    boolean isCompleted;
     String createdBy;
+    List<String> categories;
     String lastUpdatedBy;
     int chapterCount;
     int viewCount;

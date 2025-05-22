@@ -1,5 +1,6 @@
 package org.example.searchservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Document(indexName = "book-index")
 @Builder
 @AllArgsConstructor
@@ -23,6 +25,7 @@ public class BookIndex {
     String id;
     String title;
     String subtitle;
+    private String _class;
     String description;
     String author;
     String coverUrl;

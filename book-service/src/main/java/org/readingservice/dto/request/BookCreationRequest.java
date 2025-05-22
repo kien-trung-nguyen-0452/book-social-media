@@ -26,7 +26,6 @@ public class BookCreationRequest {
     String createdBy;
     String lastUpdatedBy;
     String subtitle;
-    Boolean isCompleted;
     int chapterCount;
     int viewCount;
 

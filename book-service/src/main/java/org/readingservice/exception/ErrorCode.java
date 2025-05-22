@@ -15,7 +15,8 @@ public enum ErrorCode {
     CHAPTER_NOT_IN_BOOK(3002, "Chapter does not belong to the specified book", HttpStatus.BAD_REQUEST),
     CHAPTER_SERVICE_ERROR(3001, "Failed to retrieve chapter info", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN)
+    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    INVALID_URL(1008, "Invalid URL", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

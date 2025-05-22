@@ -14,20 +14,8 @@ import java.util.List;
 public interface BookIndexRepository extends ElasticsearchRepository<BookIndex, String>, BookIndexRepositoryCustom {
     // các phương thức khác
 
-
     List<BookIndex> findByTitleContainingIgnoreCase(String keyword);
     BookIndex findBookIndexById(String id);
-    @Query("""
-    {
-      "bool": {
-        "must": [
-          #foreach($category in ${categories})
-          { "term": { "categories.keyword": "$category" }}#if($foreach.hasNext),#end
-          #end
-        ]
-      }
-    }
-    """)
     List<BookIndex> findBookIndicesByCategories(List<String> categories);
     List<BookIndex> findBookIndicesByTitle(String title);
 

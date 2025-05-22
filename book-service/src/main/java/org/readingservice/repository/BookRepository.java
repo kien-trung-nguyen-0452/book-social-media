@@ -13,4 +13,8 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     Optional<Book> findByTitleAndAuthor(String title, String author);
     boolean existsById(String id);
+    boolean existsByTitleIgnoreCaseAndAuthorIgnoreCase(String title, String author);
+
+    boolean existsByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(String title, String author);
+
 }

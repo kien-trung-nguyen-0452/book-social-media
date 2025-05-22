@@ -17,13 +17,13 @@ public interface InternalMapper {
     @Mapping(source = "title", target = "title")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "author", target = "author")
-    @Mapping(target = "categoryId", expression = "java(org.example.crawlservice.mapper.MapperHelper.defaultCategoryId())")
+
     @Mapping(source = "coverUrl", target = "coverUrl")
     BookRequest toBookRequest(BookInfo bookInfo);
 
     @Mapping(target = "bookId", ignore = true)
     @Mapping(target = "content", ignore = true)
-    @Mapping(source = "chapter", target = "chapterNumber", qualifiedByName = "parseChapterNumber")
+    @Mapping(source = "chapterNumber", target = "chapterNumber", qualifiedByName = "parseChapterNumber")
     @Mapping(source = "title", target = "title")
     @Mapping(source = "images", target = "images")
     ChapterRequest toChapterRequest(Chapter chapter);

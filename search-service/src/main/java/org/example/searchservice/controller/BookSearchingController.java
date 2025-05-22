@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -31,10 +32,20 @@ public class BookSearchingController {
         return ApiResponse.<List<BookSearchingResult>>builder()
                 .code(1000)
                 .data(bookIndexService.findByCategories(categories))
+                .message("Find all books by categories")
                 .build();
     }
+    @GetMapping("/author")
+    ApiResponse <List<BookSearchingResult> >getBooksByAuthor(@RequestParam("author") String author) {
+        return ApiResponse.<List<BookSearchingResult>>builder()
+                .code(1000)
+                .message("Find all books by author")
+                .data(bookIndexService.getAllBookByAuthor(author))
+                .build();
+
+    }
     @GetMapping("/title")
-    ApiResponse<List<BookSearchingResult>> getBookByTitle (@RequestParam String title){
+    ApiResponse<List<BookSearchingResult>> getBookByTitle (@RequestParam("title") String title){
         return ApiResponse.<List<BookSearchingResult>>builder()
                 .code(1000)
                 .data(bookIndexService.findByTitleContaining(title))

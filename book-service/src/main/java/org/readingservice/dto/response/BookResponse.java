@@ -20,16 +20,15 @@ public class BookResponse {
     String description;
     String author;
     String coverUrl;
-    Boolean isCompleted;
     String createdBy;
     String UpdatedBy;
     int chapterCount;
     int viewCount;
-
+    List<String> categories;
     @CreatedDate
     LocalDateTime createdAt;
 
     @LastModifiedDate
     LocalDateTime updatedAt;
-    List<String> categories;
+
 }

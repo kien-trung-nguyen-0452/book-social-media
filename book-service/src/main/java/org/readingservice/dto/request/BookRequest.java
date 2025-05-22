@@ -26,8 +26,6 @@ public class BookRequest {
     String createdBy;
     String UpdatedBy;
 
-    @NotNull
-    Boolean isCompleted;
 
     @NotNull
     List<String> categories;

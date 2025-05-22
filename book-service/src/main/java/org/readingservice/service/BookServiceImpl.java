@@ -21,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,23 +38,45 @@ public class BookServiceImpl implements BookService {
     BookMapper bookMapper;
     BookProducerService producerService;
 
+    public boolean isValidUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return false;
+        }
+        try {
+            new URL(url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public BookCreationResponse createBook(BookCreationRequest request) {
-        Optional<Book> existingBook = bookRepository.findByTitleAndAuthor(request.getTitle(), request.getAuthor());
-        if (existingBook.isPresent()) {
+        String title = request.getTitle().trim();
+        String author = request.getAuthor().trim();
+
+        if (!isValidUrl(request.getCoverUrl())) {
+            throw new ServiceException(ErrorCode.INVALID_URL);
+        }
+
+        if (bookRepository.existsByTitleIgnoreCaseAndAuthorIgnoreCase(title, author)) {
             throw new ServiceException(ErrorCode.DUPLICATE_BOOK);
         }
+        if (bookRepository.existsByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(title, author)) {
+            log.warn("Possible duplicate book detected (fuzzy match): title='{}', author='{}'", title, author);
+        }
+
         Book book = bookMapper.toEntity(request);
         book.setViewCount(0);
-        book.setCreatedBy(request.getCreatedBy());
-        book.setIsCompleted(request.getIsCompleted());
         book.setChapterCount(0);
+        book.setCreatedBy(request.getCreatedBy());
         book.setSubtitle(request.getSubtitle());
-        book.setTitle(request.getTitle());
-        book.setAuthor(request.getAuthor());
+        book.setCategories(request.getCategories());
+        book.setTitle(title);
+        book.setAuthor(author);
         book.setCoverUrl(request.getCoverUrl());
         book.setLastUpdatedBy(request.getLastUpdatedBy());
+
         Book savedBook = bookRepository.save(book);
 
         BookEvent event = bookMapper.toBookEvent(savedBook);
@@ -60,7 +84,6 @@ public class BookServiceImpl implements BookService {
 
         return bookMapper.toBookCreationResponse(savedBook);
     }
-
 
     @Override
     public BookResponse getBookById(String id) {
@@ -87,13 +110,11 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
         book.setCreatedBy(request.getCreatedBy());
-        book.setIsCompleted(request.getIsCompleted());
         book.setSubtitle(request.getSubtitle());
         book.setTitle(request.getTitle());
         book.setDescription(request.getDescription());
         book.setAuthor(request.getAuthor());
         book.setCoverUrl(request.getCoverUrl());
-        book.setIsCompleted(request.getIsCompleted());
         book.setCategories(request.getCategories());
         book.setSubtitle(request.getSubtitle());
         return bookMapper.toResponse(bookRepository.save(book));

@@ -11,7 +11,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Chapter {
      String id;
-     String chapter;
+     String chapterNumber;
      String title;
      List<String> images;
 }

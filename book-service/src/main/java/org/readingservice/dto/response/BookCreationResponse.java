@@ -22,7 +22,6 @@ public class BookCreationResponse {
     String createdBy;
     String UpdatedBy;
     String subtitle;
-    Boolean isCompleted;
     int chapterCount;
     int viewCount;
 

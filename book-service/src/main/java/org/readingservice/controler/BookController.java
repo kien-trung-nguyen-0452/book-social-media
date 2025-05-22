@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/books")
 @RequiredArgsConstructor
 @Tag(name = "External Book APIs ", description = "Using for reading")
-public class BookController {
+public class  BookController {
 
     private final BookService bookService;
 
