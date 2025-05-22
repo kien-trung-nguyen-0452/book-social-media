@@ -22,6 +22,7 @@ public class Comment {
     String bookId;
     String chapterId;
     String userId;
+    String username;
     String content;
 
     @CreatedDate

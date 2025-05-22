@@ -10,6 +10,7 @@ public class CommentRequest {
     String bookId;
     String chapterId;
     String userId;
+    String username;
     String content;
 
 }

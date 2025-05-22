@@ -10,9 +10,9 @@ import org.springframework.http.codec.ServerSentEvent;
 @Data
 @AllArgsConstructor
 @Builder
-@JsonIncludeProperties(value = {"data", "message", "code"})
+@JsonIncludeProperties()
 public class ApiResponse<T> {
-    private T data;
+    private T result;
     private String message;
     private int code;
 }

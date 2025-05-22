@@ -20,7 +20,7 @@ public class InternalCommentController {
     @GetMapping("/{userId}")
     public ApiResponse<List<CommentResponse>> getByUserId(@PathVariable String userId) {
         return ApiResponse.<List<CommentResponse>>builder()
-                .data(commentService.getByUserId(userId))
+                .result(commentService.getByUserId(userId))
                 .message("Comments for user")
                 .build();
     }
@@ -28,7 +28,7 @@ public class InternalCommentController {
     @GetMapping("/book/{bookId}")
     public ApiResponse<List<CommentResponse>> getByBookId(@PathVariable String bookId) {
         return ApiResponse.<List<CommentResponse>>builder()
-                .data(commentService.getByBookId(bookId))
+                .result(commentService.getByBookId(bookId))
                 .message("Comments for book")
                 .build();
     }
@@ -36,7 +36,7 @@ public class InternalCommentController {
     @GetMapping("/chapter/{chapterId}")
     public ApiResponse<List<CommentResponse>> getByChapterId(@PathVariable String chapterId) {
         return ApiResponse.<List<CommentResponse>>builder()
-                .data(commentService.getByChapterId(chapterId))
+                .result(commentService.getByChapterId(chapterId))
                 .message("Comments for chapter")
                 .build();
     }

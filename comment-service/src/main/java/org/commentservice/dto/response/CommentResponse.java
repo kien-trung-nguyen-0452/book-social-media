@@ -15,6 +15,7 @@ public class CommentResponse {
     String bookId;
     String chapterId;
     String userId;
+    String username;
     String content;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

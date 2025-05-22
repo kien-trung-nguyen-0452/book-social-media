@@ -19,7 +19,7 @@ public class ExternalCommentController {
     @PostMapping
     public ApiResponse<CommentResponse> create(@RequestBody CommentRequest request) {
         return ApiResponse.<CommentResponse>builder()
-                .data(commentService.create(request))
+                .result(commentService.create(request))
                 .message("Comment created")
                 .build();
     }

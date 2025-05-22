@@ -1,6 +1,8 @@
 package org.commentservice.service;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.commentservice.dto.request.CommentRequest;
 import org.commentservice.dto.response.CommentResponse;
 import org.commentservice.entity.Comment;
@@ -8,7 +10,10 @@ import org.commentservice.exception.ErrorCode;
 import org.commentservice.exception.ServiceException;
 import org.commentservice.mapper.CommentMapper;
 import org.commentservice.repository.CommentRepository;
+import org.commentservice.repository.httpClient.AuthServiceClient;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,13 +27,22 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper mapper;
 
+    private final AuthServiceClient authServiceClient;
+
     @Override
-    @PreAuthorize("#username == authentication.name or hasRole('ADMIN')")
-    public CommentResponse create(CommentRequest request) {
+    @PreAuthorize("request.getUsername.equals(authentication.name) or hasRole('ADMIN')")
+    public CommentResponse create(@P("request")CommentRequest request) {
+        var id = authServiceClient.getUserId().getResult();
+
+        if(id.equals(request.getUserId())){
+
         Comment comment = mapper.toEntity(request);
         comment.setCreatedAt(LocalDateTime.now());
         comment.setUpdatedAt(LocalDateTime.now());
-        return mapper.toResponse(repository.save(comment));
+        return mapper.toResponse(repository.save(comment));}
+        else {
+            throw new ServiceException(ErrorCode.UNAUTHENTICATED);
+        }
     }
 
     @Override
