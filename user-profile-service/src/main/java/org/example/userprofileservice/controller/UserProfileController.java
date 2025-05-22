@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
 
     UserProfileService userProfileService;
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
     @GetMapping("/profile/{id}")
     public ApiResponse<UserProfileResponse> getUserProfileById( @PathVariable String id){
         return ApiResponse.<UserProfileResponse>builder()

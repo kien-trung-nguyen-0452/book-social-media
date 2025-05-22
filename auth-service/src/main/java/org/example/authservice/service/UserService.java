@@ -24,6 +24,7 @@ import org.example.authservice.repository.RoleRepository;
 import org.example.authservice.repository.UserRepository;
 import org.example.authservice.repository.httpClient.UserProfileClient;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,7 @@ public class UserService {
     UserProfileClient userProfileClient;
     ProfileMapper profileMapper;
     RoleRepository roleRepository;
+    UserKafkaProducer userKafkaProducer;
 
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -139,18 +141,27 @@ public class UserService {
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         try {
             log.info("Attempting to delete profile for user: {}", user.getUsername());
+
             ApiResponse<UserProfileDeleteResponse> response = userProfileClient.deleteUserProfile(userId);
             if (response == null || response.getCode() != 1000) {
                 throw new ServiceException(ErrorCode.USER_PROFILE_DELETE_FAILED);
             }
+
             log.info("Deleted profile for user: {}", user.getUsername());
+
             userRepository.delete(user);
             log.info("Deleted user with ID: {}", userId);
+
+            // ✅ Gửi sự kiện Kafka sau khi xóa thành công
+            userKafkaProducer.sendUserDeletedEvent(userId);
+            log.info("Sent user-deleted Kafka event for userId: {}", userId);
+
         } catch (Exception e) {
             log.error("Failed to delete user/profile for userId {}: {}", userId, e.getMessage());
             throw new ServiceException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
+
 
 
 }

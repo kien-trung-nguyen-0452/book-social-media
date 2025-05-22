@@ -2,6 +2,9 @@ package org.example.userprofileservice.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 
 @Data
@@ -11,4 +14,6 @@ public class UserProfileCreationRequest {
     String userId;
     String name;
     String avatarUrl;
+    @CreatedDate
+    LocalDateTime createdAt;
 }

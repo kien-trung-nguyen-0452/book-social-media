@@ -131,7 +131,6 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public AvatarUploadResponse uploadAvatar(MultipartFile file, String userId) {
         try {
             Map<String, Object> options = ObjectUtils.asMap(

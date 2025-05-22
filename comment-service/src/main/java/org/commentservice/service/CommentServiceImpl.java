@@ -8,6 +8,7 @@ import org.commentservice.exception.ErrorCode;
 import org.commentservice.exception.ServiceException;
 import org.commentservice.mapper.CommentMapper;
 import org.commentservice.repository.CommentRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper mapper;
 
     @Override
+    @PreAuthorize("#username == authentication.name or hasRole('ADMIN')")
     public CommentResponse create(CommentRequest request) {
         Comment comment = mapper.toEntity(request);
         comment.setCreatedAt(LocalDateTime.now());
@@ -51,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
                 .map(mapper::toResponse)
                 .toList();
     }
-
+    @PreAuthorize("#username == authentication.name or hasRole('ADMIN')")
     @Override
     public void delete(String id) {
         if (!repository.existsById(id)) {
@@ -59,4 +61,23 @@ public class CommentServiceImpl implements CommentService {
         }
         repository.deleteById(id);
     }
+    // Dùng cho HTTP có phân quyền
+    @PreAuthorize("#username == authentication.name or hasRole('ADMIN')")
+    public void deleteWithPermission(String id) {
+        deleteInternal(id);
+    }
+
+    // Dùng cho Kafka - không phân quyền
+    public void deleteWithoutPermission(String id) {
+        deleteInternal(id);
+    }
+
+    // Logic chính
+    private void deleteInternal(String id) {
+        if (!repository.existsById(id)) {
+            throw new ServiceException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        repository.deleteById(id);
+    }
+
 }

@@ -12,6 +12,19 @@ spring:
       host: localhost
       port: 27017
       database: comment_db
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: comment-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: batch
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 
 logging:
   level:

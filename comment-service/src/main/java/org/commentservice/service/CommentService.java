@@ -12,5 +12,5 @@ public interface CommentService {
     List<CommentResponse> getByChapterId(String chapterId);
     List<CommentResponse> getByUserId(String userId);
     void delete(String id);
-
+    public void deleteWithoutPermission(String id);
 }

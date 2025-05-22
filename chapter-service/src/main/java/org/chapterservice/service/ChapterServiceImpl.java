@@ -16,6 +16,7 @@ import org.chapterservice.exception.ServiceException;
 import org.chapterservice.mapper.ChapterMapper;
 import org.chapterservice.repository.ChapterRepository;
 import org.chapterservice.repository.ReadingHistoryClient;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final BookServiceClient bookServiceClient;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ChapterResponse createChapter(String bookId, ChapterRequest request) {
         try {
 
@@ -128,6 +130,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ChapterResponse updateChapter(String id, ChapterRequest request) {
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
@@ -158,6 +161,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteChapter(String id) {
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
@@ -172,7 +176,6 @@ public class ChapterServiceImpl implements ChapterService {
 
         chapterKafkaProducerService.sendChapterCountEvent(event);
     }
-
 
 
     @Override
