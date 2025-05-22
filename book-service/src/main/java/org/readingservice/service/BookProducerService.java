@@ -1,6 +1,8 @@
 package org.readingservice.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,17 +17,31 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BookProducerService {
 
-    KafkaTemplate<String, BookEvent> kafkaTemplate;
+    KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
+
 
     @Async
     public void creationEven(BookEvent event) {
-        log.info("Sending book creation event: {}", event);
-        kafkaTemplate.send("book-creation-topic", event);
+        try {
+            String message = objectMapper.writeValueAsString(event);
+            log.info("Sending book creation event: {}", message);
+            kafkaTemplate.send("book-creation-topic", message);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize creation event", e);
+        }
     }
+
     @Async
     public void deletionEvent(BookEvent event) {
-        log.info("Sending book deletion event: {}", event);
-        kafkaTemplate.send("book-deletion-topic", event);
+        try {
+            String message = objectMapper.writeValueAsString(event);
+            log.info("Sending book deletion event: {}", message);
+            kafkaTemplate.send("book-deletion-topic", message);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize deletion event", e);
+        }
     }
+
 
 }

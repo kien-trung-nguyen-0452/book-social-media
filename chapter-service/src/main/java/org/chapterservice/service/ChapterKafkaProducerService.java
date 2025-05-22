@@ -42,5 +42,8 @@ public class ChapterKafkaProducerService {
             log.error("Error serializing ChapterCountEvent", e);
         }
     }
+
+
+
 }
 

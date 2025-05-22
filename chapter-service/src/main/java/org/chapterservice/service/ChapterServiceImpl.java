@@ -151,14 +151,29 @@ public class ChapterServiceImpl implements ChapterService {
 
         return chapterMapper.toResponse(chapterRepository.save(chapter));
     }
+    public String getBookIdByChapterId(String chapterId) {
+        return chapterRepository.findById(chapterId)
+                .map(Chapter::getBookId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
+    }
 
     @Override
     public void deleteChapter(String id) {
-        if (!chapterRepository.existsById(id)) {
-            throw new ServiceException(ErrorCode.CHAPTER_NOT_FOUND);
-        }
-        chapterRepository.deleteById(id);
+        Chapter chapter = chapterRepository.findById(id)
+                .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
+
+        String bookId = chapter.getBookId(); // 👈 Lấy bookId trước khi xóa
+
+        chapterRepository.deleteById(id);    // ❌ Nếu làm trước thì mất dữ liệu
+
+        ChapterCountEvent event = new ChapterCountEvent();
+        event.setBookId(bookId);
+        event.setCount(-1); // giảm 1 chương
+
+        chapterKafkaProducerService.sendChapterCountEvent(event);
     }
+
+
 
     @Override
     public ChapterResponse getLastChapterByBookId(String bookId) {

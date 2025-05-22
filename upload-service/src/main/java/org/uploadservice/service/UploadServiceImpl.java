@@ -160,6 +160,9 @@ public class UploadServiceImpl implements UploadService {
         }
     }
 
+    public void deleteByBookId(String bookId) {
+        repository.deleteByBookId(bookId);
+    }
     private String generateChapterPath(String bookId, String chapterId, String name) {
         return String.format("%s/%s/%s", bookId, chapterId, name);
     }

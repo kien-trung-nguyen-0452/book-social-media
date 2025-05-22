@@ -38,6 +38,7 @@ public class UploadController {
                 .build();
     }
 
+
     // Upload ảnh bìa sách
     @PostMapping(value = "/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CoverUploadResponse> uploadCover(@RequestParam("file") MultipartFile file,
@@ -61,4 +62,14 @@ public class UploadController {
                 .code(1000)
                 .build();
     }
+    @DeleteMapping("/book/{bookId}")
+    public ApiResponse<Void> deleteFilesByBookId(@PathVariable String bookId) {
+        uploadService.deleteByBookId(bookId);
+        return ApiResponse.<Void>builder()
+                .data(null)
+                .message("File metadata deleted successfully")
+                .code(1000)
+                .build();
+    }
+
 }

@@ -5,5 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface FileMetadataRepository extends MongoRepository<FileMetadata, String> {
+    void deleteByBookId(String bookId);
+
 
 }

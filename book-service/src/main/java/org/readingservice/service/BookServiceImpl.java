@@ -17,6 +17,8 @@ import org.readingservice.exception.ErrorCode;
 import org.readingservice.exception.ServiceException;
 import org.readingservice.mapper.BookMapper;
 import org.readingservice.repository.BookRepository;
+import org.readingservice.repository.ChapterClient;
+import org.readingservice.repository.UploadClient;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +35,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookServiceImpl implements BookService {
-
+    ChapterClient chapterClient;
     BookRepository bookRepository;
     BookMapper bookMapper;
     BookProducerService producerService;
+    UploadClient uploadClient;
 
     public boolean isValidUrl(String url) {
         if (url == null || url.isBlank()) {
@@ -58,7 +61,6 @@ public class BookServiceImpl implements BookService {
         if (!isValidUrl(request.getCoverUrl())) {
             throw new ServiceException(ErrorCode.INVALID_URL);
         }
-
         if (bookRepository.existsByTitleIgnoreCaseAndAuthorIgnoreCase(title, author)) {
             throw new ServiceException(ErrorCode.DUPLICATE_BOOK);
         }
@@ -126,11 +128,18 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
 
-        // Gửi event trước khi xóa để giữ đủ thông tin nếu cần
+        // Gửi event báo sách sắp bị xóa
         BookEvent event = bookMapper.toBookDeletionEvent(book);
         producerService.deletionEvent(event);
+
+        // Xóa sách khỏi DB
         bookRepository.deleteById(id);
+
+        // Gọi chapter-service xóa hết chương của sách này qua Feign client
+        chapterClient.deleteChaptersByBookId(id);
+        uploadClient.deleteBook(id);
     }
+
 
 
 }

@@ -15,30 +15,29 @@ public class ChapterCountConsumer {
 
     private final ObjectMapper objectMapper;
     private final BookRepository bookRepository;
-
-    @KafkaListener(topics = "chapter-count", groupId = "book-service-group")
+    @KafkaListener(topics = "chapter-count-topic", groupId = "book-service-group")
     public void listen(String message) {
         log.info("Received raw Kafka message: {}", message);
 
         try {
-            // Deserialize message thành ChapterCountEvent
             ChapterCountEvent event = objectMapper.readValue(message, ChapterCountEvent.class);
 
-            // Tìm sách theo bookId
             var book = bookRepository.findBookById(event.getBookId());
             if (book == null) {
                 log.warn("Book not found for id: {}", event.getBookId());
                 return;
             }
 
-            // Cập nhật chapterCount cho sách
-            book.setChapterCount(event.getCount());
+            // Cộng dồn chapterCount, không để âm
+            int newCount = Math.max(0, book.getChapterCount() + event.getCount());
+            book.setChapterCount(newCount);
             bookRepository.save(book);
 
-            log.info("Updated chapter count for book {} to {}", event.getBookId(), event.getCount());
+            log.info("Updated chapter count for book {} to {}", event.getBookId(), newCount);
 
         } catch (Exception e) {
             log.error("Failed to deserialize or update chapter count", e);
         }
     }
+
 }

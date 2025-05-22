@@ -8,24 +8,23 @@ spring:
     name: chapter-service
 
 
+
+
   kafka:
     bootstrap-servers: localhost:9094
-    topic.chapter-count: chapter-count
+    topic.chapter-count: chapter-count-topic
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.add.type.headers: true
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       group-id: chapter-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      properties:
-        spring.json.value.use.type.headers: true
-        spring.json.trusted.packages: "*"
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     listener:
       missing-topics-fatal: false
+
+
 
 
   data:

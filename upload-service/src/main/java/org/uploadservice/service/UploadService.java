@@ -14,5 +14,6 @@ public interface UploadService {
 
     AvatarUploadResponse uploadAvatar(MultipartFile file, String userId);
 
+    void deleteByBookId(String bookId);
 
 }
