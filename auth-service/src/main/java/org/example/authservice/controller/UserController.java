@@ -169,6 +169,9 @@ public class UserController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
                             responseCode = "1005",
                             description = "user not existed"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "1010",
+                            description = "Invalid current password"),
             })
     @PutMapping("/change-password/{userId}")
     ApiResponse<ChangePasswordResponse> changePassword(@PathVariable String userId, @RequestBody ChangePasswordRequest request){

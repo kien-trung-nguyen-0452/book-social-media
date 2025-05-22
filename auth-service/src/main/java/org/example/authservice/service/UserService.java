@@ -11,6 +11,7 @@ import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserDeleteRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.ChangePasswordResponse;
+import org.example.authservice.dto.response.UserProfileCreationResponse;
 import org.example.authservice.dto.response.UserProfileDeleteResponse;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.entity.Role;
@@ -74,10 +75,18 @@ public class UserService {
         var profileRequest = profileMapper.toProfileCreationRequest(request);
         profileRequest.setUserId(user.getUserId());
         log.info("creating user profile for user: {}", user.getUsername());
-        var profile = userProfileClient.createUserProfile(profileRequest);
+        UserProfileCreationResponse profile;
+        try {
+             profile = userProfileClient.createUserProfile(profileRequest).getResult();
+        }catch (Exception ex) {
+        // Gọi tạo profile thất bại -> Ném exception để rollback transaction (tức là rollback user tạo)
+        log.error("Failed to create user profile for user: {}, rolling back user creation", user.getUsername(), ex);
+        throw new ServiceException(ErrorCode.PROFILE_CREATE_FAIL);
+    }
+
 
         var userCreationResponse = userMapper.toUserResponse(user);
-        userCreationResponse.setProfileId(profile.getResult().getId());
+        userCreationResponse.setProfileId(profile.getId());
 
         return userCreationResponse;
     }
