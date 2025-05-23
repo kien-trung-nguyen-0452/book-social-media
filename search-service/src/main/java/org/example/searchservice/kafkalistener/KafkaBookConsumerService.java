@@ -21,7 +21,6 @@ public class KafkaBookConsumerService {
     BookIndexMapper mapper;
     private final ObjectMapper objectMapper;
 
-
     @KafkaListener(topics = "book-creation-topic", groupId = "elasticsearch")
     public void listen(String message) {
         try {
@@ -32,8 +31,6 @@ public class KafkaBookConsumerService {
             log.error("Failed to deserialize BookEvent", e);
         }
     }
-
-
 
     @KafkaListener(topics = "book-deletion-topic", groupId = "elasticsearch")
     public void handleBookDeletion(String message) {

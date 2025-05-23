@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
 @Tag(name = "External Book APIs ", description = "Using for reading")
-public class  BookController {
+public class BookController {
 
     private final BookService bookService;
 
     @GetMapping("/all")
-    @Operation(method = "GET", summary = "Get all books in database"
-            ,security = @SecurityRequirement(name= "none"))
+    @Operation(method = "GET", summary = "Get all books in database",
+            security = @SecurityRequirement(name = "none"))
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "1000",description = "Request Success")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "1000", description = "Request Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2001", description = "Book not found")
     })
     public ApiResponse<List<BookResponse>> getAllBooks() {
         return ApiResponse.<List<BookResponse>>builder()
@@ -38,6 +38,13 @@ public class  BookController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get book by ID",
+            description = "Retrieve a book by its unique ID",
+            security = @SecurityRequirement(name = "none"))
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "1000", description = "Book found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2001", description = "Book not found")
+    })
     public ApiResponse<BookResponse> getBookById(@PathVariable String id) {
         return ApiResponse.<BookResponse>builder()
                 .code(1000)
@@ -45,7 +52,11 @@ public class  BookController {
                 .message("Book found")
                 .build();
     }
+
     @GetMapping("/by-created-date")
+    @Operation(summary = "Get books sorted by created date",
+            description = "Retrieve books ordered by their creation date descending",
+            security = @SecurityRequirement(name = "none"))
     public ApiResponse<List<BookResponse>> getBooksOrderByCreatedDateDesc() {
         List<Book> books = bookService.getBooksOrderByCreatedDateDesc();
         List<BookResponse> responses = books.stream()
@@ -59,6 +70,9 @@ public class  BookController {
     }
 
     @GetMapping("/by-view-count")
+    @Operation(summary = "Get books sorted by view count",
+            description = "Retrieve books ordered by their view count descending",
+            security = @SecurityRequirement(name = "none"))
     public ApiResponse<List<BookResponse>> getBooksOrderByViewCountDesc() {
         List<Book> books = bookService.getBooksOrderByViewCountDesc();
         List<BookResponse> responses = books.stream()
@@ -72,14 +86,20 @@ public class  BookController {
     }
 
     private BookResponse convertToResponse(Book book) {
-        BookResponse response = new BookResponse();
-        response.setId(book.getId());
-        response.setTitle(book.getTitle());
-        response.setAuthor(book.getAuthor());
-        response.setViewCount(book.getViewCount());
-        // Thêm các trường khác nếu có trong BookResponse
-        return response;
+        return BookResponse.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .subtitle(book.getSubtitle())
+                .description(book.getDescription())
+                .author(book.getAuthor())
+                .coverUrl(book.getCoverUrl())
+                .createdBy(book.getCreatedBy())
+                .UpdatedBy(book.getLastUpdatedBy())  // giữ nguyên như bạn viết
+                .chapterCount(book.getChapterCount())
+                .viewCount(book.getViewCount())
+                .categories(book.getCategories())
+                .createdAt(book.getCreatedAt())
+                .updatedAt(book.getUpdatedAt())
+                .build();
     }
-
-
 }

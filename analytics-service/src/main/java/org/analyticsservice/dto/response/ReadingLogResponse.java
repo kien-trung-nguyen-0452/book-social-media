@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class ReadingLogResponse {
-    private String id; // MongoDB ID là String
-    private Long userId;
-    private Long bookId;
-    private Long chapterId;
-    private Long duration;
+    private String id;
+    private String userId;
+    private String bookId;
+    private String chapterId;
+    private String duration;
     private LocalDateTime timestamp;
 }

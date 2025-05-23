@@ -13,8 +13,7 @@ public class BookSearchingResult {
     String coverUrl;
     String title;
     int chapterCount;
-    private String author;              // Tên tác giả
+    private String author;
     private List<String> categories;
     LocalDate updatedAt;
-
 }

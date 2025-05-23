@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BookmarkResponse {
     private String id;
-    private Long userId;
-    private Long bookId;
+    private String userId;
+    private String bookId;
     private Integer chapterNumber;
     private LocalDateTime createdAt;
 }

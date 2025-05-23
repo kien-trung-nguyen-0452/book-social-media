@@ -18,9 +18,9 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     boolean existsByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(String title, String author);
 
-    // Tìm tất cả sách, sắp xếp theo viewCount giảm dần
+
     List<Book> findAllByOrderByViewCountDesc();
 
-    // Tìm tất cả sách, sắp xếp theo ngày tạo mới nhất
-    List<Book> findAllByOrderByCreatedDateDesc();
+
+    List<Book> findAllByOrderByCreatedAtDesc();
 }

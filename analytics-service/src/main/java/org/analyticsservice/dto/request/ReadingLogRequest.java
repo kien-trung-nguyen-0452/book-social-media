@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class ReadingLogRequest {
-    private Long userId;
-    private Long bookId;
-    private Long chapterId;
-    private Long duration;
+    private String userId;
+    private String bookId;
+    private String chapterId;
+    private String duration;
 }

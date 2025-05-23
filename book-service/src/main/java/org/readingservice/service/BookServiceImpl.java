@@ -48,8 +48,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksOrderByCreatedDateDesc() {
-        return bookRepository.findAllByOrderByCreatedDateDesc();
+        return bookRepository.findAllByOrderByCreatedAtDesc();
     }
+
     public boolean isValidUrl(String url) {
         if (url == null || url.isBlank()) {
             return false;
@@ -76,7 +77,6 @@ public class BookServiceImpl implements BookService {
         if (bookRepository.existsByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(title, author)) {
             log.warn("Possible duplicate book detected (fuzzy match): title='{}', author='{}'", title, author);
         }
-
         Book book = bookMapper.toEntity(request);
         book.setViewCount(0);
         book.setChapterCount(0);
@@ -137,14 +137,9 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
 
-        // Gửi event báo sách sắp bị xóa
         BookEvent event = bookMapper.toBookDeletionEvent(book);
         producerService.deletionEvent(event);
-
-        // Xóa sách khỏi DB
         bookRepository.deleteById(id);
-
-        // Gọi chapter-service xóa hết chương của sách này qua Feign client
         chapterClient.deleteChaptersByBookId(id);
         uploadClient.deleteBook(id);
     }
