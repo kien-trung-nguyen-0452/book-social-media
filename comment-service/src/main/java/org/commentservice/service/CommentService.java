@@ -17,7 +17,7 @@ public interface CommentService {
     void deleteByUsername(@P("username") String username);
     List<CommentResponse> getReplies(String parentId);
     CommentResponse update(String id, CommentReplyRequest request);
-    void deleteByUserIdWithoutAuth(String userId);
+    void deleteByUsernameWithoutAuth(String username);
     void delete(String id, @P("username") String username);
 
 }

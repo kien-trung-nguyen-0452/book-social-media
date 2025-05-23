@@ -55,8 +55,12 @@ public class FavouriteService {
     }
 
     @PreAuthorize("#username == authentication.name")
-    public void removeAllFavouriteBookByUsername(@P("username")String username){
-        if(!favoriteBookRepository.existsByUsername(username)){
+    public void removeAllFavouriteBookByUsername(String username) {
+        removeAllFavouriteBookByUsernameNoAuth(username);
+    }
+
+    public void removeAllFavouriteBookByUsernameNoAuth(String username) {
+        if (!favoriteBookRepository.existsByUsername(username)) {
             throw new ServiceException(ErrorCode.FAVOURITE_NOT_EXISTED);
         }
         favoriteBookRepository.deleteByUsername(username);
@@ -64,13 +68,22 @@ public class FavouriteService {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void removeAllFavouriteBookByBookId(String bookId){
-        if(!favoriteBookRepository.existsByBookId(bookId)){
+    public void removeAllFavouriteBookByBookId(String bookId) {
+        removeAllFavouriteBookByBookIdInternal(bookId);
+    }
+
+    public void removeAllFavouriteBookByBookIdWithoutAuth(String bookId) {
+        removeAllFavouriteBookByBookIdInternal(bookId);
+    }
+
+    private void removeAllFavouriteBookByBookIdInternal(String bookId) {
+        if (!favoriteBookRepository.existsByBookId(bookId)) {
             throw new ServiceException(ErrorCode.BOOK_NOT_EXISTED);
         }
         favoriteBookRepository.deleteAllByBookId(bookId);
     }
-    
+
+
     public int getCountByBookId(String bookId){
         if(!favoriteBookRepository.existsByBookId(bookId)){
             throw new ServiceException(ErrorCode.BOOK_NOT_EXISTED);

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class CommentServiceKafkaConsumer {
 
     ObjectMapper mapper = new ObjectMapper();
-    private final CommentService commentService; // Service chứa logic xóa comment theo userId
+    private final CommentService commentService;
 
     @KafkaListener(topics = "user-deleted-topic", groupId = "comment-service-group")
     public void handleUserDeletedEvent(ConsumerRecord<String, String> record) {
@@ -25,10 +25,10 @@ public class CommentServiceKafkaConsumer {
 
             // Parse JSON
             JsonNode jsonNode = mapper.readTree(message);
-            String userId = jsonNode.get("userId").asText();
+            String username = jsonNode.get("username").asText();
 
-            commentService.deleteByUserIdWithoutAuth(userId);
-            log.info("Deleted all comments for userId: {}", userId);
+            commentService.deleteByUsernameWithoutAuth(username);
+            log.info("Deleted all comments for username: {}", username);
         } catch (Exception e) {
             log.error("Failed to handle user deleted event for message: {}", record.value(), e);
         }

@@ -24,13 +24,6 @@ spring:
             readTimeout: 60000
             loggerLevel: full
 
-
-
-
-
-
-
-
   kafka:
     bootstrap-servers: localhost:9094
     producer:

@@ -14,7 +14,6 @@ import java.util.List;
 public class CommentResponse {
     String id;
     String bookId;
-    String UserId;
     String chapterId;
 
     String username;

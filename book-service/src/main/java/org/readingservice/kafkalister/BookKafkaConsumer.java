@@ -23,7 +23,7 @@ public class BookKafkaConsumer {
         log.info("Received raw Kafka message: {}", message);
 
         try {
-            // Deserialize sang DTO của BookService
+
             UpdateViewCountRequest request = objectMapper.readValue(message, UpdateViewCountRequest.class);
 
             var book = bookRepository.findBookById(request.getBookId());

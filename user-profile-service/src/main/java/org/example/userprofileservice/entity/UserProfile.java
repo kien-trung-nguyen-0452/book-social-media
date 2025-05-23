@@ -8,7 +8,9 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-import java.time.LocalDateTime;
+
+import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Node("UserProfile")
 @Data
@@ -20,5 +22,6 @@ public class UserProfile {
     String name;
     String avatarUrl;
     @CreatedDate
-    LocalDateTime createdAt;
+    private Instant createdAt;
+
 }

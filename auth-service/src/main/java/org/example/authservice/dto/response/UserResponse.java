@@ -16,5 +16,6 @@ public class UserResponse {
     String email;
     String username;
     String password;
+
     LocalDateTime createdAt;
 }

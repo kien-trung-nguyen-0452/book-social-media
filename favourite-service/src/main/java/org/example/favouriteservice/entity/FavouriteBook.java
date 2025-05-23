@@ -1,6 +1,7 @@
 package org.example.favouriteservice.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,5 +14,8 @@ public class FavouriteBook {
     String id;
     String bookId;
     String username;
+    @CreatedDate
     LocalDate favouriteAt;
+    @CreatedDate
+    LocalDate addDate;
 }
