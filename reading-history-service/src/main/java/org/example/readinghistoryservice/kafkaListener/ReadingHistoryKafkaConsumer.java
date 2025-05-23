@@ -22,7 +22,7 @@ public class ReadingHistoryKafkaConsumer {
 
         try {
             if (historyRecordingRepository.existsByUserId(message)){
-            historyRecordingRepository.deleteHistoryRecordingByUserId(message);
+            historyRecordingRepository.deleteAllByUserId(message);
             log.info("Delete all history recording by user id: {}", message);}
 
             else {
