@@ -14,7 +14,7 @@ public interface BookService {
     List<BookResponse> getAllBooks();
     BookResponse updateBook(String id, BookRequest request);
     void deleteBook(String id); // ✅ đổi Long -> String
-    List<Book> getBooksOrderByCreatedDateDesc();
-    List<Book> getBooksOrderByViewCountDesc();
+    List<BookResponse> getBooksSortedByCreatedDate();
+    public List<BookResponse> getBooksSortedByViewCount();
 }
 

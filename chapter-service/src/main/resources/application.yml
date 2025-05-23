@@ -7,9 +7,6 @@ spring:
   application:
     name: chapter-service
 
-
-
-
   kafka:
     bootstrap-servers: localhost:9094
     topic.chapter-count: chapter-count-topic

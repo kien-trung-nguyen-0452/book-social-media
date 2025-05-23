@@ -9,6 +9,8 @@ import org.readingservice.dto.response.BookResponse;
 import org.mapstruct.*;
 import org.readingservice.event.BookEvent;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
@@ -32,7 +34,7 @@ public interface BookMapper {
     BookEvent toBookEvent(Book book);
 
 
-
+    List<BookResponse> toResponseList(List<Book> books);
 
     BookCreationResponse toBookCreationResponse(Book book);
     default BookEvent toBookDeletionEvent(Book book) {

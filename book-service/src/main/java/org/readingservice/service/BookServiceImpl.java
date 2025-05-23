@@ -42,13 +42,13 @@ public class BookServiceImpl implements BookService {
     UploadClient uploadClient;
 
     @Override
-    public List<Book> getBooksOrderByViewCountDesc() {
-        return bookRepository.findAllByOrderByViewCountDesc();
+    public List<BookResponse> getBooksSortedByCreatedDate() {
+        return bookMapper.toResponseList(bookRepository.findAllByOrderByCreatedAtDesc());
     }
 
     @Override
-    public List<Book> getBooksOrderByCreatedDateDesc() {
-        return bookRepository.findAllByOrderByCreatedAtDesc();
+    public List<BookResponse> getBooksSortedByViewCount() {
+        return bookMapper.toResponseList(bookRepository.findAllByOrderByViewCountDesc());
     }
 
     public boolean isValidUrl(String url) {

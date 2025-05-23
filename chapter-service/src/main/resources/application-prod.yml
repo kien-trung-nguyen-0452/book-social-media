@@ -1,9 +1,0 @@
-spring:
-  profiles:
-    active: prod
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_SERVER_URL}

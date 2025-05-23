@@ -54,14 +54,13 @@ public class BookController {
     }
 
     @GetMapping("/by-created-date")
-    @Operation(summary = "Get books sorted by created date",
+    @Operation(
+            summary = "Get books sorted by created date",
             description = "Retrieve books ordered by their creation date descending",
-            security = @SecurityRequirement(name = "none"))
+            security = @SecurityRequirement(name = "none")
+    )
     public ApiResponse<List<BookResponse>> getBooksOrderByCreatedDateDesc() {
-        List<Book> books = bookService.getBooksOrderByCreatedDateDesc();
-        List<BookResponse> responses = books.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+        List<BookResponse> responses = bookService.getBooksSortedByCreatedDate();
         return ApiResponse.<List<BookResponse>>builder()
                 .code(1000)
                 .data(responses)
@@ -70,14 +69,13 @@ public class BookController {
     }
 
     @GetMapping("/by-view-count")
-    @Operation(summary = "Get books sorted by view count",
+    @Operation(
+            summary = "Get books sorted by view count",
             description = "Retrieve books ordered by their view count descending",
-            security = @SecurityRequirement(name = "none"))
+            security = @SecurityRequirement(name = "none")
+    )
     public ApiResponse<List<BookResponse>> getBooksOrderByViewCountDesc() {
-        List<Book> books = bookService.getBooksOrderByViewCountDesc();
-        List<BookResponse> responses = books.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+        List<BookResponse> responses = bookService.getBooksSortedByViewCount();
         return ApiResponse.<List<BookResponse>>builder()
                 .code(1000)
                 .data(responses)
@@ -85,21 +83,6 @@ public class BookController {
                 .build();
     }
 
-    private BookResponse convertToResponse(Book book) {
-        return BookResponse.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .subtitle(book.getSubtitle())
-                .description(book.getDescription())
-                .author(book.getAuthor())
-                .coverUrl(book.getCoverUrl())
-                .createdBy(book.getCreatedBy())
-                .UpdatedBy(book.getLastUpdatedBy())  // giữ nguyên như bạn viết
-                .chapterCount(book.getChapterCount())
-                .viewCount(book.getViewCount())
-                .categories(book.getCategories())
-                .createdAt(book.getCreatedAt())
-                .updatedAt(book.getUpdatedAt())
-                .build();
-    }
+
+
 }
