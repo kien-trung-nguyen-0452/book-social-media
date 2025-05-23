@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "chapter-service", configuration = FeignClientConfig.class)
 public interface ChapterClient {
     @PostMapping("chapter/internal/{bookId}/add")
-    ApiResponse<ChapterResponse> createChapter(@PathVariable("bookId") String bookId, @RequestBody ChapterRequest request);
+    ApiResponse<ChapterResponse> createChapter(@PathVariable String bookId, @RequestBody ChapterRequest request);
     @DeleteMapping("chapter/internal/delete/{id}")
     ApiResponse<ChapterResponse> deleteChapter(@PathVariable String id);
     @PutMapping("chapter/internal/update/{id}")

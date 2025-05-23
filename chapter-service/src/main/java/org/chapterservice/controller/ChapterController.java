@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.chapterservice.dto.common.ApiResponse;
 import org.chapterservice.dto.response.ChapterResponse;
 import org.chapterservice.service.ChapterService;
+import org.chapterservice.service.ChapterServiceImpl;
 import org.chapterservice.service.ViewCountService;
 import org.springframework.web.bind.annotation.*;
 

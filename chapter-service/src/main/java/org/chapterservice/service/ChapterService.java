@@ -2,9 +2,10 @@ package org.chapterservice.service;
 
 import org.chapterservice.dto.request.ChapterRequest;
 import org.chapterservice.dto.response.ChapterResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public interface ChapterService {
 
     ChapterResponse createChapter(String bookId,ChapterRequest request);

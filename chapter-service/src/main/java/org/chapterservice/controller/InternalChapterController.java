@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class InternalChapterController {
     ChapterService chapterService;
 
-    @PostMapping("{bookId}/add")
-    public ApiResponse<ChapterResponse> createChapter(@PathVariable("bookId") String bookId,
+    @PostMapping("/{bookId}/add")
+    public ApiResponse<ChapterResponse> createChapter(@PathVariable String bookId,
                                                       @RequestBody ChapterRequest request) {
         ChapterResponse response = chapterService.createChapter(bookId, request);
         return ApiResponse.<ChapterResponse>builder()
@@ -35,7 +35,7 @@ public class InternalChapterController {
                 .build();
     }
 
-    @DeleteMapping("delete/book/{bookId}")
+    @DeleteMapping("/delete/book/{bookId}")
     public ApiResponse<Void> deleteChaptersByBookId(@PathVariable String bookId) {
         chapterService.deleteChaptersByBookId(bookId);
         return ApiResponse.<Void>builder()
@@ -43,7 +43,7 @@ public class InternalChapterController {
                 .build();
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ApiResponse<Void> deleteChapter(@PathVariable String id) {
         chapterService.deleteChapter(id);
         return ApiResponse.<Void>builder()

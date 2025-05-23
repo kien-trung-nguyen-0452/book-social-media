@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.chapterservice.dto.common.ApiResponse;
 import org.chapterservice.dto.request.ChapterRequest;
 import org.chapterservice.dto.request.HistoryRecordRequest;
 import org.chapterservice.dto.response.ChapterResponse;
@@ -35,20 +36,17 @@ public class ChapterServiceImpl implements ChapterService {
     ChapterRepository chapterRepository;
     ChapterMapper chapterMapper;
     ReadingHistoryClient readingHistoryClient;
-    private final ChapterKafkaProducerService chapterKafkaProducerService;
-    private final BookServiceClient bookServiceClient;
+    final ChapterKafkaProducerService chapterKafkaProducerService;
+    final BookServiceClient bookServiceClient;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ChapterResponse createChapter(String bookId, ChapterRequest request) {
         try {
-
-            Boolean bookExists = bookServiceClient.checkBookExists(bookId);
-            if (Boolean.FALSE.equals(bookExists)) {
+            ApiResponse<Boolean> bookExists = bookServiceClient.checkBookExists(bookId);
+            if (bookExists.getData().equals(false)) {
                 throw new ServiceException(ErrorCode.BOOK_NOT_FOUND); // định nghĩa thêm error code nếu chưa có
             }
-
-
             boolean isDuplicate = chapterRepository.existsByBookIdAndTitleAndChapterNumber(
                     bookId,
                     request.getTitle(),
@@ -57,7 +55,6 @@ public class ChapterServiceImpl implements ChapterService {
             if (isDuplicate) {
                 throw new ServiceException(ErrorCode.DUPLICATE_CHAPTER);
             }
-
             Chapter chapter = chapterMapper.toEntity(request);
             LocalDateTime now = LocalDateTime.now();
             chapter.setCreatedAt(now);
@@ -65,15 +62,12 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setBookId(bookId);
             chapter.setTitle(request.getTitle());
             chapter.setChapterNumber(request.getChapterNumber());
-
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             chapter.setCreatedBy(username);
             chapter.setUpdatedBy(username);
-
             Chapter saved = chapterRepository.save(chapter);
             long chapterCount = chapterRepository.countByBookId(saved.getBookId());
 
-            // Gửi event Kafka
             ChapterCountEvent event = new ChapterCountEvent(saved.getBookId(), (int) chapterCount);
             chapterKafkaProducerService.sendChapterCountEvent(event);
 
