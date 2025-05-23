@@ -199,7 +199,7 @@ public class UserController {
                             description = "unauthenticated")
             })
     @GetMapping("/get-user-id")
-    ApiResponse<String> geUserId(){
+    ApiResponse<String> getUserId(){
         return ApiResponse.<String>builder()
                 .result(userService.getUserId())
                 .build();

@@ -37,7 +37,7 @@ spring:
             - StripPrefix=2
 
         - id: comment-service
-          uri: lb://book-service:8083
+          uri: lb://comment-service:8083
           predicates:
             - Path=${app.api-prefix}/comment/**
           filters:

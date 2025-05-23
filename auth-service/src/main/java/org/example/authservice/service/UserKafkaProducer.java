@@ -20,7 +20,6 @@ public class UserKafkaProducer {
             UserDeletionEvent event = new UserDeletionEvent();
             event.setUserId(userId);
             event.setTimestamp(Instant.now());
-
             String message = objectMapper.writeValueAsString(event);
             kafkaTemplate.send("user-deleted-topic", message);
         } catch (Exception e) {

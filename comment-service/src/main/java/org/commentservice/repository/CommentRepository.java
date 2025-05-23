@@ -10,9 +10,9 @@ public interface CommentRepository extends MongoRepository<Comment, String> {
     List<Comment> findByBookId(String bookId);
     List<Comment> findByChapterId(String chapterId);
     List<Comment> findByUserId(String userId);
-    void deleteByBookId(String bookId);
-    void deleteByChapterId(String chapterId);
-    void deleteByUserId(String userId);
+    List<Comment> findByUsername(String username);
+    List<Comment> findByParentId(String parentId);
+
 
     void deleteById(String id);
     void deleteAllByUsername(String username);
