@@ -15,5 +15,5 @@ public interface HistoryRecordingRepository extends MongoRepository<HistoryRecor
 
     Page<HistoryRecording> findAllByUserIdOrderByLastReadAtDesc(String userId, Pageable pageable);
 
-    void deleteHistoryRecordingByUserId(String userId);
+    void deleteAllByUserId(String userId);
 }
