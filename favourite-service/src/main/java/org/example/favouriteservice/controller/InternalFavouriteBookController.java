@@ -36,7 +36,7 @@ public class InternalFavouriteBookController {
             }
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2005", description = "User not existed")
     })
     @GetMapping("/get-favourite-list/{username}")
@@ -56,7 +56,7 @@ public class InternalFavouriteBookController {
             }
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2009", description = "Book already in user's favourite list")
     })
     @PostMapping("/add")
@@ -76,7 +76,7 @@ public class InternalFavouriteBookController {
             }
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2005", description = "User not existed"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2007", description = "Book not found in favourite list")
     })
@@ -98,7 +98,7 @@ public class InternalFavouriteBookController {
 
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2005", description = "User not existed")
     })
     @GetMapping("/is-favourite")
@@ -118,7 +118,7 @@ public class InternalFavouriteBookController {
             }
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2007", description = "No book was found")
     })
     @DeleteMapping("/remove-all-by-user/{username}")
@@ -139,7 +139,7 @@ public class InternalFavouriteBookController {
     }
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "0", description = "Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Success"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "2006", description = "Book not existed"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "1006", description = "Unauthenticated, you are not the admin")
 

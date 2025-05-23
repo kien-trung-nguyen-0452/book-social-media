@@ -27,7 +27,7 @@ public class ExternalFavouriteBookController {
     @ApiResponses(
             value = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = "0",
+                            responseCode = "200",
                             description = "success"),
             })
     @GetMapping("count/{bookId}")

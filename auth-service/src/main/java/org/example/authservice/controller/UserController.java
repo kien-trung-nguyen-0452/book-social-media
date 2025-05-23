@@ -190,7 +190,7 @@ public class UserController {
                     scopes = {"this user"}))
     @ApiResponses(
             value = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "", description = "success"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
                             responseCode = "1005",
                             description = "user not existed"),
