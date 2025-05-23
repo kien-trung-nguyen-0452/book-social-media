@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     private final AuthServiceClient authServiceClient;
 
     @Override
-    @PreAuthorize("request.getUsername.equals(authentication.name) or hasRole('ADMIN')")
+    @PreAuthorize("request.username.equals(authentication.name) or hasRole('ADMIN')")
     public CommentResponse create(@P("request")CommentRequest request) {
         var id = authServiceClient.getUserId().getResult();
 

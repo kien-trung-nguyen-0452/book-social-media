@@ -10,10 +10,7 @@ import org.example.authservice.dto.common.ApiResponse;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserDeleteRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
-import org.example.authservice.dto.response.ChangePasswordResponse;
-import org.example.authservice.dto.response.UserProfileCreationResponse;
-import org.example.authservice.dto.response.UserProfileDeleteResponse;
-import org.example.authservice.dto.response.UserResponse;
+import org.example.authservice.dto.response.*;
 import org.example.authservice.entity.Role;
 import org.example.authservice.entity.User;
 import org.example.authservice.enumerate.PredefinedRole;
@@ -102,12 +99,20 @@ public class UserService {
     }
 
     @PostAuthorize("returnObject != null and returnObject.username.equals(authentication.name)")
-    public UserResponse getMyInfo() {
+    public UserProfile getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         User user =
                 userRepository.findByUsername(name).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
-        return userMapper.toUserResponse(user);
+        UserProfileResponse userProfileResponse = userProfileClient.getMyInfo(user.getUserId()).getResult();
+        return UserProfile.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .avatarUrl(userProfileResponse.getAvatarUrl())
+                .createdAt(user.getCreatedAt())
+                .name(userProfileResponse.getName())
+                .build();
     }
 
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String userId) {

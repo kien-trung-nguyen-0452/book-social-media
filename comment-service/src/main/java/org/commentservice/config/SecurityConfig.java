@@ -1,7 +1,7 @@
 package org.commentservice.config;
 
 
-import org.commentservice.config.JwtAuthenticationEntryPoint;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -15,8 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-
-
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
@@ -34,8 +32,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
-
+        httpSecurity.authorizeHttpRequests(request ->
+                request.requestMatchers(PUBLIC_ENDPOINTS)
                 .permitAll()
                 .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-ui/**", "/swagger-ui.html")
                 .permitAll()

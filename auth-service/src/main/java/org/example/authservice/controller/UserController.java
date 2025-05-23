@@ -9,6 +9,7 @@ import org.example.authservice.dto.request.ChangePasswordRequest;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.ChangePasswordResponse;
+import org.example.authservice.dto.response.UserProfile;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -121,8 +122,8 @@ public class UserController {
                         responseCode = "1005",
                         description = "user not existed"),
             })
-    ApiResponse<UserResponse> getInfo() {
-        return ApiResponse.<UserResponse>builder()
+    ApiResponse<UserProfile> getInfo() {
+        return ApiResponse.<UserProfile>builder()
                 .result(userService.getMyInfo())
                 .build();
     }
