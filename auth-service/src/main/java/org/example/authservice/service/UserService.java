@@ -49,7 +49,7 @@ public class UserService {
     ProfileMapper profileMapper;
     RoleRepository roleRepository;
     UserKafkaProducer userKafkaProducer;
-
+    @Transactional
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ServiceException(ErrorCode.USER_EXISTED);

@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class FeintRetryerConfig {
 
     private static final int MAX_ATTEMPTS = 3;
-    private static final long MAX_INTERVAL = 2000L;
-    private static final long INIT_INTERVAL = 1000L;
+    private static final long MAX_INTERVAL = 20000L;
+    private static final long INIT_INTERVAL = 10000L;
 
     @Bean
     public Retryer retryer() {

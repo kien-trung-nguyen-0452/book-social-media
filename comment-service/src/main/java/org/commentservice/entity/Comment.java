@@ -2,12 +2,14 @@ package org.commentservice.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.commentservice.dto.response.CommentResponse;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "comment_db")
 @Data
@@ -21,9 +23,13 @@ public class Comment {
 
     String bookId;
     String chapterId;
-    String userId;
+    String UserId;
     String username;
+
     String content;
+    String parentId;
+
+
 
     @CreatedDate
     LocalDateTime createdAt;
