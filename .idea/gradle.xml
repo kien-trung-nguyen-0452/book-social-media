@@ -9,6 +9,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$/RatingandReview-Service" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="testRunner" value="PLATFORM" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/common-dto" />
         <option name="modules">
           <set>

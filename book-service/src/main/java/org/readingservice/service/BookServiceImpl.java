@@ -41,6 +41,15 @@ public class BookServiceImpl implements BookService {
     BookProducerService producerService;
     UploadClient uploadClient;
 
+    @Override
+    public List<Book> getBooksOrderByViewCountDesc() {
+        return bookRepository.findAllByOrderByViewCountDesc();
+    }
+
+    @Override
+    public List<Book> getBooksOrderByCreatedDateDesc() {
+        return bookRepository.findAllByOrderByCreatedDateDesc();
+    }
     public boolean isValidUrl(String url) {
         if (url == null || url.isBlank()) {
             return false;

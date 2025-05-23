@@ -115,6 +115,8 @@ public class UserService {
                 .build();
     }
 
+
+
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
 
@@ -151,6 +153,7 @@ public class UserService {
     }
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUserProfile(String userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         try {
@@ -160,21 +163,22 @@ public class UserService {
             if (response == null || response.getCode() != 1000) {
                 throw new ServiceException(ErrorCode.USER_PROFILE_DELETE_FAILED);
             }
-
+            // Lấy username từ user entity rồi gọi gửi event
+            userKafkaProducer.sendUserDeletedEvent(user.getUserId(), user.getUsername());
+            log.info("Sent user-deleted Kafka event for username: {}", user.getUsername());
             log.info("Deleted profile for user: {}", user.getUsername());
 
             userRepository.delete(user);
             log.info("Deleted user with ID: {}", userId);
 
-            // ✅ Gửi sự kiện Kafka sau khi xóa thành công
-            userKafkaProducer.sendUserDeletedEvent(userId);
-            log.info("Sent user-deleted Kafka event for userId: {}", userId);
+
 
         } catch (Exception e) {
             log.error("Failed to delete user/profile for userId {}: {}", userId, e.getMessage());
             throw new ServiceException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
+
 
 
 

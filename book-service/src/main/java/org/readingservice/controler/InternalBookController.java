@@ -22,7 +22,6 @@ public class InternalBookController {
 
 
     @PostMapping("/create")
-
     public ApiResponse<BookCreationResponse> createBook(@RequestBody BookCreationRequest request) {
         BookCreationResponse response = bookService.createBook(request);
         return ApiResponse.<BookCreationResponse>builder()

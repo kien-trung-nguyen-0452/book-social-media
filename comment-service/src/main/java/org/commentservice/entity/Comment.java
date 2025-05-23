@@ -23,13 +23,10 @@ public class Comment {
 
     String bookId;
     String chapterId;
-    String UserId;
     String username;
 
     String content;
     String parentId;
-
-
 
     @CreatedDate
     LocalDateTime createdAt;

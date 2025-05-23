@@ -1,15 +1,23 @@
 server:
-  port: 8099
+  port: 8091
   servlet:
     context-path: /favourite
 
 spring:
   application:
-    name: book-service
+    name: favourite-service
 
   data:
     mongodb:
       uri: mongodb://localhost:27017/bookdb
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9094
+      group-id: favourite-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 eureka:
   client:

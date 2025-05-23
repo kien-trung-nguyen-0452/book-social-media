@@ -17,8 +17,6 @@ public class CommentReplyRequest {
 
     @NotBlank
     private String parentId;
-    @NotBlank
-    String UserId;
 
     @NotBlank
     private String username;
