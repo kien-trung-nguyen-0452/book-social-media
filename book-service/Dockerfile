@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package spring-boot:repackage -DskipTests
 
 # Stage 2: Runtime stage using Amazon Corretto JDK 21
-FROM amazoncorretto:21.0.4
+FROM amazoncorretto:21
 
 # Set the working directory for the application
 WORKDIR /app

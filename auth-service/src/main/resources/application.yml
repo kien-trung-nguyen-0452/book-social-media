@@ -7,10 +7,10 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:mysql://mysql:3306/auth_service
+    url: jdbc:mysql://frere-mysql-db:3306/frere_db
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: ${DBMS_USERNAME:root}
-    password: ${DBMS_PASSWORD:1234}
+    username: root
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: update
@@ -57,5 +57,5 @@ springdoc:
 
 jwt:
   signerKey: A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq
-  valid-duration: ${JWT_VALID_DURATION:3600}
-  refreshable-duration: ${JWT_REFRESHABLE_DURATION:360000}
+  valid-duration: 3600
+  refreshable-duration: 360000

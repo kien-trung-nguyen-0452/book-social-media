@@ -134,7 +134,6 @@ services:
       SPRING_PROFILES_ACTIVE: "local"
     depends_on:
       - mysql-db
-      - eureka-server
     networks:
       - api-network
 
@@ -217,7 +216,7 @@ services:
       - "8090:8090"
 
   kafdrop:
-    image: my-kafdrop:latest
+    image: obsidiandynamics/kafdrop
     container_name: kafdrop
     ports:
       - "9000:9000"
@@ -232,19 +231,24 @@ services:
     build:
       context: ./user-profile-service
     container_name: user-profile
-    depends_on:
-      - eureka-server
-      - mysql-db
     ports:
-      - "8088:8088"
+      - "8099:8099"   # đồng bộ với server.port = 8099 trong yml
     environment:
-      DB_URL: jdbc:mysql://frere-mysql-db:3306/frere_db
-      DB_USERNAME: root
-      DB_PASSWORD: 1234
-      EUREKA_SERVER_URL: http://eureka:8761/eureka/
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_APPLICATION_NAME: user-profile-service
+      SPRING_NEO4J_URI: bolt://neo4j:7687
+      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+      SPRING_NEO4J_AUTHENTICATION_PASSWORD: 123456789
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_HOSTNAME: user-profile-service
+    depends_on:
+      - neo4j
+      - eureka-server
     networks:
       - api-network
+
 
   reading-history-service:
     build:
