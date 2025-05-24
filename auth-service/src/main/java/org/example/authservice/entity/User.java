@@ -5,10 +5,11 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ public class User {
     String username;
     String password;
     String email;
+
     @CreatedDate
     LocalDate createdAt;
 

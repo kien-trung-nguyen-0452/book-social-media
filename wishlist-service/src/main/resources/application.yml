@@ -7,15 +7,12 @@ spring:
   application:
     name: wishlist-service
 
-
   data:
     mongodb:
-      uri: mongodb://localhost:27017/wishlist_db
-
+      uri: mongodb://mongodb:27017/wishlist_db
 
 logging:
   level:
-    org.wishlistservice: DEBUG
     org.springframework: INFO
 
 eureka:

@@ -156,26 +156,26 @@ public class UserController {
                 .build();
     }
 
-
     @Operation(
             method = "PUT",
             summary = "change password",
             security =
-            @SecurityRequirement(
-                    name = "BearToken",
-                    scopes = {"this user"}))
+                    @SecurityRequirement(
+                            name = "BearToken",
+                            scopes = {"this user"}))
     @ApiResponses(
             value = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = "1005",
-                            description = "user not existed"),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = "1010",
-                            description = "Invalid current password"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "1005",
+                        description = "user not existed"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "1010",
+                        description = "Invalid current password"),
             })
     @PutMapping("/change-password/{userId}")
-    ApiResponse<ChangePasswordResponse> changePassword(@PathVariable String userId, @RequestBody ChangePasswordRequest request){
+    ApiResponse<ChangePasswordResponse> changePassword(
+            @PathVariable String userId, @RequestBody ChangePasswordRequest request) {
         return ApiResponse.<ChangePasswordResponse>builder()
                 .result(userService.changePassword(userId, request))
                 .build();
@@ -185,23 +185,21 @@ public class UserController {
             method = "GET",
             summary = "get current user id",
             security =
-            @SecurityRequirement(
-                    name = "BearToken",
-                    scopes = {"this user"}))
+                    @SecurityRequirement(
+                            name = "BearToken",
+                            scopes = {"this user"}))
     @ApiResponses(
             value = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = "1005",
-                            description = "user not existed"),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = "1006",
-                            description = "unauthenticated")
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "success"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "1005",
+                        description = "user not existed"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "1006",
+                        description = "unauthenticated")
             })
     @GetMapping("/get-user-id")
-    ApiResponse<String> getUserId(){
-        return ApiResponse.<String>builder()
-                .result(userService.getUserId())
-                .build();
+    ApiResponse<String> getUserId() {
+        return ApiResponse.<String>builder().result(userService.getUserId()).build();
     }
 }

@@ -2,23 +2,22 @@ server:
   port: 8099
   servlet:
     context-path: /profile
+
 spring:
-  profiles:
-    active:
-      local
   application:
     name: user-profile-service
   neo4j:
-    uri: bolt://localhost:7687
+    uri: bolt://neo4j:7687
     authentication:
       username: neo4j
       password: 123456789
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/ # <<< nếu eureka cũng chạy trong Docker
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    hostname: user-profile-service

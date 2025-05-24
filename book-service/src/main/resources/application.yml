@@ -9,12 +9,10 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/bookdb
-
-
+      uri: mongodb://mongo:27017/bookdb
 
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -24,15 +22,11 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-
-
-
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
   instance:
     prefer-ip-address: true
-    hostname: localhost

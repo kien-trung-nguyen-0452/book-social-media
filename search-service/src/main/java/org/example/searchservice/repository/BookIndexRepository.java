@@ -18,6 +18,4 @@ public interface BookIndexRepository extends ElasticsearchRepository<BookIndex, 
     BookIndex findBookIndexById(String id);
     List<BookIndex> findBookIndicesByCategories(List<String> categories);
     List<BookIndex> findBookIndicesByTitle(String title);
-
-
 }

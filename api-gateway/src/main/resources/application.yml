@@ -9,84 +9,84 @@ spring:
     gateway:
       routes:
         - id: auth-service
-          uri: lb://auth-service:8080
+          uri: lb://auth-service
           predicates:
             - Path=${app.api-prefix}/identity/**
           filters:
             - StripPrefix=2
 
         - id: book-service
-          uri: lb://book-service:8086
+          uri: lb://book-service
           predicates:
             - Path=${app.api-prefix}/book/**
           filters:
             - StripPrefix=2
 
         - id: bookmark-service
-          uri: lb://book-service:8084
+          uri: lb://book-service
           predicates:
             - Path=${app.api-prefix}/bookmark/**
           filters:
             - StripPrefix=2
 
         - id: chapter-service
-          uri: lb://chapter-service:8087
+          uri: lb://chapter-service
           predicates:
             - Path=${app.api-prefix}/chapter/**
           filters:
             - StripPrefix=2
 
         - id: comment-service
-          uri: lb://comment-service:8083
+          uri: lb://comment-service
           predicates:
             - Path=${app.api-prefix}/comment/**
           filters:
             - StripPrefix=2
 
         - id: crawl-service
-          uri: lb://crawl-service:8082
+          uri: lb://crawl-service
           predicates:
             - Path=${app.api-prefix}/crawl/**
           filters:
             - StripPrefix=2
 
         - id: upload-service
-          uri: lb://upload-service:8085
+          uri: lb://upload-service
           predicates:
             - Path=${app.api-prefix}/upload/**
           filters:
             - StripPrefix=2
 
         - id: wishlist-service
-          uri: lb://wishlist-service:8081
+          uri: lb://wishlist-service
           predicates:
             - Path=${app.api-prefix}/recommend/**
           filters:
             - StripPrefix=2
 
         - id: search-service
-          uri: lb://search-service:8090
+          uri: lb://search-service
           predicates:
             - Path=${app.api-prefix}/search/**
           filters:
             - StripPrefix=2
 
         - id: reading-history-service
-          uri: lb://reading-history-service:8093
+          uri: lb://reading-history-service
           predicates:
             - Path=${app.api-prefix}/history/**
           filters:
             - StripPrefix=2
 
         - id: user-profile-service
-          uri: lb://user-profile-service:8099
+          uri: lb://user-profile-service
           predicates:
             - Path=${app.api-prefix}/profile/**
           filters:
             - StripPrefix=2
 
         - id: favourite-service
-          uri: lb://favourite-service:8091
+          uri: lb://favourite-service
           predicates:
             - Path=${app.api-prefix}/favourite/**
           filters:
@@ -95,7 +95,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
 

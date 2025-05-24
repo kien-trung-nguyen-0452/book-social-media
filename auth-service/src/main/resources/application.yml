@@ -7,7 +7,7 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://127.0.0.1:3306/auth_service}
+    url: jdbc:mysql://mysql:3306/auth_service
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DBMS_USERNAME:root}
     password: ${DBMS_PASSWORD:1234}
@@ -25,7 +25,7 @@ spring:
             loggerLevel: full
 
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: kafka:9094
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -42,13 +42,11 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: localhost
-
 
 springdoc:
   api-docs:
@@ -56,7 +54,6 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /swagger-ui.html
-
 
 jwt:
   signerKey: A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq

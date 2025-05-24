@@ -6,9 +6,10 @@ server:
 spring:
   application:
     name: upload-service
+
   data:
     mongodb:
-      uri: mongodb://localhost:27017/upload_db
+      uri: mongodb://mongo:27017/upload_db
 
 cloudinary:
   cloud-name: dku1pfouk
@@ -18,7 +19,7 @@ cloudinary:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    hostname: upload-service

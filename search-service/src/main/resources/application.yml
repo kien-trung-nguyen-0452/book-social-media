@@ -2,11 +2,13 @@ server:
   port: 8090
   servlet:
     context-path: /search
+
 spring:
   application:
     name: search-service
+
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: kafka:9094  # ❗ Đổi localhost → kafka (tên service trong docker-compose)
     consumer:
       group-id: elasticsearch
       auto-offset-reset: earliest
@@ -21,15 +23,16 @@ spring:
       missing-topics-fatal: false
 
   elasticsearch:
-    uris: http://localhost:9200
+    uris: http://elasticsearch:9200  # ❗ Đổi localhost → elasticsearch (tên service trong docker-compose)
     connection-timeout: 10s
     socket-timeout: 30s
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/  # ❗ Đổi localhost → eureka
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    hostname: search-service

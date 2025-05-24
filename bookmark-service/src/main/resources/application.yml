@@ -2,13 +2,13 @@ server:
   port: 8084
   servlet:
     context-path: /bookmark
+
 spring:
   application:
     name: bookmark-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/bookmark_db
-
+      uri: mongodb://mongo:27017/bookmark_db
 
   jackson:
     serialization:
@@ -24,3 +24,5 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://eureka:8761/eureka/
+  instance:
+    prefer-ip-address: true

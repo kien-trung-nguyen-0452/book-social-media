@@ -19,8 +19,8 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED(1009, "Email existed", HttpStatus.BAD_REQUEST),
     INVALID_CURRENT_PASSWORD(1011, "wrong password", HttpStatus.BAD_REQUEST),
-    PROFILE_CREATE_FAIL(1010, "Failed to create user profile. Transaction rolled back", HttpStatus.INTERNAL_SERVER_ERROR),
-
+    PROFILE_CREATE_FAIL(
+            1010, "Failed to create user profile. Transaction rolled back", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

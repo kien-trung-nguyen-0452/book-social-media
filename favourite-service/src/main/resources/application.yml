@@ -9,11 +9,11 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/bookdb
+      uri: mongodb://mongo:27017/bookdb
 
   kafka:
     consumer:
-      bootstrap-servers: localhost:9094
+      bootstrap-servers: kafka:9092
       group-id: favourite-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -24,4 +24,4 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/

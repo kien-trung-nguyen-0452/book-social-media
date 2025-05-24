@@ -124,14 +124,14 @@ services:
     ports:
       - "8080:8080"
     environment:
-      JWT_SIGNER_KEY: ${JWT_SIGNER_KEY}
-      JWT_VALID_DURATION: ${JWT_VALID_DURATION}
-      JWT_REFRESHABLE_DURATION: ${JWT_REFRESHABLE_DURATION}
-      EUREKA_SERVER_URL: ${EUREKA_SERVER_URL}
-      DBMS_CONNECTION: ${DBMS_CONNECTION}
-      DBMS_USERNAME:  ${DBMS_USERNAME}
-      DBMS_PASSWORD: ${DBMS_PASSWORD}
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      JWT_SIGNER_KEY: "A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq"
+      JWT_VALID_DURATION: "3600"
+      JWT_REFRESHABLE_DURATION: "360000"
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka/"
+      DBMS_CONNECTION: "jdbc:mysql://frere-mysql-db:3306/frere_db"
+      DBMS_USERNAME: "root"
+      DBMS_PASSWORD: "1234"
+      SPRING_PROFILES_ACTIVE: "local"
     depends_on:
       - mysql-db
       - eureka-server
@@ -215,6 +215,7 @@ services:
       - api-network
     ports:
       - "8090:8090"
+
   kafdrop:
     image: my-kafdrop:latest
     container_name: kafdrop
@@ -227,6 +228,53 @@ services:
       - api-network
     restart: unless-stopped
 
+  user-profile-service:
+    build:
+      context: ./user-profile-service
+    container_name: user-profile
+    depends_on:
+      - eureka-server
+      - mysql-db
+    ports:
+      - "8088:8088"
+    environment:
+      DB_URL: jdbc:mysql://frere-mysql-db:3306/frere_db
+      DB_USERNAME: root
+      DB_PASSWORD: 1234
+      EUREKA_SERVER_URL: http://eureka:8761/eureka/
+      SPRING_PROFILES_ACTIVE: local
+    networks:
+      - api-network
+
+  reading-history-service:
+    build:
+      context: ./reading-history-service
+    container_name: reading-history
+    depends_on:
+      - mongodb
+      - eureka-server
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/frere_db
+      EUREKA_SERVER_URL: http://eureka:8761/eureka/
+    networks:
+      - api-network
+
+  favourite-service:
+    build:
+      context: ./favourite-service
+    container_name: favourite
+    depends_on:
+      - mongodb
+      - eureka-server
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/frere_db
+      EUREKA_SERVER_URL: http://eureka:8761/eureka/
+    networks:
+      - api-network
 
 volumes:
   frere_redis_data:

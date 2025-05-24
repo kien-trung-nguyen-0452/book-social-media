@@ -19,7 +19,7 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8080/identity")  // Đây là base url của service
+                .baseUrl("http://identity-service")  // Đây là base url của service
                 .build();
     }
     @Bean

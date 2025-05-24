@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.example.authservice.dto.request.ChangePasswordRequest;
 import jakarta.transaction.Transactional;
+
 import org.example.authservice.dto.common.ApiResponse;
+import org.example.authservice.dto.request.ChangePasswordRequest;
 import org.example.authservice.dto.request.UserCreateRequest;
-import org.example.authservice.dto.request.UserDeleteRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.*;
 import org.example.authservice.entity.Role;
@@ -22,7 +22,6 @@ import org.example.authservice.repository.RoleRepository;
 import org.example.authservice.repository.UserRepository;
 import org.example.authservice.repository.httpClient.UserProfileClient;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +45,7 @@ public class UserService {
     ProfileMapper profileMapper;
     RoleRepository roleRepository;
     UserKafkaProducer userKafkaProducer;
+
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -74,13 +74,12 @@ public class UserService {
         log.info("creating user profile for user: {}", user.getUsername());
         UserProfileCreationResponse profile;
         try {
-             profile = userProfileClient.createUserProfile(profileRequest).getResult();
-        }catch (Exception ex) {
-        // Gọi tạo profile thất bại -> Ném exception để rollback transaction (tức là rollback user tạo)
-        log.error("Failed to create user profile for user: {}, rolling back user creation", user.getUsername(), ex);
-        throw new ServiceException(ErrorCode.PROFILE_CREATE_FAIL);
-    }
-
+            profile = userProfileClient.createUserProfile(profileRequest).getResult();
+        } catch (Exception ex) {
+            // Gọi tạo profile thất bại -> Ném exception để rollback transaction (tức là rollback user tạo)
+            log.error("Failed to create user profile for user: {}, rolling back user creation", user.getUsername(), ex);
+            throw new ServiceException(ErrorCode.PROFILE_CREATE_FAIL);
+        }
 
         var userCreationResponse = userMapper.toUserResponse(user);
         userCreationResponse.setProfileId(profile.getId());
@@ -104,7 +103,8 @@ public class UserService {
         String name = context.getAuthentication().getName();
         User user =
                 userRepository.findByUsername(name).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
-        UserProfileResponse userProfileResponse = userProfileClient.getMyInfo(user.getUserId()).getResult();
+        UserProfileResponse userProfileResponse =
+                userProfileClient.getMyInfo(user.getUserId()).getResult();
         return UserProfile.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
@@ -115,8 +115,6 @@ public class UserService {
                 .build();
     }
 
-
-
     public UserResponse updateUser(UserUpdateRequest userUpdateRequest, String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
 
@@ -124,19 +122,15 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public ChangePasswordResponse changePassword(String userId, ChangePasswordRequest request){
+    public ChangePasswordResponse changePassword(String userId, ChangePasswordRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         boolean isMatch = passwordEncoder.matches(request.getCurrentPassword(), user.getPassword());
-        if(isMatch){
-            return ChangePasswordResponse.builder()
-                    .success(true)
-                    .build();
-        }
-        else {
+        if (isMatch) {
+            return ChangePasswordResponse.builder().success(true).build();
+        } else {
             throw new ServiceException(ErrorCode.INVALID_CURRENT_PASSWORD);
         }
     }
-
 
     @PostAuthorize("returnObject != null and returnObject.equals(authentication.name)")
     public String getUserId() {
@@ -147,15 +141,16 @@ public class UserService {
 
         String username = authenticated.getName();
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository
+                .findByUsername(username)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         return user.getUserId();
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUserProfile(String userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_EXISTED));
         try {
             log.info("Attempting to delete profile for user: {}", user.getUsername());
 
@@ -171,15 +166,9 @@ public class UserService {
             userRepository.delete(user);
             log.info("Deleted user with ID: {}", userId);
 
-
-
         } catch (Exception e) {
             log.error("Failed to delete user/profile for userId {}: {}", userId, e.getMessage());
             throw new ServiceException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
-
-
-
-
 }

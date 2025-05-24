@@ -7,13 +7,17 @@ import org.example.userprofileservice.dto.response.UserReadingHistory;
 import org.example.userprofileservice.dto.response.UserReadingHistoryResponse;
 import org.example.userprofileservice.entity.UserProfile;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DateMapper.class)
 public interface UserProfileMapper {
     UserProfileCreationResponse toUserProfileCreationResponse(UserProfile userProfile);
-    UserProfile toUserProfile (UserProfileCreationRequest request);
-    UserProfileResponse toUserProfileResponse(UserProfile userProfile);
 
+    @Mapping(source = "createdAt", target = "createdAt")
+    UserProfile toUserProfile(UserProfileCreationRequest request);
+
+    @Mapping(source = "createdAt", target = "createdAt")
+    UserProfileResponse toUserProfileResponse(UserProfile userProfile);
 }

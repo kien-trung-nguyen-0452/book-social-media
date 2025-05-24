@@ -1,9 +1,10 @@
 package org.example.authservice.config;
 
-import feign.RequestInterceptor;
-import feign.Retryer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import feign.RequestInterceptor;
+import feign.Retryer;
 
 @Configuration
 public class FeintRetryerConfig {
@@ -18,7 +19,7 @@ public class FeintRetryerConfig {
     }
 
     @Bean
-    public RequestInterceptor interceptor(){
+    public RequestInterceptor interceptor() {
         return new AuthenticationRequestInterceptor();
     }
 }
