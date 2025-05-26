@@ -63,7 +63,6 @@ public class BookServiceImpl implements BookService {
         }
     }
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public BookCreationResponse createBook(BookCreationRequest request) {
         String title = request.getTitle().trim();
         String author = request.getAuthor().trim();
@@ -116,7 +115,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public BookResponse updateBook(String id, BookRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));
@@ -132,7 +130,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public void deleteBook(String id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.BOOK_NOT_FOUND));

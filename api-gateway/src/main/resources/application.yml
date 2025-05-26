@@ -23,7 +23,7 @@ spring:
             - StripPrefix=2
 
         - id: bookmark-service
-          uri: lb://book-service
+          uri: lb://bookmark-service
           predicates:
             - Path=${app.api-prefix}/bookmark/**
           filters:

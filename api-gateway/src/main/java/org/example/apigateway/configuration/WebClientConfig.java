@@ -19,21 +19,23 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("http://identity-service")  // Đây là base url của service
+                .baseUrl("http://auth-service:8080/identity")  // Đây là base url của service
                 .build();
     }
     @Bean
-    CorsWebFilter corsWebFilter(){
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("*"));
-        corsConfiguration.setAllowedHeaders(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("*"));
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOriginPatterns(List.of("*")); // Cho phép tất cả các origin
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfig.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header, bao gồm Authorization
+        corsConfig.setAllowCredentials(true); // Cho phép gửi credentials như cookies hoặc Authorization header
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
 
-        return new CorsWebFilter(urlBasedCorsConfigurationSource);
+        return new CorsWebFilter(source);
     }
+
 
     @Bean
     IdentityClient identityClient(WebClient webClient){

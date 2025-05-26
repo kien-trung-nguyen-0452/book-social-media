@@ -3,6 +3,7 @@ package org.example.authservice.service;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
+import org.example.authservice.dto.event.UserCreatedEvent;
 import org.example.authservice.dto.event.UserDeletionEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -37,4 +38,25 @@ public class UserKafkaProducer {
             throw new RuntimeException("Failed to send user deleted event", e);
         }
     }
+    public void sendUserCreatedEvent(String userId, String username, String name, String email) {
+        try {
+            UserCreatedEvent event = UserCreatedEvent.builder()
+                    .userId(userId)
+                    .username(username)
+                    .name(name)
+                    .email(email)
+                    .build();
+
+            String message = objectMapper.writeValueAsString(event);
+
+            kafkaTemplate.send("user-created-topic", message).get(5, TimeUnit.SECONDS);
+
+            log.info("User created event sent for user: {}", username);
+
+        } catch (Exception e) {
+            log.error("Failed to send user created event for user: {}", username, e);
+            throw new RuntimeException("Failed to send user created event", e);
+        }
+    }
+
 }

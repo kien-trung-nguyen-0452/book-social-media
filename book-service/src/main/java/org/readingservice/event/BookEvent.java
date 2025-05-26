@@ -23,10 +23,8 @@ public class BookEvent {
     int viewCount;
     double averageRating;
     List<String> categories;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime createdAt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime updatedAt;
 
 }

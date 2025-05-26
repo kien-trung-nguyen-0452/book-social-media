@@ -14,7 +14,7 @@ RUN mvn clean package spring-boot:repackage -DskipTests
 # Start with Amazon Correto JDK 21
 FROM amazoncorretto:21.0.4
 
-# Set working folder to App and copy complied file from above step
+
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 

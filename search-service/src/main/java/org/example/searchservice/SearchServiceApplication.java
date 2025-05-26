@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableMethodSecurity
 @SpringBootApplication
 @EnableFeignClients
-@EnableElasticsearchRepositories(considerNestedRepositories = true)
 public class SearchServiceApplication {
 
     public static void main(String[] args) {

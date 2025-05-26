@@ -51,7 +51,6 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public FromUrlUploadResponse uploadChapterImage(FromUrlUploadRequest request) {
         try {
             List<String> uploadedUrls = new ArrayList<>();
@@ -101,7 +100,6 @@ public class UploadServiceImpl implements UploadService {
 
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public CoverUploadResponse uploadCover(MultipartFile file, String bookId) {
         try {
             Map<String, Object> options = ObjectUtils.asMap(

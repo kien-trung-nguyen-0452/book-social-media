@@ -60,7 +60,6 @@ public class UserService {
         HashSet<Role> roles = new HashSet<>();
 
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
-
         user.setRoles(roles);
 
         try {
@@ -69,23 +68,26 @@ public class UserService {
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
 
-        var profileRequest = profileMapper.toProfileCreationRequest(request);
-        profileRequest.setUserId(user.getUserId());
-        log.info("creating user profile for user: {}", user.getUsername());
-        UserProfileCreationResponse profile;
+        // ✅ Gửi Kafka event thay vì gọi Feign client
         try {
-            profile = userProfileClient.createUserProfile(profileRequest).getResult();
-        } catch (Exception ex) {
-            // Gọi tạo profile thất bại -> Ném exception để rollback transaction (tức là rollback user tạo)
-            log.error("Failed to create user profile for user: {}, rolling back user creation", user.getUsername(), ex);
+            userKafkaProducer.sendUserCreatedEvent(
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    request.getName()
+
+            );
+            log.info("Sent user created event for user: {}", user.getUsername());
+        } catch (Exception e) {
+            log.error("Failed to send user created event for user: {}, rolling back", user.getUsername(), e);
             throw new ServiceException(ErrorCode.PROFILE_CREATE_FAIL);
         }
 
+        // Trả về user response (chưa có profileId vì profile sẽ được tạo async)
         var userCreationResponse = userMapper.toUserResponse(user);
-        userCreationResponse.setProfileId(profile.getId());
-
         return userCreationResponse;
     }
+
 
     public List<UserResponse> findAllUser() {
         return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());

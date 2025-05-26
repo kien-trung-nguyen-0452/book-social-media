@@ -44,6 +44,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/notification/email/send",
             "/book/books/.*",
             "/search/search/.*",
+            "/chapter/chapters/.*"
 
     };
 

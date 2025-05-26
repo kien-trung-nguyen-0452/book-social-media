@@ -9,7 +9,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://mongo:27017/history_db  #
+      uri: mongodb://mongodb:27017/history_db
 
   kafka:
     consumer:

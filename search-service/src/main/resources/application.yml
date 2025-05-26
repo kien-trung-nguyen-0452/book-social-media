@@ -8,7 +8,7 @@ spring:
     name: search-service
 
   kafka:
-    bootstrap-servers: kafka:9092  # ❗ Đổi localhost → kafka (tên service trong docker-compose)
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: elasticsearch
       auto-offset-reset: earliest
@@ -23,7 +23,7 @@ spring:
       missing-topics-fatal: false
 
   elasticsearch:
-    uris: http://elasticsearch:9200  # ❗ Đổi localhost → elasticsearch (tên service trong docker-compose)
+    uris: http://elasticsearch:9200
     connection-timeout: 10s
     socket-timeout: 30s
 

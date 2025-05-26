@@ -40,7 +40,6 @@ public class ChapterServiceImpl implements ChapterService {
     final BookServiceClient bookServiceClient;
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public ChapterResponse createChapter(String bookId, ChapterRequest request) {
         try {
             ApiResponse<Boolean> bookExists = bookServiceClient.checkBookExists(bookId);
@@ -124,7 +123,6 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public ChapterResponse updateChapter(String id, ChapterRequest request) {
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));
@@ -155,7 +153,6 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public void deleteChapter(String id) {
         Chapter chapter = chapterRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ErrorCode.CHAPTER_NOT_FOUND));

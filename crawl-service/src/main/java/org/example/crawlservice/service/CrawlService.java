@@ -57,6 +57,31 @@ public class CrawlService {
                 }
             }
         }
+        // Bước 0: Upload coverUrl nếu có
+        String coverUrl = info.getCoverUrl();
+        if (coverUrl != null && !coverUrl.isBlank()) {
+            if (!isValidUrl(coverUrl)) {
+                log.error("Invalid cover URL: {}", coverUrl);
+                throw new ServiceException(ErrorCode.URL_INVALID);
+            }
+
+            try {
+                UploadRequest coverUploadRequest = UploadRequest.builder()
+                        .url(List.of(coverUrl))
+                        .name(info.getTitle())
+                        .build();
+
+                UploadResponse uploadResponse = uploadClient.uploadFromUrl(coverUploadRequest).getData();
+                List<String> uploadedUrls = uploadResponse.getUrl();
+                if (!uploadedUrls.isEmpty()) {
+                    info.setCoverUrl(uploadedUrls.get(0)); // cập nhật lại coverUrl bằng link cloud
+                }
+            } catch (Exception e) {
+                log.error("Failed to upload cover image: {}", coverUrl, e);
+                throw new ServiceException(ErrorCode.URL_INVALID);
+            }
+        }
+
 
         // Tạo sách
         BookRequest bookRequest = internalMapper.toBookRequest(info);

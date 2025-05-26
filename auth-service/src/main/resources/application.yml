@@ -25,7 +25,7 @@ spring:
             loggerLevel: full
 
   kafka:
-    bootstrap-servers: kafka:9094
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -57,5 +57,5 @@ springdoc:
 
 jwt:
   signerKey: A5QeC6oNNk4gXSbRoTFyHoZAG6d9dgOJS+6/jscIW0m2m6do7/o1Q1zainVvVpOq
-  valid-duration: 3600
+  valid-duration: 360000
   refreshable-duration: 360000
