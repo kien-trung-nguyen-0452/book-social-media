@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -25,16 +26,21 @@ public class WebClientConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOriginPatterns(List.of("*")); // Cho phép tất cả các origin
+        List<String> allowedOriginPatterns = new ArrayList<>();
+        for (int port = 5000; port <= 5300; port++) {
+            allowedOriginPatterns.add("http://localhost:" + port);
+        }
+        corsConfig.setAllowedOriginPatterns(allowedOriginPatterns);
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfig.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header, bao gồm Authorization
-        corsConfig.setAllowCredentials(true); // Cho phép gửi credentials như cookies hoặc Authorization header
+        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
 
         return new CorsWebFilter(source);
     }
+
 
 
     @Bean

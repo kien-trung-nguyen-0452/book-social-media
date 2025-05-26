@@ -115,9 +115,6 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public List<ChapterResponse> getChaptersByBookId(String bookId) {
-        if (chapterRepository.existsChaptersByBookId(bookId)){
-            throw new ServiceException(ErrorCode.CHAPTER_NOT_FOUND);
-        }
         var chapList = chapterRepository.findByBookIdOrderByChapterNumberAsc(bookId);
         return chapList.stream().map(chapterMapper::toResponse).collect(Collectors.toList());
     }

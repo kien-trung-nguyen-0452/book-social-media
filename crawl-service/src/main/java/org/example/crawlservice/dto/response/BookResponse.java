@@ -26,11 +26,7 @@ public class BookResponse {
     int chapterCount;
     int viewCount;
     double averageRating;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
     LocalDateTime createdAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
     LocalDateTime updatedAt;
 
 }
